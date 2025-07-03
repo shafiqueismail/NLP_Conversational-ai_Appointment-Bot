@@ -554,7 +554,7 @@ training_data = {
     "Is this a bakery?",
     "What’s the capital of Italy?",
     "How do I reset my laptop?",
-    "Recommend a good sci-fi movie",
+    "Recommend a good restraunt",
     "Where can I buy running shoes?",
     "Turn off my smart lights",
     "Open YouTube for me",
