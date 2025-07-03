@@ -638,7 +638,7 @@ conversation_context = {
     "history": []
 }
 
-# 6. Predict the intent 
+# 6. Predict the intent   
 def predict_intent(user_input):
     with open("model.pkl", "rb") as f: model = pickle.load(f)
     with open("vectorizer.pkl", "rb") as f: vectorizer = pickle.load(f)
