@@ -1,5 +1,7 @@
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
+import pickle
+import os
 
 # 1. Structured training data
 training_data = {
@@ -593,7 +595,6 @@ training_data = {
     "Do I need an umbrella today?",
     "How do I update my software?"
 ]
-
 }
 
 # 2. Flatten the data into two lists
@@ -612,6 +613,10 @@ X_train = vectorizer.fit_transform(training_sentences)
 model = MultinomialNB()
 model.fit(X_train, training_labels)
 
+# Save model and vectorizer for session memory
+with open("model.pkl", "wb") as f: pickle.dump(model, f)
+with open("vectorizer.pkl", "wb") as f: pickle.dump(vectorizer, f)
+
 # 5. Intent → Response
 intent_responses = {
     "book_cleaning": "We can book your dental cleaning. Would you like to continue?",
@@ -623,32 +628,52 @@ intent_responses = {
     "ask_availability": "We’ll check what times are available. Do you have a preferred day or time?",
     "tooth_pain": "I'm sorry you're in pain. We recommend booking a visit. Would you like help with that?",
     "general_inquiry": "I'm happy to help with information about our services. What would you like to know?",
-    "out_of_scope": "Sorry, I can only help with dental-related questions like appointments, services, or pricing."
+    "out_of_scope": "Sorry, I can only help with dental-related questions like appointments, services, or pricing.",
+    "clarify_intent": "Sorry, I didn't quite understand. Could you please rephrase or be more specific?"
 }
 
+conversation_context = {
+    "last_intent": None,
+    "params": {},
+    "history": []
+}
 
 # 6. Predict intent
 def predict_intent(user_input):
+    with open("model.pkl", "rb") as f: model = pickle.load(f)
+    with open("vectorizer.pkl", "rb") as f: vectorizer = pickle.load(f)
     X_test = vectorizer.transform([user_input])
     prediction = model.predict(X_test)[0]
     confidence = model.predict_proba(X_test).max()
     return prediction, confidence
 
-# 7. Command line test
+# 7. Response Engine with Flow Handling
+def handle_response(user_input):
+    prediction, confidence = predict_intent(user_input)
+    context = conversation_context
+    context["history"].append(user_input)
+
+    if confidence < 0.5:
+        return intent_responses["clarify_intent"]
+
+    # Intent switch detection
+    if context["last_intent"] and prediction != context["last_intent"]:
+        context["last_intent"] = prediction
+        context["params"] = {}
+        return f"Okay, switching to {prediction.replace('_', ' ')}. {intent_responses[prediction]}"
+
+    # Continue current flow
+    context["last_intent"] = prediction
+    return intent_responses.get(prediction, "I'm not sure how to respond to that.")
+
+
+# 8. Command Line Chat
 if __name__ == "__main__":
-    print("Welcome to the Dental Assistant AI")
-    print("Type a message to test intent detection ('exit' to quit):\n")
-
+    print("Welcome to the Dental Assistant AI. Type 'exit' to quit.\n")
     while True:
-        user_input = input("You: ")
+        user_input = input("You: ").strip()
         if user_input.lower() == "exit":
+            print("Goodbye!")
             break
-
-        intent, confidence = predict_intent(user_input)
-
-        if confidence < 0.5:
-            print("I'm not sure what you meant. Could you rephrase?\n")
-        else:
-            response = intent_responses.get(intent, "Intent understood, but no specific response found.")
-            print(f"Intent: {intent}  |  Confidence: {confidence:.2f}")
-            print("Assistant:", response + "\n")
+        response = handle_response(user_input)
+        print("Assistant:", response, "\n")
