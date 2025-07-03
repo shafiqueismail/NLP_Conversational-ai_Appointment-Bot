@@ -662,7 +662,7 @@ def handle_response(user_input):
         context["params"] = {}
         return f"Okay, switching to {prediction.replace('_', ' ')}. {intent_responses[prediction]}"
 
-    # Continue current flow
+    # Continue the current flow
     context["last_intent"] = prediction
     return intent_responses.get(prediction, "I'm not sure how to respond to that.")
 
