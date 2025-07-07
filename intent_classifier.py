@@ -2,6 +2,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 import pickle
 import os
+from random import choice
+
 
 # 1. Structured training data
 training_data = {
@@ -632,22 +634,101 @@ with open("model.pkl", "wb") as f: pickle.dump(model, f)
 with open("vectorizer.pkl", "wb") as f: pickle.dump(vectorizer, f)
 
 # 5. Intent → Response
-intent_responses = {
-    "book_cleaning": "We can book your dental cleaning. When are you free?",
-    "book_whitening": "Teeth whitening is available! What time is best to book an appointment for you?",
-    "book_checkup": "Let's schedule your checkup. Is there a time slot that works best for you?",
-    "cancel_appointment": "Your appointment has been canceled. Let us know if you’d like to book again.",
-    "reschedule_appointment": "Understood. When would you like to reschedule your appointment?",
-    "ask_price": "Sure. I can help you with our service pricing. Which treatment are you interested in?",
-    "ask_availability": "We’ll check what times are available. Do you have a preferred day or time?",
-    "tooth_pain": "I'm sorry you're in pain. We recommend booking a visit. Would you like help with that?",
-    "general_inquiry": "I'm happy to help with information about our services. What would you like to know?",
-    "out_of_scope": "Sorry, I can only help with dental-related questions like appointments, services, or pricing.",
-    "clarify_intent": "Sorry, I didn't quite understand. Could you please rephrase or be more specific?",
-    "book_filling": "Sounds like you need to fill a cavity! What times are you available?",
-    "book_extraction": "We can schedule a tooth extraction for you. When are your availabilities?",
-    "book_root_canal": "Understood. We can book a root canal treatment for you. Do you have a preferred day or time?",
-    "book_braces_consult": "We offer orthodontic consultations to discuss braces or Invisalign options. Would you like to book a time now?"
+# intent_responses = {
+#     "book_cleaning": "We can book your dental cleaning. When are you free?",
+#     "book_whitening": "Teeth whitening is available! What time is best to book an appointment for you?",
+#     "book_checkup": "Let's schedule your checkup. Is there a time slot that works best for you?",
+#     "cancel_appointment": "Your appointment has been canceled. Let us know if you’d like to book again.",
+#     "reschedule_appointment": "Understood. When would you like to reschedule your appointment?",
+#     "ask_price": "Sure. I can help you with our service pricing. Which treatment are you interested in?",
+#     "ask_availability": "We’ll check what times are available. Do you have a preferred day or time?",
+#     "tooth_pain": "I'm sorry you're in pain. We recommend booking a visit. Would you like help with that?",
+#     "general_inquiry": "I'm happy to help with information about our services. What would you like to know?",
+#     "out_of_scope": "Sorry, I can only help with dental-related questions like appointments, services, or pricing.",
+#     "clarify_intent": "Sorry, I didn't quite understand. Could you please rephrase or be more specific?",
+#     "book_filling": "Sounds like you need to fill a cavity! What times are you available?",
+#     "book_extraction": "We can schedule a tooth extraction for you. When are your availabilities?",
+#     "book_root_canal": "Understood. We can book a root canal treatment for you. Do you have a preferred day or time?",
+#     "book_braces_consult": "We offer orthodontic consultations to discuss braces or Invisalign options. Would you like to book a time now?"
+# }
+
+
+fillers = {
+  "book_cleaning": [
+    "When are you available?",
+    "Do you have a day in mind?",
+    "Let me know your preferred time."
+  ],
+  "ask_price": [
+    "Which treatment are you curious about?",
+    "Are you asking about cleaning, whitening, or something else?",
+    "Let me know what you're looking for pricing on."
+  ],
+  "cancel_appointment": [
+    "Let us know if you'd like to reschedule.",
+    "We hope to see you another time!",
+    "You're welcome to rebook any time."
+  ],
+  "clarify_intent": [
+    "Maybe try rephrasing?",
+    "Could you say that a little differently?",
+    "I'm here to help with dental services and appointments!"
+  ],
+  "book_whitening": [
+    "Do you have a time in mind for your whitening?",
+    "We can brighten your smile — when works for you?",
+    "Let me know your availability so we can whiten those teeth!"
+  ],
+  "book_checkup": [
+    "Do you prefer mornings or afternoons?",
+    "Let's keep those teeth healthy — when can you come in?",
+    "Tell me the best time for your checkup."
+  ],
+  "reschedule_appointment": [
+    "Let me know the new time that works for you.",
+    "We can easily move your appointment.",
+    "What day or time would you like instead?"
+  ],
+  "ask_availability": [
+    "Are you looking for something this week?",
+    "Any specific day or time you're hoping for?",
+    "We’ll check our calendar — what works best for you?"
+  ],
+  "tooth_pain": [
+    "That sounds painful. Would you like to book an urgent visit?",
+    "Let’s get that looked at. Should I find you a time today?",
+    "Would you like help booking an emergency dental appointment?"
+  ],
+  "general_inquiry": [
+    "Feel free to ask anything about our clinic.",
+    "I’m here to help with any questions you have.",
+    "Ask away — I can help with services, hours, or anything else."
+  ],
+  "book_filling": [
+    "We can get that cavity taken care of — when are you free?",
+    "Let’s book a time to fix your filling.",
+    "Do you want to come in this week for the filling?"
+  ],
+  "book_extraction": [
+    "Let’s find a time to remove that tooth.",
+    "Would you like an extraction appointment this week?",
+    "We can help — what day works for you?"
+  ],
+  "book_root_canal": [
+    "Let’s book you in before it gets worse.",
+    "We’ll take care of that root canal. What day do you prefer?",
+    "Would you like to come in this week or next?"
+  ],
+  "book_braces_consult": [
+    "We can help you explore braces or Invisalign options.",
+    "When would you like to come in for your orthodontic consultation?",
+    "Let’s schedule a time to talk about braces."
+  ],
+  "out_of_scope": [
+    "Let’s stick to dental topics!",
+    "I’m built to help with dental care — try asking about appointments or pricing.",
+    "Please ask me something related to dentistry."
+  ]
 }
 
 conversation_context = {
@@ -665,6 +746,17 @@ def predict_intent(user_input):
     confidence = model.predict_proba(X_test).max()
     return prediction, confidence
 
+
+def get_dynamic_response(intent):
+    response_templates = [
+        "Sure! Let's take care of that. {filler}",
+        "Absolutely. {filler}",
+        "Happy to help! {filler}"
+    ]
+    template = choice(response_templates)
+    filler = choice(fillers.get(intent, [""]))
+    return template.format(filler=filler)
+
 # 7. Response Engine with Flow Handling
 def handle_response(user_input):
     prediction, confidence = predict_intent(user_input)
@@ -672,17 +764,17 @@ def handle_response(user_input):
     context["history"].append(user_input)
 
     if confidence < 0.5:
-        return intent_responses["clarify_intent"]
+        return get_dynamic_response("clarify_intent")
 
     # Intent switch detection
     if context["last_intent"] and prediction != context["last_intent"]:
         context["last_intent"] = prediction
         context["params"] = {}
-        return f"Okay, switching to {prediction.replace('_', ' ')}. {intent_responses[prediction]}"
+        return f"Okay, switching to {prediction.replace('_', ' ')}. {get_dynamic_response(prediction)}"
 
-    # Continue the current flow
     context["last_intent"] = prediction
-    return intent_responses.get(prediction, "I'm not sure how to respond to that.")
+    return get_dynamic_response(prediction)
+
 
 
 # 8. Command Line Chat
