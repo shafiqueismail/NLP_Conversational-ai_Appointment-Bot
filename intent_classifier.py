@@ -491,6 +491,27 @@ training_data = {
     "My cheek is swollen from tooth pain",
     "I might have nerve pain in my tooth"
 ],
+
+"book_filling": [
+  "Can I book a filling appointment?",
+  "I have a cavity that needs filling",
+  "Please schedule me for a tooth filling",
+  "I have to fill a cavity",
+  "I have a couple of cavities that need to be filled today",
+  "I need a filling right now",
+  "Please schedule me for a cavity filling on Tuesday or Wednesday",
+  "My cavity hurts a lot",
+  "My cavity is chipped and fell off, I need a replacement",
+  "My cavity hurts a lot, i need it checked up",
+  "The cavity needs to be filled with a black or white coating",
+  "I need to book an apoointment to fill my tooth that has a cavity"
+],
+
+"book_extraction": [
+  "I need to get a tooth removed",
+  "Can you book me for wisdom tooth extraction?",
+],
+
     "general_inquiry": [
     "What services are available at your clinic?",
     "Do you take new patients?",
@@ -629,7 +650,8 @@ intent_responses = {
     "tooth_pain": "I'm sorry you're in pain. We recommend booking a visit. Would you like help with that?",
     "general_inquiry": "I'm happy to help with information about our services. What would you like to know?",
     "out_of_scope": "Sorry, I can only help with dental-related questions like appointments, services, or pricing.",
-    "clarify_intent": "Sorry, I didn't quite understand. Could you please rephrase or be more specific?"
+    "clarify_intent": "Sorry, I didn't quite understand. Could you please rephrase or be more specific?",
+    "book_filling": "We can book you an appointment to get your cavity filled. Would you like to continue?"
 }
 
 conversation_context = {

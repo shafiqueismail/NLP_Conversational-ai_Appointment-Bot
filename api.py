@@ -49,7 +49,9 @@ class AppointmentOut(BaseModel):
 # GET /api/appointments
 # --------------------
 @app.get("/api/appointments", response_model=List[AppointmentOut])
-def get_appointments(dates: str = Query(..., description="Comma-separated list of dates")):
+def get_appointments(dates: str = Query("", description="Comma-separated list of dates")):
+    if not dates:
+        return []  # return empty list if no dates are passed
     date_list = [d.strip() for d in dates.split(",")]
     db = SessionLocal()
     appointments = db.query(Appointment).filter(Appointment.date.in_(date_list)).all()
