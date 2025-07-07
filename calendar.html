@@ -35,7 +35,7 @@
     <div class="table-responsive">
       <table class="table table-bordered">
         <thead class="table-light">
-          <tr id="dayHeaders">
+          <tr>
             <th>Time</th>
             <th>Monday<br><small class="date-label"></small></th>
             <th>Tuesday<br><small class="date-label"></small></th>
@@ -45,23 +45,7 @@
           </tr>
         </thead>
         <tbody id="calendarBody">
-          <!-- Time slots: static for demo, could be dynamic in full system -->
-          <tr><td class="time-slot">9:00 AM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-          <tr><td class="time-slot">9:30 AM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-          <tr><td class="time-slot">10:00 AM</td><td>—</td><td>—</td><td class="booked">Yusuf</td><td>—</td><td>—</td></tr>
-          <tr><td class="time-slot">10:30 AM</td><td>—</td><td>—</td><td>—</td><td class="booked">Fatima</td><td>—</td></tr>
-          <tr><td class="time-slot">11:00 AM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-          <tr><td class="time-slot">11:30 AM</td><td>—</td><td class="booked">Ali</td><td>—</td><td>—</td><td>—</td></tr>
-          <tr><td class="time-slot">12:00 PM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-          <tr><td class="time-slot">12:30 PM</td><td>—</td><td>—</td><td class="booked">Aisha</td><td>—</td><td>—</td></tr>
-          <tr><td class="time-slot">1:00 PM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-          <tr><td class="time-slot">1:30 PM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-          <tr><td class="time-slot">2:00 PM</td><td>—</td><td class="booked">Rahim</td><td>—</td><td>—</td><td>—</td></tr>
-          <tr><td class="time-slot">2:30 PM</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="booked">Salma</td></tr>
-          <tr><td class="time-slot">3:00 PM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-          <tr><td class="time-slot">3:30 PM</td><td>—</td><td>—</td><td class="booked">Omar</td><td>—</td><td>—</td></tr>
-          <tr><td class="time-slot">4:00 PM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-          <tr><td class="time-slot">4:30 PM</td><td>—</td><td>—</td><td>—</td><td class="booked">Layla</td><td>—</td></tr>
+          <!-- Dynamically filled -->
         </tbody>
       </table>
     </div>
@@ -70,27 +54,74 @@
   <script>
     const dateInput = document.getElementById('weekPicker');
     const dateLabels = document.querySelectorAll('.date-label');
+    const calendarBody = document.getElementById('calendarBody');
 
-    function updateWeekDates(startDateStr) {
-      const inputDate = new Date(startDateStr);
-      const dayOfWeek = inputDate.getDay(); // 0 = Sunday, 1 = Monday, ...
-      const monday = new Date(inputDate);
-      monday.setDate(inputDate.getDate() - ((dayOfWeek + 6) % 7)); // Back to Monday
+    const times = [
+      "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM",
+      "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM",
+      "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM",
+      "3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM"
+    ];
 
+    function getMonday(date) {
+      const d = new Date(date);
+      const day = d.getDay();
+      const diff = (day + 6) % 7; // Adjust so Monday is start
+      d.setDate(d.getDate() - diff);
+      return d;
+    }
+
+    function updateWeekDatesAndCalendar(startDateStr) {
+      const monday = getMonday(startDateStr);
+      const weekDates = [];
+
+      // Update header labels
       for (let i = 0; i < 5; i++) {
-        const currentDay = new Date(monday);
-        currentDay.setDate(monday.getDate() + i);
-        const label = currentDay.toLocaleDateString('en-CA'); // Format: yyyy-mm-dd
-        dateLabels[i].textContent = label;
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + i);
+        dateLabels[i].textContent = d.toLocaleDateString('en-CA');
+        weekDates.push(d.toISOString().split('T')[0]); // Format YYYY-MM-DD
+      }
+
+      // Clear previous rows
+      calendarBody.innerHTML = "";
+
+      // Populate time slots
+      times.forEach(time => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td class="time-slot">${time}</td>` + weekDates.map(() => `<td>—</td>`).join("");
+        calendarBody.appendChild(row);
+      });
+
+      // Fetch and fill booked slots from backend
+      fetchAppointments(weekDates);
+    }
+
+    async function fetchAppointments(weekDates) {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/appointments?dates=${weekDates.join(",")}`);
+        const data = await response.json();
+
+        // Fill the table
+        const rows = calendarBody.querySelectorAll("tr");
+        for (const appt of data) {
+          const timeIndex = times.indexOf(appt.time);
+          const dayIndex = weekDates.indexOf(appt.date); // Monday = 0
+          if (timeIndex !== -1 && dayIndex !== -1) {
+            const cell = rows[timeIndex].children[dayIndex + 1]; // +1 offset due to time slot in first column
+            cell.classList.add("booked");
+            cell.textContent = appt.name;
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load appointments:", error);
       }
     }
 
-    // Initial set
-    updateWeekDates(dateInput.value);
-
-    // On change
+    // Initial load
+    updateWeekDatesAndCalendar(dateInput.value);
     dateInput.addEventListener('change', () => {
-      updateWeekDates(dateInput.value);
+      updateWeekDatesAndCalendar(dateInput.value);
     });
   </script>
 </body>
