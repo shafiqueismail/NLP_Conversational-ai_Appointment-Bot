@@ -2,12 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dentist Weekly Calendar</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <style>
     .time-slot {
       height: 50px;
@@ -26,50 +23,75 @@
 <body class="bg-light">
   <div class="container py-4">
     <h2 class="text-center mb-4">Dentist Weekly Appointment Calendar</h2>
+
+    <!-- Week selector -->
+    <div class="mb-3 text-center">
+      <label for="weekPicker" class="form-label fw-bold">Select a week:</label>
+      <input type="date" id="weekPicker" class="form-control w-auto d-inline-block"
+             min="2025-07-07" max="2026-07-07" value="2025-07-07"/>
+    </div>
+
+    <!-- Table -->
     <div class="table-responsive">
       <table class="table table-bordered">
         <thead class="table-light">
-          <tr>
+          <tr id="dayHeaders">
             <th>Time</th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
+            <th>Monday<br><small class="date-label"></small></th>
+            <th>Tuesday<br><small class="date-label"></small></th>
+            <th>Wednesday<br><small class="date-label"></small></th>
+            <th>Thursday<br><small class="date-label"></small></th>
+            <th>Friday<br><small class="date-label"></small></th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Time slots every 30 minutes from 9:00 AM to 5:00 PM -->
-          <!-- You can mark booked slots with class="booked" -->
-
-          <!-- Loop through 9:00 AM to 5:00 PM (last slot is 4:30 PM) -->
-          <!-- 9:00 AM -->
+        <tbody id="calendarBody">
+          <!-- Time slots: static for demo, could be dynamic in full system -->
           <tr><td class="time-slot">9:00 AM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
           <tr><td class="time-slot">9:30 AM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-          <!-- 10:00 AM -->
           <tr><td class="time-slot">10:00 AM</td><td>—</td><td>—</td><td class="booked">Yusuf</td><td>—</td><td>—</td></tr>
           <tr><td class="time-slot">10:30 AM</td><td>—</td><td>—</td><td>—</td><td class="booked">Fatima</td><td>—</td></tr>
-          <!-- 11:00 AM -->
           <tr><td class="time-slot">11:00 AM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
           <tr><td class="time-slot">11:30 AM</td><td>—</td><td class="booked">Ali</td><td>—</td><td>—</td><td>—</td></tr>
-          <!-- 12:00 PM -->
           <tr><td class="time-slot">12:00 PM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
           <tr><td class="time-slot">12:30 PM</td><td>—</td><td>—</td><td class="booked">Aisha</td><td>—</td><td>—</td></tr>
-          <!-- 1:00 PM -->
           <tr><td class="time-slot">1:00 PM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
           <tr><td class="time-slot">1:30 PM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-          <!-- 2:00 PM -->
           <tr><td class="time-slot">2:00 PM</td><td>—</td><td class="booked">Rahim</td><td>—</td><td>—</td><td>—</td></tr>
           <tr><td class="time-slot">2:30 PM</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="booked">Salma</td></tr>
-          <!-- 3:00 PM -->
           <tr><td class="time-slot">3:00 PM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
           <tr><td class="time-slot">3:30 PM</td><td>—</td><td>—</td><td class="booked">Omar</td><td>—</td><td>—</td></tr>
-          <!-- 4:00 PM -->
           <tr><td class="time-slot">4:00 PM</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
           <tr><td class="time-slot">4:30 PM</td><td>—</td><td>—</td><td>—</td><td class="booked">Layla</td><td>—</td></tr>
         </tbody>
       </table>
     </div>
   </div>
+
+  <script>
+    const dateInput = document.getElementById('weekPicker');
+    const dateLabels = document.querySelectorAll('.date-label');
+
+    function updateWeekDates(startDateStr) {
+      const inputDate = new Date(startDateStr);
+      const dayOfWeek = inputDate.getDay(); // 0 = Sunday, 1 = Monday, ...
+      const monday = new Date(inputDate);
+      monday.setDate(inputDate.getDate() - ((dayOfWeek + 6) % 7)); // Back to Monday
+
+      for (let i = 0; i < 5; i++) {
+        const currentDay = new Date(monday);
+        currentDay.setDate(monday.getDate() + i);
+        const label = currentDay.toLocaleDateString('en-CA'); // Format: yyyy-mm-dd
+        dateLabels[i].textContent = label;
+      }
+    }
+
+    // Initial set
+    updateWeekDates(dateInput.value);
+
+    // On change
+    dateInput.addEventListener('change', () => {
+      updateWeekDates(dateInput.value);
+    });
+  </script>
 </body>
-</html> 
+</html>
