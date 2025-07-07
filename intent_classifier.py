@@ -95,7 +95,10 @@ training_data = {
     "I want your whitening service",
     "Book me for stain removal session",
     "I want a teeth whitening visit",
-    "Do you do teeth whitening"
+    "Do you do teeth whitening",
+    "I want my teeth to be whiter",
+    "I want whiter teeth",
+    "My teeth are yellowing, I need to whiten my teeth"
 ],
    "cancel_appointment": [
     "I want to cancel my visit",
