@@ -653,6 +653,81 @@ with open("vectorizer.pkl", "wb") as f: pickle.dump(vectorizer, f)
 # }
 
 
+
+# 2. Dialogue flows per intent (FSM)
+dialogue_flows = {
+    "book_cleaning": [
+        {"prompt": "Sure! When would you like to come in for a cleaning?", "expect": "date"},
+        {"prompt": "Got it. Do you prefer morning or afternoon?", "expect": "time_pref"},
+        {"prompt": "Thanks! I've noted that down. Anything else you'd like to ask?", "expect": "end"}
+    ],
+    "book_filling": [
+        {"prompt": "We can take care of your cavity. What day works for you?", "expect": "date"},
+        {"prompt": "Morning or afternoon?", "expect": "time_pref"},
+        {"prompt": "Great! I've logged your appointment. Need anything else?", "expect": "end"}
+    ],
+    "book_extraction": [
+        {"prompt": "Ouch! When would you like to come in for a tooth extraction?", "expect": "date"},
+        {"prompt": "Do you prefer a morning or afternoon extraction?", "expect": "time_pref"},
+        {"prompt": "Noted! We'll get that taken care of. Anything else you’d like to do?", "expect": "end"}
+    ],
+    "book_checkup": [
+        {"prompt": "Let’s keep those teeth healthy! When would you like your checkup?", "expect": "date"},
+        {"prompt": "Morning or afternoon for your checkup?", "expect": "time_pref"},
+        {"prompt": "Checkup scheduled! Anything else I can help with?", "expect": "end"}
+    ],
+    "book_whitening": [
+        {"prompt": "Brighten your smile! What day works for whitening?", "expect": "date"},
+        {"prompt": "Would you like it in the morning or afternoon?", "expect": "time_pref"},
+        {"prompt": "Got it! Whitening is scheduled. Need anything else?", "expect": "end"}
+    ],
+    "book_root_canal": [
+        {"prompt": "Root canal needed — let’s book you in. What day is good?", "expect": "date"},
+        {"prompt": "Morning or afternoon for your root canal?", "expect": "time_pref"},
+        {"prompt": "All set! Let us know if you need anything else.", "expect": "end"}
+    ],
+    "book_braces_consult": [
+        {"prompt": "Let’s get you a braces consultation. When are you available?", "expect": "date"},
+        {"prompt": "Morning or afternoon for the consult?", "expect": "time_pref"},
+        {"prompt": "Great! We’ll discuss your options then. Anything else?", "expect": "end"}
+    ],
+    "cancel_appointment": [
+        {"prompt": "No problem. What appointment would you like to cancel (cleaning, checkup, etc.)?", "expect": "type"},
+        {"prompt": "Got it. Anything else you’d like to do?", "expect": "end"}
+    ],
+    "reschedule_appointment": [
+        {"prompt": "Sure. What type of appointment are you rescheduling?", "expect": "type"},
+        {"prompt": "What’s your new preferred date?", "expect": "date"},
+        {"prompt": "Morning or afternoon for the new time?", "expect": "time_pref"},
+        {"prompt": "Rescheduled! Let me know if you need anything else.", "expect": "end"}
+    ],
+    "ask_price": [
+        {"prompt": "Sure. What treatment are you asking about (cleaning, whitening, extraction, or is it something else)?", "expect": "type"},
+        {"prompt": "Let me look that up for you.", "expect": "end"}
+    ],
+    "ask_availability": [
+        {"prompt": "Let me check our calendar. What type of service are you interested in?", "expect": "type"},
+        {"prompt": "Do you prefer a morning or afternoon appointment?", "expect": "time_pref"},
+        {"prompt": "Thanks! We’ll get back to you with availability.", "expect": "end"}
+    ],
+    "tooth_pain": [
+        {"prompt": "I’m sorry to hear that. Would you like to book an emergency visit?", "expect": "yes_no"},
+        {"prompt": "When would you like to come in?", "expect": "date"},
+        {"prompt": "Morning or afternoon?", "expect": "time_pref"},
+        {"prompt": "We’ll see you soon. Take care until then!", "expect": "end"}
+    ],
+    "general_inquiry": [
+        {"prompt": "Sure, I can help with info about our services. What would you like to know?", "expect": "topic"},
+        {"prompt": "Thanks for reaching out!", "expect": "end"}
+    ],
+    "out_of_scope": [
+        {"prompt": "Sorry, I can only help with dental-related questions. Try asking about appointments or treatments.", "expect": "end"}
+    ]
+}
+
+
+
+
 fillers = {
   "book_cleaning": [
     "When are you available?",
@@ -733,9 +808,11 @@ fillers = {
 
 conversation_context = {
     "last_intent": None,
+    "step": 0,
     "params": {},
     "history": []
 }
+
 
 # 6. Predict the intent    
 def predict_intent(user_input):
@@ -745,6 +822,18 @@ def predict_intent(user_input):
     prediction = model.predict(X_test)[0]
     confidence = model.predict_proba(X_test).max()
     return prediction, confidence
+
+
+# Slot Filling (very basic extraction)
+def extract_slot(user_input):
+    slots = {}
+    if any(day in user_input.lower() for day in ["monday", "tuesday", "wednesday", "thursday", "friday"]):
+        slots["date"] = user_input
+    if "morning" in user_input.lower():
+        slots["time_pref"] = "morning"
+    elif "afternoon" in user_input.lower():
+        slots["time_pref"] = "afternoon"
+    return slots
 
 
 def get_dynamic_response(intent):
@@ -757,29 +846,55 @@ def get_dynamic_response(intent):
     filler = choice(fillers.get(intent, [""]))
     return template.format(filler=filler)
 
-# 7. Response Engine with Flow Handling
+# 6. FSM-driven response engine
 def handle_response(user_input):
-    prediction, confidence = predict_intent(user_input)
     context = conversation_context
     context["history"].append(user_input)
-
+    
+    prediction, confidence = predict_intent(user_input)
+    
+    # Low confidence fallback
     if confidence < 0.5:
-        return get_dynamic_response("clarify_intent")
-
-    # Intent switch detection
-    if context["last_intent"] and prediction != context["last_intent"]:
-        context["last_intent"] = prediction
+        context["last_intent"] = None
+        context["step"] = 0
         context["params"] = {}
-        return f"Okay, switching to {prediction.replace('_', ' ')}. {get_dynamic_response(prediction)}"
+        return "I'm not quite sure I understood. Could you rephrase that?"
 
-    context["last_intent"] = prediction
-    return get_dynamic_response(prediction)
+    # Switch to new intent
+    if context["last_intent"] != prediction:
+        context["last_intent"] = prediction
+        context["step"] = 0
+        context["params"] = {}
+
+    # FSM Flow
+    flow = dialogue_flows.get(prediction)
+    if not flow:
+        return f"Okay, you want to {prediction.replace('_', ' ')}. Let me help with that."
+
+    step = context["step"]
+    if step >= len(flow):
+        return "Thanks! Anything else I can help with?"
+
+    expected_slot = flow[step]["expect"]
+    found_slots = extract_slot(user_input)
+
+    if expected_slot in found_slots:
+        context["params"].update(found_slots)
+        context["step"] += 1
+        if context["step"] < len(flow):
+            return flow[context["step"]]["prompt"]
+        else:
+            # Final message
+            return f"You're all set for {context['params'].get('date', 'your appointment')} in the {context['params'].get('time_pref', 'day')}. Anything else I can help with?"
+    else:
+        # Repeat same question
+        return flow[step]["prompt"]
 
 
 
-# 8. Command Line Chat
+# 7. Command line chat loop
 if __name__ == "__main__":
-    print("Welcome to the Dental Assistant AI. Type 'exit' to quit.\n")
+    print("Welcome to the Dental Assistant AI with FSM! Type 'exit' to quit.\n")
     while True:
         user_input = input("You: ").strip()
         if user_input.lower() == "exit":
