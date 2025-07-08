@@ -3,6 +3,8 @@ from sklearn.naive_bayes import MultinomialNB
 import pickle
 import os
 from random import choice
+import re
+
 
 
 # 1. Structured training data
@@ -827,12 +829,27 @@ def predict_intent(user_input):
 # Slot Filling (very basic extraction)
 def extract_slot(user_input):
     slots = {}
-    if any(day in user_input.lower() for day in ["monday", "tuesday", "wednesday", "thursday", "friday"]):
-        slots["date"] = user_input
-    if "morning" in user_input.lower():
+    cleaned_input = user_input.lower().strip("?.!")
+
+    # Match day names like 'monday', 'next monday', 'on tuesday', etc.
+    day_match = re.search(r"(?:on |next |this )?(monday|tuesday|wednesday|thursday|friday|saturday|sunday)", cleaned_input)
+    if day_match:
+        slots["date"] = day_match.group(0).strip()
+
+    # Time preference
+    if "morning" in cleaned_input:
         slots["time_pref"] = "morning"
-    elif "afternoon" in user_input.lower():
+    elif "afternoon" in cleaned_input:
         slots["time_pref"] = "afternoon"
+    elif "evening" in cleaned_input:
+        slots["time_pref"] = "evening"
+
+    # Optional: basic yes/no for emergency
+    if "yes" in cleaned_input or "sure" in cleaned_input:
+        slots["yes_no"] = "yes"
+    elif "no" in cleaned_input:
+        slots["yes_no"] = "no"
+
     return slots
 
 
