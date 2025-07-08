@@ -16,7 +16,7 @@
       font-weight: bold;
     }
     .highlight-today {
-      background-color: #ffe0b3 !important;
+      background-color: #fff8e1 !important; /* pale yellow */
     }
     thead th {
       text-align: center;
@@ -39,13 +39,9 @@
     <div class="table-responsive">
       <table class="table table-bordered">
         <thead class="table-light">
-          <tr id="calendarHeader">
-            <!-- Filled dynamically -->
-          </tr>
+          <tr id="calendarHeader"></tr>
         </thead>
-        <tbody id="calendarBody">
-          <!-- Filled dynamically -->
-        </tbody>
+        <tbody id="calendarBody"></tbody>
       </table>
     </div>
   </div>
@@ -56,71 +52,80 @@
     const nextBtn = document.getElementById('nextWeek');
     const calendarHeader = document.getElementById('calendarHeader');
     const calendarBody = document.getElementById('calendarBody');
-
+  
     const times = [
       "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM",
       "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM",
       "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM",
       "3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM"
     ];
-
+  
     const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
+  
     function getMonday(date) {
       const d = new Date(date);
       const day = d.getDay();
-      const diff = (day === 0 ? -6 : 1 - day); // Sunday = 0 → back to Monday
+      const diff = (day === 0 ? -6 : 1 - day); // Sunday = 0
       d.setDate(d.getDate() + diff);
       return d;
     }
-
+  
+    // ✅ Accurate today-in-EST (returns "2025-07-08" etc.)
+    function getTodayInEST() {
+      const now = new Date();
+      const formatter = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/New_York',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+      return formatter.format(now); // '2025-07-08'
+    }
+  
     function updateWeekDatesAndCalendar(startDateStr) {
       const monday = getMonday(startDateStr);
-      const todayUS = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
-      const todayStr = new Date(todayUS).toISOString().split("T")[0];
+      const todayStr = getTodayInEST(); // fixed
       const weekDates = [];
-
-      // Update header
+  
+      // Header
       let headerHTML = `<th>Time</th>`;
       for (let i = 0; i < 7; i++) {
         const d = new Date(monday);
-        d.setDate(monday.getDate() + i);
+        d.setDate(d.getDate() + i);
         const iso = d.toISOString().split("T")[0];
         weekDates.push(iso);
-        headerHTML += `<th>${dayNames[i]}<br><small class="date-label">${d.toLocaleDateString("en-CA")}</small></th>`;
+  
+        const formatted = d.toLocaleDateString("en-CA");
+        headerHTML += `<th>${dayNames[i]}<br><small class="date-label">${formatted}</small></th>`;
       }
       calendarHeader.innerHTML = headerHTML;
-
-      // Update date picker to reflect current Monday
-      const mondayISO = monday.toISOString().split("T")[0];
-      dateInput.value = mondayISO;
-
-      // Clear table
+  
+      dateInput.value = monday.toISOString().split("T")[0];
       calendarBody.innerHTML = "";
-
-      // Fill table
+  
+      // Body rows
       times.forEach(time => {
         const row = document.createElement("tr");
         let rowHTML = `<td class="time-slot">${time}</td>`;
-
-        weekDates.forEach(date => {
-          const isToday = (date === todayStr);
-          const tdClass = isToday ? 'highlight-today' : '';
-          rowHTML += `<td class="${tdClass}">—</td>`;
+  
+        weekDates.forEach(dateISO => {
+          const formatted = new Date(dateISO).toLocaleDateString("en-CA");
+          const highlight = (formatted === todayStr) ? "highlight-today" : "";
+          rowHTML += `<td class="${highlight}">—</td>`;
         });
-
+  
         row.innerHTML = rowHTML;
         calendarBody.appendChild(row);
       });
-
+  
       fetchAppointments(weekDates);
     }
-
+  
     async function fetchAppointments(weekDates) {
       try {
         const response = await fetch(`http://127.0.0.1:8000/api/appointments?dates=${weekDates.join(",")}`);
         const data = await response.json();
-
+  
         const rows = calendarBody.querySelectorAll("tr");
         for (const appt of data) {
           const timeIndex = times.indexOf(appt.time);
@@ -131,35 +136,32 @@
             cell.textContent = appt.name;
           }
         }
-      } catch (error) {
-        console.error("Failed to load appointments:", error);
+      } catch (err) {
+        console.error("Failed to load appointments:", err);
       }
     }
-
-    // Button actions
+  
     prevBtn.addEventListener('click', () => {
       const d = new Date(dateInput.value);
       d.setDate(d.getDate() - 7);
-      dateInput.value = d.toISOString().split("T")[0];
-      updateWeekDatesAndCalendar(dateInput.value);
+      updateWeekDatesAndCalendar(d.toISOString().split("T")[0]);
     });
-
+  
     nextBtn.addEventListener('click', () => {
       const d = new Date(dateInput.value);
       d.setDate(d.getDate() + 7);
-      dateInput.value = d.toISOString().split("T")[0];
-      updateWeekDatesAndCalendar(dateInput.value);
+      updateWeekDatesAndCalendar(d.toISOString().split("T")[0]);
     });
-
+  
     dateInput.addEventListener('change', () => {
       updateWeekDatesAndCalendar(dateInput.value);
     });
-
-    // Initialize with today (Eastern time)
-    const todayUS = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
-    const todayDate = new Date(todayUS).toISOString().split("T")[0];
-    dateInput.value = todayDate;
-    updateWeekDatesAndCalendar(todayDate);
+  
+    // 🔥 Load current week on page load (based on today in EST)
+    const todayEST = getTodayInEST(); // e.g., '2025-07-08'
+    updateWeekDatesAndCalendar(todayEST);
   </script>
+  
+  
 </body>
 </html>
