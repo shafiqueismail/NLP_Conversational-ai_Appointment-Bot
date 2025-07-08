@@ -870,15 +870,8 @@ def handle_response(user_input):
     context["history"].append(user_input)
     
     prediction, confidence = predict_intent(user_input)
-    
-    # Low confidence fallback
-    if confidence < 0.5:
-        context["last_intent"] = None
-        context["step"] = 0
-        context["params"] = {}
-        return "I'm not quite sure I understood. Could you rephrase that?"
 
-    # Switch to new intent
+    # Always go with top prediction
     if context["last_intent"] != prediction:
         context["last_intent"] = prediction
         context["step"] = 0
@@ -902,11 +895,10 @@ def handle_response(user_input):
         if context["step"] < len(flow):
             return flow[context["step"]]["prompt"]
         else:
-            # Final message
             return f"You're all set for {context['params'].get('date', 'your appointment')} in the {context['params'].get('time_pref', 'day')}. Anything else I can help with?"
     else:
-        # Repeat same question
         return flow[step]["prompt"]
+
 
 
 
