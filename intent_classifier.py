@@ -868,14 +868,14 @@ def get_dynamic_response(intent):
 def handle_response(user_input):
     context = conversation_context
     context["history"].append(user_input)
-    
-    prediction, confidence = predict_intent(user_input)
 
-    # Always go with top prediction
-    if context["last_intent"] != prediction:
+    # Only predict new intent if we are NOT in the middle of an active flow
+    if context["step"] == 0:
+        prediction, confidence = predict_intent(user_input)
         context["last_intent"] = prediction
-        context["step"] = 0
         context["params"] = {}
+    else:
+        prediction = context["last_intent"]
 
     # FSM Flow
     flow = dialogue_flows.get(prediction)
@@ -898,7 +898,6 @@ def handle_response(user_input):
             return f"You're all set for {context['params'].get('date', 'your appointment')} in the {context['params'].get('time_pref', 'day')}. Anything else I can help with?"
     else:
         return flow[step]["prompt"]
-
 
 
 
