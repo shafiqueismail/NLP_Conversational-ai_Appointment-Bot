@@ -751,7 +751,7 @@ def get_dynamic_response(intent):
     response_templates = [
         "Sure! Let's take care of that. {filler}",
         "Absolutely. {filler}",
-        "Happy to help! {filler}"
+        "Happy to help! {filler},"
     ]
     template = choice(response_templates)
     filler = choice(fillers.get(intent, [""]))
