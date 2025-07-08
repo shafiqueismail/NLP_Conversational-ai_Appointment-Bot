@@ -15,6 +15,9 @@
       background-color: #ffd6d6;
       font-weight: bold;
     }
+    .highlight-today {
+      background-color: #ffe0b3 !important;
+    }
     thead th {
       text-align: center;
     }
@@ -24,28 +27,24 @@
   <div class="container py-4">
     <h2 class="text-center mb-4">Dentist Weekly Appointment Calendar</h2>
 
-    <!-- Week selector -->
+    <!-- Week navigation -->
     <div class="mb-3 text-center">
-      <label for="weekPicker" class="form-label fw-bold">Select a week:</label>
-      <input type="date" id="weekPicker" class="form-control w-auto d-inline-block"
-             min="2025-07-07" max="2026-07-07" value="2025-07-07"/>
+      <button id="prevWeek" class="btn btn-outline-primary me-2">Previous Week</button>
+      <input type="date" id="weekPicker" class="form-control d-inline-block w-auto"
+             min="2025-07-07" max="2026-07-07"/>
+      <button id="nextWeek" class="btn btn-outline-primary ms-2">Next Week</button>
     </div>
 
-    <!-- Table -->
+    <!-- Calendar table -->
     <div class="table-responsive">
       <table class="table table-bordered">
         <thead class="table-light">
-          <tr>
-            <th>Time</th>
-            <th>Monday<br><small class="date-label"></small></th>
-            <th>Tuesday<br><small class="date-label"></small></th>
-            <th>Wednesday<br><small class="date-label"></small></th>
-            <th>Thursday<br><small class="date-label"></small></th>
-            <th>Friday<br><small class="date-label"></small></th>
+          <tr id="calendarHeader">
+            <!-- Filled dynamically -->
           </tr>
         </thead>
         <tbody id="calendarBody">
-          <!-- Dynamically filled -->
+          <!-- Filled dynamically -->
         </tbody>
       </table>
     </div>
@@ -53,7 +52,9 @@
 
   <script>
     const dateInput = document.getElementById('weekPicker');
-    const dateLabels = document.querySelectorAll('.date-label');
+    const prevBtn = document.getElementById('prevWeek');
+    const nextBtn = document.getElementById('nextWeek');
+    const calendarHeader = document.getElementById('calendarHeader');
     const calendarBody = document.getElementById('calendarBody');
 
     const times = [
@@ -63,37 +64,55 @@
       "3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM"
     ];
 
+    const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
     function getMonday(date) {
       const d = new Date(date);
       const day = d.getDay();
-      const diff = (day + 6) % 7; // Adjust so Monday is start
-      d.setDate(d.getDate() - diff);
+      const diff = (day === 0 ? -6 : 1 - day); // Sunday = 0 → back to Monday
+      d.setDate(d.getDate() + diff);
       return d;
     }
 
     function updateWeekDatesAndCalendar(startDateStr) {
       const monday = getMonday(startDateStr);
+      const todayUS = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
+      const todayStr = new Date(todayUS).toISOString().split("T")[0];
       const weekDates = [];
 
-      // Update header labels
-      for (let i = 0; i < 5; i++) {
+      // Update header
+      let headerHTML = `<th>Time</th>`;
+      for (let i = 0; i < 7; i++) {
         const d = new Date(monday);
         d.setDate(monday.getDate() + i);
-        dateLabels[i].textContent = d.toLocaleDateString('en-CA');
-        weekDates.push(d.toISOString().split('T')[0]); // Format YYYY-MM-DD
+        const iso = d.toISOString().split("T")[0];
+        weekDates.push(iso);
+        headerHTML += `<th>${dayNames[i]}<br><small class="date-label">${d.toLocaleDateString("en-CA")}</small></th>`;
       }
+      calendarHeader.innerHTML = headerHTML;
 
-      // Clear previous rows
+      // Update date picker to reflect current Monday
+      const mondayISO = monday.toISOString().split("T")[0];
+      dateInput.value = mondayISO;
+
+      // Clear table
       calendarBody.innerHTML = "";
 
-      // Populate time slots
+      // Fill table
       times.forEach(time => {
         const row = document.createElement("tr");
-        row.innerHTML = `<td class="time-slot">${time}</td>` + weekDates.map(() => `<td>—</td>`).join("");
+        let rowHTML = `<td class="time-slot">${time}</td>`;
+
+        weekDates.forEach(date => {
+          const isToday = (date === todayStr);
+          const tdClass = isToday ? 'highlight-today' : '';
+          rowHTML += `<td class="${tdClass}">—</td>`;
+        });
+
+        row.innerHTML = rowHTML;
         calendarBody.appendChild(row);
       });
 
-      // Fetch and fill booked slots from backend
       fetchAppointments(weekDates);
     }
 
@@ -102,13 +121,12 @@
         const response = await fetch(`http://127.0.0.1:8000/api/appointments?dates=${weekDates.join(",")}`);
         const data = await response.json();
 
-        // Fill the table
         const rows = calendarBody.querySelectorAll("tr");
         for (const appt of data) {
           const timeIndex = times.indexOf(appt.time);
-          const dayIndex = weekDates.indexOf(appt.date); // Monday = 0
+          const dayIndex = weekDates.indexOf(appt.date);
           if (timeIndex !== -1 && dayIndex !== -1) {
-            const cell = rows[timeIndex].children[dayIndex + 1]; // +1 offset due to time slot in first column
+            const cell = rows[timeIndex].children[dayIndex + 1];
             cell.classList.add("booked");
             cell.textContent = appt.name;
           }
@@ -118,11 +136,30 @@
       }
     }
 
-    // Initial load
-    updateWeekDatesAndCalendar(dateInput.value);
+    // Button actions
+    prevBtn.addEventListener('click', () => {
+      const d = new Date(dateInput.value);
+      d.setDate(d.getDate() - 7);
+      dateInput.value = d.toISOString().split("T")[0];
+      updateWeekDatesAndCalendar(dateInput.value);
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const d = new Date(dateInput.value);
+      d.setDate(d.getDate() + 7);
+      dateInput.value = d.toISOString().split("T")[0];
+      updateWeekDatesAndCalendar(dateInput.value);
+    });
+
     dateInput.addEventListener('change', () => {
       updateWeekDatesAndCalendar(dateInput.value);
     });
+
+    // Initialize with today (Eastern time)
+    const todayUS = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
+    const todayDate = new Date(todayUS).toISOString().split("T")[0];
+    dateInput.value = todayDate;
+    updateWeekDatesAndCalendar(todayDate);
   </script>
 </body>
 </html>
