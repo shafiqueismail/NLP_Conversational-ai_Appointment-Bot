@@ -4,6 +4,8 @@ import pickle
 import os
 from random import choice
 import re
+import dateparser
+
 
 
 
@@ -468,7 +470,8 @@ training_data = {
   "My cavity is chipped and fell off, I need a replacement",
   "My cavity hurts a lot, I need it checked up",
   "The cavity needs to be filled with a black or white coating",
-  "I need to book an apoointment to fill my tooth that has a cavity"
+  "I need to book an apoointment to fill my tooth that has a cavity",
+  "I want to fill a cavity" 
 ],
 
 "book_extraction": [
@@ -829,26 +832,24 @@ def predict_intent(user_input):
 # Slot Filling (very basic extraction)
 def extract_slot(user_input):
     slots = {}
-    cleaned_input = user_input.lower().strip("?.!")
 
-    # Match day names like 'monday', 'next monday', 'on tuesday', etc.
-    day_match = re.search(r"(?:on |next |this )?(monday|tuesday|wednesday|thursday|friday|saturday|sunday)", cleaned_input)
-    if day_match:
-        slots["date"] = day_match.group(0).strip()
+    # Extract a datetime object
+    parsed_date = dateparser.parse(user_input, settings={"PREFER_DATES_FROM": "future"})
+    if parsed_date:
+        # Split date and time of day
+        day_name = parsed_date.strftime('%A').lower()     # e.g. 'tuesday'
+        hour = parsed_date.hour
 
-    # Time preference
-    if "morning" in cleaned_input:
-        slots["time_pref"] = "morning"
-    elif "afternoon" in cleaned_input:
-        slots["time_pref"] = "afternoon"
-    elif "evening" in cleaned_input:
-        slots["time_pref"] = "evening"
+        # Use weekday as 'date'
+        slots["date"] = day_name
 
-    # Optional: basic yes/no for emergency
-    if "yes" in cleaned_input or "sure" in cleaned_input:
-        slots["yes_no"] = "yes"
-    elif "no" in cleaned_input:
-        slots["yes_no"] = "no"
+        # Classify time of day (optional)
+        if 5 <= hour < 12:
+            slots["time_pref"] = "morning"
+        elif 12 <= hour < 17:
+            slots["time_pref"] = "afternoon"
+        else:
+            slots["time_pref"] = "evening"
 
     return slots
 
