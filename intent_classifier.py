@@ -938,20 +938,19 @@ def handle_response(user_input):
     found_slots = extract_slot(user_input)
 
     INTENT_SWITCH_CONFIDENCE_THRESHOLD = 0.75
-    slot_keywords = {"name", "date", "time_pref"}
 
-    # Prevent switching if mid-dialogue and user only gave slot info
+    # Strict: Do not allow intent switch if name was found
     if new_prediction != context.get("last_intent") and context["step"] > 0:
-        gave_relevant_slot = any(k in found_slots for k in slot_keywords)
+        gave_name = "name" in found_slots
 
-        if confidence > INTENT_SWITCH_CONFIDENCE_THRESHOLD and not gave_relevant_slot:
+        if confidence > INTENT_SWITCH_CONFIDENCE_THRESHOLD and not gave_name:
             print(f"Intent changed from {context['last_intent']} to {new_prediction} (confidence={confidence:.2f}). Resetting flow.")
             context["last_intent"] = new_prediction
             context["step"] = 0
             context["params"] = found_slots
             return handle_response(user_input)
         else:
-            print(f"Low confidence ({confidence:.2f}) or slot-related input — keeping current intent: {context['last_intent']}")
+            print(f"Intent NOT switched — either low confidence or name detected (confidence={confidence:.2f}, name={gave_name})")
             new_prediction = context["last_intent"]
 
     # Step 0: Initial intent setup
@@ -1041,6 +1040,7 @@ def handle_response(user_input):
         return handle_response(user_input)
     else:
         return flow[step]["prompt"]
+
 
 
 
