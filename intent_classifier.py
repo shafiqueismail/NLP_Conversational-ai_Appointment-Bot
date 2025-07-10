@@ -917,16 +917,16 @@ def handle_response(user_input):
     context = conversation_context
     context["history"].append(user_input)
 
-    # 🔁 Step 1: Check if user intent changed during mid-convo
+    # 🔁 Step 1: Predict and detect if intent changed mid-convo
     new_prediction, confidence = predict_intent(user_input)
     if new_prediction != context.get("last_intent") and context["step"] > 0:
         print(f"🔁 Intent changed from {context['last_intent']} → {new_prediction}. Resetting flow.")
         context["last_intent"] = new_prediction
         context["step"] = 0
         context["params"] = extract_slot(user_input)
-        return handle_response(user_input)  # Restart FSM with new intent
+        return handle_response(user_input)
 
-    # Step 2: On first step, initialize everything
+    # Step 2: Initial user input — set intent and slots
     if context["step"] == 0:
         prediction = new_prediction
         context["last_intent"] = prediction
@@ -941,13 +941,12 @@ def handle_response(user_input):
 
         # Jump to first missing step
         if missing_slots:
-            first_missing = missing_slots[0]
             for i, step in enumerate(flow):
-                if step["expect"] == first_missing:
+                if step["expect"] == missing_slots[0]:
                     context["step"] = i
                     break
         else:
-            context["step"] = len(flow)  # Skip prompts if all slots known
+            context["step"] = len(flow)  # Skip to booking
 
     else:
         prediction = context["last_intent"]
@@ -959,8 +958,16 @@ def handle_response(user_input):
     flow = dialogue_flows.get(prediction)
     step = context["step"]
 
-    # Step 3: If done, book the appointment
-    if step >= len(flow):
+    # ✅ Step 3: Check if all required slots are now filled
+    required_slots = [s["expect"] for s in flow if s["expect"] != "end"]
+    missing = [s for s in required_slots if s not in context["params"]]
+
+    if not missing:
+        # All slots filled → skip to booking
+        context["step"] = len(flow)
+
+    # Step 4: Book the appointment if at the end
+    if context["step"] >= len(flow):
         name = context['params'].get('name', 'John Doe')
         date = context['params']['date'].capitalize()
         time_pref = context['params']['time_pref']
@@ -973,7 +980,7 @@ def handle_response(user_input):
         chosen_time = default_times.get(time_pref, "09:00 AM")
 
         treatment = prediction.replace("book_", "").replace("_", " ").title()
-        duration = TREATMENT_DURATIONS.get(treatment, 60)
+        duration = TREATMENT_DURATIONS.get(prediction, 60)
 
         payload = {
             "name": name,
@@ -997,19 +1004,19 @@ def handle_response(user_input):
             f"Treatment: {treatment}, Duration: {duration} mins"
         )
 
-        context["step"] = 0  # Reset conversation
+        context["step"] = 0
+        context["params"] = {}
+        context["last_intent"] = None
         return confirmation + "\n" + parsed_info + "\nAnything else I can help with?"
 
-    # Step 4: Ask next prompt if any slots missing
+    # Step 5: Continue FSM flow with next prompt
     expected_slot = flow[step]["expect"]
     if expected_slot in context["params"]:
         context["step"] += 1
-        if context["step"] < len(flow):
-            return flow[context["step"]]["prompt"]
-        else:
-            return handle_response("")  # Trigger booking flow
+        return handle_response(user_input)  # Recursively continue flow
     else:
         return flow[step]["prompt"]
+
 
 
 
