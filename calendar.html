@@ -14,7 +14,8 @@
     .booked {
       background-color: #ffd6d6;
       font-weight: bold;
-    }
+      text-align: center;
+  }
     .highlight-today {
       background-color: #fff8e1 !important; /* pale yellow */
     }
@@ -122,24 +123,42 @@
     }
   
     async function fetchAppointments(weekDates) {
-      try {
-        const response = await fetch(`http://127.0.0.1:8000/api/appointments?dates=${weekDates.join(",")}`);
-        const data = await response.json();
-  
-        const rows = calendarBody.querySelectorAll("tr");
-        for (const appt of data) {
-          const timeIndex = times.indexOf(appt.time);
-          const dayIndex = weekDates.indexOf(appt.date);
-          if (timeIndex !== -1 && dayIndex !== -1) {
-            const cell = rows[timeIndex].children[dayIndex + 1];
-            cell.classList.add("booked");
-            cell.textContent = appt.name;
-          }
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/api/appointments?dates=${weekDates.join(",")}`);
+    const data = await response.json();
+
+    const rows = calendarBody.querySelectorAll("tr");
+
+    for (const appt of data) {
+      const timeIndex = times.indexOf(appt.time);
+      const dayIndex = weekDates.indexOf(appt.date);
+      if (timeIndex !== -1 && dayIndex !== -1) {
+        const cell = rows[timeIndex].children[dayIndex + 1];
+        cell.classList.add("booked");
+
+        //Show name + treatment on calendar
+        cell.innerHTML = `
+          <strong>${appt.name}</strong><br>
+          <small>${appt.treatment}</small>
+        `;
+
+        // Highlight whitening appointments
+        if (appt.treatment.toLowerCase().includes("whitening")) {
+          cell.style.backgroundColor = "#ffe0f0"; // light pink
         }
-      } catch (err) {
-        console.error("Failed to load appointments:", err);
+
+        // (Optional) You can later use duration for rowspan or height control
+        // Example: if appt.duration > 60, apply a visual cue
+        // if (appt.duration > 60) {
+        //   cell.style.border = "2px solid red";
+        // }
       }
     }
+  } catch (err) {
+    console.error("Failed to load appointments:", err);
+  }
+}
+
   
     prevBtn.addEventListener('click', () => {
       const d = new Date(dateInput.value);
