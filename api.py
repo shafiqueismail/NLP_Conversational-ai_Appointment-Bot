@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from typing import List
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import sessionmaker, declarative_base
+from datetime import datetime, timedelta
 
 # --------------------
 # Database setup
@@ -31,7 +32,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],
+    allow_origins=["http://127.0.0.1:5500"],  # Adjust if your frontend runs elsewhere
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -74,23 +75,40 @@ def get_appointments(dates: str = Query("", description="Comma-separated list of
     } for a in appointments]
 
 # --------------------
-# POST: Add new appointment (with double-booking check)
+# POST: Add new appointment with overlap check
 # --------------------
 @app.post("/api/add_appointment")
 def add_appointment(appointment: NewAppointment):
     db = SessionLocal()
 
-    # Step 1: Check if date + time is already booked
-    conflict = db.query(Appointment).filter(
-        Appointment.date == appointment.date,
-        Appointment.time == appointment.time
-    ).first()
-
-    if conflict:
+    # Convert new appointment time to datetime
+    try:
+        new_start = datetime.strptime(appointment.time, "%I:%M %p")
+    except ValueError:
         db.close()
-        return {"status": "error", "message": "This time slot is already booked."}
+        return {"status": "error", "message": "Invalid time format. Use 'HH:MM AM/PM'."}
 
-    # Step 2: No conflict, proceed to insert
+    new_end = new_start + timedelta(minutes=appointment.duration)
+
+    # Fetch same-day appointments
+    same_day_appointments = db.query(Appointment).filter(
+        Appointment.date == appointment.date
+    ).all()
+
+    # Check for overlap
+    for existing in same_day_appointments:
+        existing_start = datetime.strptime(existing.time, "%I:%M %p")
+        existing_end = existing_start + timedelta(minutes=existing.duration)
+
+        # Overlap rule
+        if new_start < existing_end and new_end > existing_start:
+            db.close()
+            return {
+                "status": "error",
+                "message": f"Conflict with {existing.name}'s appointment at {existing.time}."
+            }
+
+    # No conflict → Save appointment
     new_entry = Appointment(
         name=appointment.name,
         date=appointment.date,
