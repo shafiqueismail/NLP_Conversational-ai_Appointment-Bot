@@ -917,16 +917,21 @@ def handle_response(user_input):
     context = conversation_context
     context["history"].append(user_input)
 
-    # 🔁 Step 1: Predict and detect if intent changed mid-convo
     new_prediction, confidence = predict_intent(user_input)
-    if new_prediction != context.get("last_intent") and context["step"] > 0:
-        print(f"🔁 Intent changed from {context['last_intent']} → {new_prediction}. Resetting flow.")
-        context["last_intent"] = new_prediction
-        context["step"] = 0
-        context["params"] = extract_slot(user_input)
-        return handle_response(user_input)
 
-    # Step 2: Initial user input — set intent and slots
+    INTENT_SWITCH_CONFIDENCE_THRESHOLD = 0.5 # A category can be changed mid search only if the threshold is above 0.5
+
+    if new_prediction != context.get("last_intent") and context["step"] > 0:
+        if confidence > INTENT_SWITCH_CONFIDENCE_THRESHOLD:
+            print(f"Intent changed from {context['last_intent']} to {new_prediction} (confidence={confidence:.2f}). Resetting flow.")
+            context["last_intent"] = new_prediction
+            context["step"] = 0
+            context["params"] = extract_slot(user_input)
+            return handle_response(user_input)
+        else:
+            print(f"Low confidence ({confidence:.2f}) — keeping current intent: {context['last_intent']}")
+            new_prediction = context["last_intent"]
+
     if context["step"] == 0:
         prediction = new_prediction
         context["last_intent"] = prediction
@@ -939,34 +944,30 @@ def handle_response(user_input):
         if not flow:
             return f"Okay, you want to {prediction.replace('_', ' ')}. Let me help with that."
 
-        # Jump to first missing step
         if missing_slots:
             for i, step in enumerate(flow):
                 if step["expect"] == missing_slots[0]:
                     context["step"] = i
                     break
         else:
-            context["step"] = len(flow)  # Skip to booking
+            context["step"] = len(flow)
 
     else:
         prediction = context["last_intent"]
         found_slots = extract_slot(user_input)
         context["params"].update(found_slots)
 
-    print(f"🧠 Current intent: {context['last_intent']}, Step: {context['step']}, Slots: {context['params']}")
+    print(f"Current intent: {context['last_intent']}, Step: {context['step']}, Slots: {context['params']}")
 
     flow = dialogue_flows.get(prediction)
     step = context["step"]
 
-    # ✅ Step 3: Check if all required slots are now filled
     required_slots = [s["expect"] for s in flow if s["expect"] != "end"]
     missing = [s for s in required_slots if s not in context["params"]]
 
     if not missing:
-        # All slots filled → skip to booking
         context["step"] = len(flow)
 
-    # Step 4: Book the appointment if at the end
     if context["step"] >= len(flow):
         name = context['params'].get('name', 'John Doe')
         date = context['params']['date'].capitalize()
@@ -993,11 +994,11 @@ def handle_response(user_input):
         try:
             response = requests.post("http://127.0.0.1:8000/api/add_appointment", json=payload)
             if response.status_code == 200:
-                confirmation = f"✅ You're all set for {treatment} on {date} at {chosen_time}."
+                confirmation = f"You are booked for {treatment} on {date} at {chosen_time}."
             else:
-                confirmation = "❌ I tried to book your appointment, but something went wrong."
+                confirmation = "There was an error while trying to book your appointment."
         except Exception:
-            confirmation = "❌ Couldn’t reach the booking server."
+            confirmation = "Could not connect to the booking server."
 
         parsed_info = (
             f"[Parsed Info] Name: {name}, Date: {date}, Time: {chosen_time}, "
@@ -1007,13 +1008,13 @@ def handle_response(user_input):
         context["step"] = 0
         context["params"] = {}
         context["last_intent"] = None
-        return confirmation + "\n" + parsed_info + "\nAnything else I can help with?"
 
-    # Step 5: Continue FSM flow with next prompt
+        return confirmation + "\n" + parsed_info + "\nIs there anything else I can help you with?"
+
     expected_slot = flow[step]["expect"]
     if expected_slot in context["params"]:
         context["step"] += 1
-        return handle_response(user_input)  # Recursively continue flow
+        return handle_response(user_input)
     else:
         return flow[step]["prompt"]
 
