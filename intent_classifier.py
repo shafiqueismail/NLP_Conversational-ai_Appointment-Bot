@@ -106,7 +106,23 @@ training_data = {
     "Do you do teeth whitening",
     "I want my teeth to be whiter",
     "I want whiter teeth",
-    "My teeth are yellowing, I need to whiten my teeth"
+    "My teeth are yellowing, I need to whiten my teeth",
+    "Hi, I’d like to book a whitening session",
+    "Can I whiten my teeth?",
+    "I need to get teeth whitening",
+    "I want a whitening session",
+    "My teeth need whitening",
+    "Book me for teeth whitening",
+    "Whitening appointment please",
+    "I’d like to get my teeth whitened",
+    "I need to whiten my teeth",
+    "I’m looking to brighten my smile",
+    "Teeth whitening this week",
+    "Can I schedule teeth whitening?",
+    "Set up a whitening treatment",
+    "Please book me for whitening",
+    "Whitening on Friday",
+    "I want to get my teeth whitened"
 ],
    "cancel_appointment": [
     "I want to cancel my visit",
@@ -645,7 +661,7 @@ with open("vectorizer.pkl", "wb") as f: pickle.dump(vectorizer, f)
 # 2. Dialogue flows per intent (FSM)
 dialogue_flows = {
     "book_cleaning": [
-        {"prompt": "First things first! What’s your full name?", "expect": "name"},
+        {"prompt": "Perfect! First things first, what’s your full name?", "expect": "name"},
         {"prompt": "Sure! When would you like to come in for a cleaning?", "expect": "date"},
         {"prompt": "Got it. Do you prefer morning or afternoon?", "expect": "time_pref"},
         {"prompt": "Thanks! I've noted that down. Anything else you'd like to ask?", "expect": "end"}
@@ -836,8 +852,7 @@ def predict_intent(user_input):
 
 
 # Slot Filling (very basic extraction)
-import re
-import dateparser
+
 
 def extract_slot(user_input):
     slots = {}
@@ -864,11 +879,16 @@ def extract_slot(user_input):
     elif "evening" in user_input.lower():
         slots["time_pref"] = "evening"
 
-    # --- Name Detection ---
-    name_match = re.search(r"\bmy name is ([A-Z][a-z]+(?: [A-Z][a-z]+)?)", user_input)
+    # --- Name Detection (Improved) ---
+    name_match = re.search(
+        r"\b(?:my name is|i am|i'm|this is|booking for|appointment for|for)\s+([A-Z][a-z]+(?: [A-Z][a-z]+)?)",
+        user_input,
+        re.IGNORECASE
+    )
     if name_match:
-        slots["name"] = name_match.group(1)
+        slots["name"] = name_match.group(1).strip()
     else:
+        # Fallback if message is just a name like "Bob Dylan"
         words = user_input.strip().split()
         if len(words) == 2 and all(w[0].isupper() for w in words if w.isalpha()):
             slots["name"] = user_input.strip()
@@ -891,12 +911,24 @@ def get_dynamic_response(intent):
 # 6. FSM-driven response engine
 import requests
 
+import requests
+
 def handle_response(user_input):
     context = conversation_context
     context["history"].append(user_input)
 
+    # 🔁 Step 1: Check if user intent changed during mid-convo
+    new_prediction, confidence = predict_intent(user_input)
+    if new_prediction != context.get("last_intent") and context["step"] > 0:
+        print(f"🔁 Intent changed from {context['last_intent']} → {new_prediction}. Resetting flow.")
+        context["last_intent"] = new_prediction
+        context["step"] = 0
+        context["params"] = extract_slot(user_input)
+        return handle_response(user_input)  # Restart FSM with new intent
+
+    # Step 2: On first step, initialize everything
     if context["step"] == 0:
-        prediction, confidence = predict_intent(user_input)
+        prediction = new_prediction
         context["last_intent"] = prediction
         context["params"] = extract_slot(user_input)
 
@@ -907,6 +939,7 @@ def handle_response(user_input):
         if not flow:
             return f"Okay, you want to {prediction.replace('_', ' ')}. Let me help with that."
 
+        # Jump to first missing step
         if missing_slots:
             first_missing = missing_slots[0]
             for i, step in enumerate(flow):
@@ -914,17 +947,20 @@ def handle_response(user_input):
                     context["step"] = i
                     break
         else:
-            context["step"] = len(flow)  # Skip prompts
+            context["step"] = len(flow)  # Skip prompts if all slots known
+
     else:
         prediction = context["last_intent"]
         found_slots = extract_slot(user_input)
         context["params"].update(found_slots)
 
+    print(f"🧠 Current intent: {context['last_intent']}, Step: {context['step']}, Slots: {context['params']}")
+
     flow = dialogue_flows.get(prediction)
     step = context["step"]
 
+    # Step 3: If done, book the appointment
     if step >= len(flow):
-        # All done — book it
         name = context['params'].get('name', 'John Doe')
         date = context['params']['date'].capitalize()
         time_pref = context['params']['time_pref']
@@ -961,20 +997,19 @@ def handle_response(user_input):
             f"Treatment: {treatment}, Duration: {duration} mins"
         )
 
-        context["step"] = 0  # Reset FSM for new session
+        context["step"] = 0  # Reset conversation
         return confirmation + "\n" + parsed_info + "\nAnything else I can help with?"
 
-    # Ask next prompt
+    # Step 4: Ask next prompt if any slots missing
     expected_slot = flow[step]["expect"]
     if expected_slot in context["params"]:
         context["step"] += 1
         if context["step"] < len(flow):
             return flow[context["step"]]["prompt"]
         else:
-            return handle_response("")  # Re-enter to book
+            return handle_response("")  # Trigger booking flow
     else:
         return flow[step]["prompt"]
-
 
 
 
