@@ -640,25 +640,6 @@ model.fit(X_train, training_labels)
 with open("model.pkl", "wb") as f: pickle.dump(model, f)
 with open("vectorizer.pkl", "wb") as f: pickle.dump(vectorizer, f)
 
-# 5. Intent → Response
-# intent_responses = {
-#     "book_cleaning": "We can book your dental cleaning. When are you free?",
-#     "book_whitening": "Teeth whitening is available! What time is best to book an appointment for you?",
-#     "book_checkup": "Let's schedule your checkup. Is there a time slot that works best for you?",
-#     "cancel_appointment": "Your appointment has been canceled. Let us know if you’d like to book again.",
-#     "reschedule_appointment": "Understood. When would you like to reschedule your appointment?",
-#     "ask_price": "Sure. I can help you with our service pricing. Which treatment are you interested in?",
-#     "ask_availability": "We’ll check what times are available. Do you have a preferred day or time?",
-#     "tooth_pain": "I'm sorry you're in pain. We recommend booking a visit. Would you like help with that?",
-#     "general_inquiry": "I'm happy to help with information about our services. What would you like to know?",
-#     "out_of_scope": "Sorry, I can only help with dental-related questions like appointments, services, or pricing.",
-#     "clarify_intent": "Sorry, I didn't quite understand. Could you please rephrase or be more specific?",
-#     "book_filling": "Sounds like you need to fill a cavity! What times are you available?",
-#     "book_extraction": "We can schedule a tooth extraction for you. When are your availabilities?",
-#     "book_root_canal": "Understood. We can book a root canal treatment for you. Do you have a preferred day or time?",
-#     "book_braces_consult": "We offer orthodontic consultations to discuss braces or Invisalign options. Would you like to book a time now?"
-# }
-
 
 
 # 2. Dialogue flows per intent (FSM)
