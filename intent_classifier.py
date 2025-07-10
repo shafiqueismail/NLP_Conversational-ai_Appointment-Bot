@@ -933,34 +933,25 @@ def handle_response(user_input):
     context = conversation_context
     context["history"].append(user_input)
 
-    # Predict intent and extract new slots
+    # --- Step 1: Predict intent and extract new slots ---
     new_prediction, confidence = predict_intent(user_input)
     found_slots = extract_slot(user_input)
 
-    INTENT_SWITCH_CONFIDENCE_THRESHOLD = 0.75
-
-    # Determine expected slot based on current FSM step
+    # --- Step 2: FSM setup ---
     current_intent = context.get("last_intent")
     step = context.get("step", 0)
     flow = dialogue_flows.get(current_intent, [])
     expected_slot = flow[step]["expect"] if step < len(flow) else None
     slot_was_expected = expected_slot in found_slots
 
-    # Determine if we should allow switching intent
-    if step > 0 and new_prediction != current_intent:
-        if confidence >= INTENT_SWITCH_CONFIDENCE_THRESHOLD and not slot_was_expected:
-            print(f"Intent switched from {current_intent} ➜ {new_prediction} (confidence={confidence:.2f})")
-            context["last_intent"] = new_prediction
-            context["step"] = 0
-            context["params"] = found_slots
-            return handle_response(user_input)
-        else:
-            print(f"Intent NOT switched (confidence={confidence:.2f}, slot_was_expected={slot_was_expected})")
-            new_prediction = current_intent
+    # --- Step 3: Disable mode switching completely ---
+    # Instead of switching, we always continue with the currently active intent.
+    # This avoids bugs when the user types "My name is..." or "yes" and the system mistakenly switches.
+    new_prediction = current_intent
 
-    # Step 0: Initial intent setup
+    # --- Step 4: First time setup ---
     if step == 0:
-        prediction = new_prediction
+        prediction = new_prediction or predict_intent(user_input)[0]
         context["last_intent"] = prediction
         context["params"] = found_slots
 
@@ -971,6 +962,7 @@ def handle_response(user_input):
         if not flow:
             return f"Okay, you want to {prediction.replace('_', ' ')}. Let me help with that."
 
+        # Set FSM to first missing slot step
         if missing:
             for i, step_info in enumerate(flow):
                 if step_info["expect"] == missing[0]:
@@ -985,7 +977,7 @@ def handle_response(user_input):
 
     print(f"Current intent: {context['last_intent']}, Step: {context['step']}, Slots: {context['params']}")
 
-    # Re-fetch flow and step after possible updates
+    # --- Step 5: Check if all required slots are filled ---
     flow = dialogue_flows.get(prediction)
     step = context["step"]
 
@@ -995,8 +987,8 @@ def handle_response(user_input):
     if not missing:
         context["step"] = len(flow)
 
+    # --- Step 6: Booking completed, submit to backend ---
     if context["step"] >= len(flow):
-        # All slots are filled — schedule the appointment
         name = context['params'].get('name', 'John Doe')
         date = context['params']['date'].capitalize()
         time_pref = context['params']['time_pref']
@@ -1033,20 +1025,21 @@ def handle_response(user_input):
             f"Treatment: {treatment}, Duration: {duration} mins"
         )
 
-        # Reset context for next session
+        # Reset FSM context after booking
         context["step"] = 0
         context["params"] = {}
         context["last_intent"] = None
 
         return confirmation + "\n" + parsed_info + "\nIs there anything else I can help you with?"
 
-    # Continue FSM
+    # --- Step 7: Continue FSM (next prompt) ---
     expected_slot = flow[step]["expect"]
     if expected_slot in context["params"]:
         context["step"] += 1
         return handle_response(user_input)
     else:
         return flow[step]["prompt"]
+
 
 
 
