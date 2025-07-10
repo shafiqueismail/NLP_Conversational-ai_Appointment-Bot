@@ -645,7 +645,7 @@ with open("vectorizer.pkl", "wb") as f: pickle.dump(vectorizer, f)
 # 2. Dialogue flows per intent (FSM)
 dialogue_flows = {
     "book_cleaning": [
-        {"prompt": "What’s your full name?", "expect": "name"},
+        {"prompt": "First things first! What’s your full name?", "expect": "name"},
         {"prompt": "Sure! When would you like to come in for a cleaning?", "expect": "date"},
         {"prompt": "Got it. Do you prefer morning or afternoon?", "expect": "time_pref"},
         {"prompt": "Thanks! I've noted that down. Anything else you'd like to ask?", "expect": "end"}
@@ -836,20 +836,19 @@ def predict_intent(user_input):
 
 
 # Slot Filling (very basic extraction)
+import re
+import dateparser
+
 def extract_slot(user_input):
-    import dateparser
     slots = {}
 
     # --- Date & Time Parsing ---
     parsed_date = dateparser.parse(user_input, settings={"PREFER_DATES_FROM": "future"})
     if parsed_date:
-        # Extract day of the week
-        day_name = parsed_date.strftime('%A').lower()  # e.g., 'tuesday'
-        hour = parsed_date.hour
-
+        day_name = parsed_date.strftime('%A').lower()
         slots["date"] = day_name
 
-        # Time of day slot
+        hour = parsed_date.hour
         if 5 <= hour < 12:
             slots["time_pref"] = "morning"
         elif 12 <= hour < 17:
@@ -857,12 +856,25 @@ def extract_slot(user_input):
         else:
             slots["time_pref"] = "evening"
 
+    # --- Time preference keyword detection ---
+    if "morning" in user_input.lower():
+        slots["time_pref"] = "morning"
+    elif "afternoon" in user_input.lower():
+        slots["time_pref"] = "afternoon"
+    elif "evening" in user_input.lower():
+        slots["time_pref"] = "evening"
+
     # --- Name Detection ---
-    words = user_input.split()
-    if len(words) >= 2 and all(word[0].isupper() for word in words if word.isalpha()):
-        slots["name"] = user_input
+    name_match = re.search(r"\bmy name is ([A-Z][a-z]+(?: [A-Z][a-z]+)?)", user_input)
+    if name_match:
+        slots["name"] = name_match.group(1)
+    else:
+        words = user_input.strip().split()
+        if len(words) == 2 and all(w[0].isupper() for w in words if w.isalpha()):
+            slots["name"] = user_input.strip()
 
     return slots
+
 
 
 
@@ -877,93 +889,92 @@ def get_dynamic_response(intent):
     return template.format(filler=filler)
 
 # 6. FSM-driven response engine
+import requests
+
 def handle_response(user_input):
     context = conversation_context
     context["history"].append(user_input)
 
-    # Predict new intent if not in the middle of a flow
     if context["step"] == 0:
         prediction, confidence = predict_intent(user_input)
         context["last_intent"] = prediction
-        context["params"] = {}
+        context["params"] = extract_slot(user_input)
+
+        flow = dialogue_flows.get(prediction, [])
+        required_slots = [step["expect"] for step in flow if step["expect"] != "end"]
+        missing_slots = [slot for slot in required_slots if slot not in context["params"]]
+
+        if not flow:
+            return f"Okay, you want to {prediction.replace('_', ' ')}. Let me help with that."
+
+        if missing_slots:
+            first_missing = missing_slots[0]
+            for i, step in enumerate(flow):
+                if step["expect"] == first_missing:
+                    context["step"] = i
+                    break
+        else:
+            context["step"] = len(flow)  # Skip prompts
     else:
         prediction = context["last_intent"]
-
-    # FSM Flow for current intent
-    flow = dialogue_flows.get(prediction)
-    if not flow:
-        return f"Okay, you want to {prediction.replace('_', ' ')}. Let me help with that."
-
-    step = context["step"]
-    if step >= len(flow):
-        return "Thanks! Anything else I can help with?"
-
-    expected_slot = flow[step]["expect"]
-    found_slots = extract_slot(user_input)
-
-    # If the user provided the expected info
-    if expected_slot in found_slots:
+        found_slots = extract_slot(user_input)
         context["params"].update(found_slots)
-        context["step"] += 1
 
-        # If more steps remain in the flow
+    flow = dialogue_flows.get(prediction)
+    step = context["step"]
+
+    if step >= len(flow):
+        # All done — book it
+        name = context['params'].get('name', 'John Doe')
+        date = context['params']['date'].capitalize()
+        time_pref = context['params']['time_pref']
+
+        default_times = {
+            "morning": "09:00 AM",
+            "afternoon": "01:00 PM",
+            "evening": "04:00 PM"
+        }
+        chosen_time = default_times.get(time_pref, "09:00 AM")
+
+        treatment = prediction.replace("book_", "").replace("_", " ").title()
+        duration = TREATMENT_DURATIONS.get(treatment, 60)
+
+        payload = {
+            "name": name,
+            "date": date,
+            "time": chosen_time,
+            "treatment": treatment,
+            "duration": duration
+        }
+
+        try:
+            response = requests.post("http://127.0.0.1:8000/api/add_appointment", json=payload)
+            if response.status_code == 200:
+                confirmation = f"✅ You're all set for {treatment} on {date} at {chosen_time}."
+            else:
+                confirmation = "❌ I tried to book your appointment, but something went wrong."
+        except Exception:
+            confirmation = "❌ Couldn’t reach the booking server."
+
+        parsed_info = (
+            f"[Parsed Info] Name: {name}, Date: {date}, Time: {chosen_time}, "
+            f"Treatment: {treatment}, Duration: {duration} mins"
+        )
+
+        context["step"] = 0  # Reset FSM for new session
+        return confirmation + "\n" + parsed_info + "\nAnything else I can help with?"
+
+    # Ask next prompt
+    expected_slot = flow[step]["expect"]
+    if expected_slot in context["params"]:
+        context["step"] += 1
         if context["step"] < len(flow):
             return flow[context["step"]]["prompt"]
         else:
-            # --- All slots filled: Book the appointment ---
-            import requests
-            import datetime
-
-            name = context['params'].get('name', 'John Doe')
-            date = context['params']['date'].capitalize()
-            time_pref = context['params']['time_pref']
-
-            # Default times by time_pref
-            default_times = {
-                "morning": "09:00 AM",
-                "afternoon": "01:00 PM",
-                "evening": "04:00 PM"
-            }
-            chosen_time = default_times.get(time_pref, "09:00 AM")
-
-            # Format intent name into human-readable treatment
-            treatment = prediction.replace("book_", "").replace("_", " ").title()
-
-            # Duration rules
-            TREATMENT_DURATIONS = {
-                "Teeth Whitening": 90,
-                "Cleaning": 60,
-                "Checkup": 60,
-                "Filling": 60,
-                "Extraction": 60,
-                "Root Canal": 60,
-                "Braces Consult": 60
-            }
-            duration = TREATMENT_DURATIONS.get(treatment, 60)
-
-            # Prepare JSON payload
-            payload = {
-                "name": name,
-                "date": date,
-                "time": chosen_time,
-                "treatment": treatment,
-                "duration": duration
-            }
-
-            # Send to backend API
-            try:
-                response = requests.post("http://127.0.0.1:8000/api/add_appointment", json=payload)
-                if response.status_code == 200:
-                    confirmation = f"You're all set for {treatment} on {date} at {chosen_time}."
-                else:
-                    confirmation = "I tried to book your appointment, but something went wrong."
-            except Exception as e:
-                confirmation = "Couldn’t reach the booking server."
-
-            return confirmation + " Anything else I can help with?"
+            return handle_response("")  # Re-enter to book
     else:
-        # Still missing the expected info
         return flow[step]["prompt"]
+
 
 
 
@@ -978,3 +989,4 @@ if __name__ == "__main__":
             break
         response = handle_response(user_input)
         print("Assistant:", response, "\n")
+
