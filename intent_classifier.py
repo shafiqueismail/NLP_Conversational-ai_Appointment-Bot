@@ -5,6 +5,8 @@ import os
 from random import choice
 import re
 import dateparser
+import requests
+import datetime
 
 
 
@@ -662,49 +664,65 @@ with open("vectorizer.pkl", "wb") as f: pickle.dump(vectorizer, f)
 # 2. Dialogue flows per intent (FSM)
 dialogue_flows = {
     "book_cleaning": [
+        {"prompt": "What’s your full name?", "expect": "name"},
         {"prompt": "Sure! When would you like to come in for a cleaning?", "expect": "date"},
         {"prompt": "Got it. Do you prefer morning or afternoon?", "expect": "time_pref"},
         {"prompt": "Thanks! I've noted that down. Anything else you'd like to ask?", "expect": "end"}
     ],
     "book_filling": [
+        {"prompt": "What’s your full name?", "expect": "name"},
         {"prompt": "We can take care of your cavity. What day works for you?", "expect": "date"},
         {"prompt": "Morning or afternoon?", "expect": "time_pref"},
         {"prompt": "Great! I've logged your appointment. Need anything else?", "expect": "end"}
     ],
     "book_extraction": [
+        {"prompt": "What’s your full name?", "expect": "name"},
         {"prompt": "Ouch! When would you like to come in for a tooth extraction?", "expect": "date"},
         {"prompt": "Do you prefer a morning or afternoon extraction?", "expect": "time_pref"},
         {"prompt": "Noted! We'll get that taken care of. Anything else you’d like to do?", "expect": "end"}
     ],
     "book_checkup": [
+        {"prompt": "What’s your full name?", "expect": "name"},
         {"prompt": "Let’s keep those teeth healthy! When would you like your checkup?", "expect": "date"},
         {"prompt": "Morning or afternoon for your checkup?", "expect": "time_pref"},
         {"prompt": "Checkup scheduled! Anything else I can help with?", "expect": "end"}
     ],
     "book_whitening": [
+        {"prompt": "What’s your full name?", "expect": "name"},
         {"prompt": "Brighten your smile! What day works for whitening?", "expect": "date"},
         {"prompt": "Would you like it in the morning or afternoon?", "expect": "time_pref"},
         {"prompt": "Got it! Whitening is scheduled. Need anything else?", "expect": "end"}
     ],
     "book_root_canal": [
+        {"prompt": "What’s your full name?", "expect": "name"},
         {"prompt": "Root canal needed — let’s book you in. What day is good?", "expect": "date"},
         {"prompt": "Morning or afternoon for your root canal?", "expect": "time_pref"},
         {"prompt": "All set! Let us know if you need anything else.", "expect": "end"}
     ],
     "book_braces_consult": [
+        {"prompt": "What’s your full name?", "expect": "name"},
         {"prompt": "Let’s get you a braces consultation. When are you available?", "expect": "date"},
         {"prompt": "Morning or afternoon for the consult?", "expect": "time_pref"},
         {"prompt": "Great! We’ll discuss your options then. Anything else?", "expect": "end"}
     ],
     "cancel_appointment": [
+        {"prompt": "What’s your full name?", "expect": "name"},
         {"prompt": "No problem. What appointment would you like to cancel (cleaning, checkup, etc.)?", "expect": "type"},
         {"prompt": "Got it. Anything else you’d like to do?", "expect": "end"}
     ],
     "reschedule_appointment": [
+        {"prompt": "What’s your full name?", "expect": "name"},
         {"prompt": "Sure. What type of appointment are you rescheduling?", "expect": "type"},
         {"prompt": "What’s your new preferred date?", "expect": "date"},
         {"prompt": "Morning or afternoon for the new time?", "expect": "time_pref"},
         {"prompt": "Rescheduled! Let me know if you need anything else.", "expect": "end"}
+    ],
+    "tooth_pain": [
+        {"prompt": "What’s your full name?", "expect": "name"},
+        {"prompt": "I’m sorry to hear that. Would you like to book an emergency visit?", "expect": "yes_no"},
+        {"prompt": "When would you like to come in?", "expect": "date"},
+        {"prompt": "Morning or afternoon?", "expect": "time_pref"},
+        {"prompt": "We’ll see you soon. Take care until then!", "expect": "end"}
     ],
     "ask_price": [
         {"prompt": "Sure. What treatment are you asking about (cleaning, whitening, extraction, or is it something else)?", "expect": "type"},
@@ -715,12 +733,6 @@ dialogue_flows = {
         {"prompt": "Do you prefer a morning or afternoon appointment?", "expect": "time_pref"},
         {"prompt": "Thanks! We’ll get back to you with availability.", "expect": "end"}
     ],
-    "tooth_pain": [
-        {"prompt": "I’m sorry to hear that. Would you like to book an emergency visit?", "expect": "yes_no"},
-        {"prompt": "When would you like to come in?", "expect": "date"},
-        {"prompt": "Morning or afternoon?", "expect": "time_pref"},
-        {"prompt": "We’ll see you soon. Take care until then!", "expect": "end"}
-    ],
     "general_inquiry": [
         {"prompt": "Sure, I can help with info about our services. What would you like to know?", "expect": "topic"},
         {"prompt": "Thanks for reaching out!", "expect": "end"}
@@ -729,6 +741,7 @@ dialogue_flows = {
         {"prompt": "Sorry, I can only help with dental-related questions. Try asking about appointments or treatments.", "expect": "end"}
     ]
 }
+
 
 
 
@@ -843,19 +856,19 @@ def predict_intent(user_input):
 
 # Slot Filling (very basic extraction)
 def extract_slot(user_input):
+    import dateparser
     slots = {}
 
-    # Extract a datetime object
+    # --- Date & Time Parsing ---
     parsed_date = dateparser.parse(user_input, settings={"PREFER_DATES_FROM": "future"})
     if parsed_date:
-        # Split date and time of day
-        day_name = parsed_date.strftime('%A').lower()     # e.g. 'tuesday'
+        # Extract day of the week
+        day_name = parsed_date.strftime('%A').lower()  # e.g., 'tuesday'
         hour = parsed_date.hour
 
-        # Use weekday as 'date'
         slots["date"] = day_name
 
-        # Classify time of day (optional)
+        # Time of day slot
         if 5 <= hour < 12:
             slots["time_pref"] = "morning"
         elif 12 <= hour < 17:
@@ -863,7 +876,13 @@ def extract_slot(user_input):
         else:
             slots["time_pref"] = "evening"
 
+    # --- Name Detection ---
+    words = user_input.split()
+    if len(words) >= 2 and all(word[0].isupper() for word in words if word.isalpha()):
+        slots["name"] = user_input
+
     return slots
+
 
 
 def get_dynamic_response(intent):
@@ -881,7 +900,7 @@ def handle_response(user_input):
     context = conversation_context
     context["history"].append(user_input)
 
-    # Only predict new intent if we are NOT in the middle of an active flow
+    # Predict new intent if not in the middle of a flow
     if context["step"] == 0:
         prediction, confidence = predict_intent(user_input)
         context["last_intent"] = prediction
@@ -889,7 +908,7 @@ def handle_response(user_input):
     else:
         prediction = context["last_intent"]
 
-    # FSM Flow
+    # FSM Flow for current intent
     flow = dialogue_flows.get(prediction)
     if not flow:
         return f"Okay, you want to {prediction.replace('_', ' ')}. Let me help with that."
@@ -901,55 +920,70 @@ def handle_response(user_input):
     expected_slot = flow[step]["expect"]
     found_slots = extract_slot(user_input)
 
+    # If the user provided the expected info
     if expected_slot in found_slots:
         context["params"].update(found_slots)
         context["step"] += 1
+
+        # If more steps remain in the flow
         if context["step"] < len(flow):
             return flow[context["step"]]["prompt"]
         else:
-    # Auto-booking logic
-    appointment_type = prediction
-    date = context['params'].get('date')
-    time_pref = context['params'].get('time_pref')
-    
-    # Choose default time slot based on time_pref
-    default_times = {
-        "morning": "09:00 AM",
-        "afternoon": "01:00 PM",
-        "evening": "04:00 PM"
-    }
-    chosen_time = default_times.get(time_pref, "09:00 AM")
+            # --- All slots filled: Book the appointment ---
+            import requests
+            import datetime
 
-    # Format to 24-hr string for consistency
-    import datetime
-    dt = datetime.datetime.strptime(chosen_time, "%I:%M %p")
-    formatted_time = dt.strftime("%-I:%M %p")  # for API
+            name = context['params'].get('name', 'John Doe')
+            date = context['params']['date'].capitalize()
+            time_pref = context['params']['time_pref']
 
-    # Duration in minutes
-    duration = TREATMENT_DURATIONS.get(appointment_type, 60)
+            # Default times by time_pref
+            default_times = {
+                "morning": "09:00 AM",
+                "afternoon": "01:00 PM",
+                "evening": "04:00 PM"
+            }
+            chosen_time = default_times.get(time_pref, "09:00 AM")
 
-    # Record to backend
-    try:
-        import requests
-        payload = {
-            "name": "John Doe",  # later prompt for real name
-            "date": date.capitalize(),  # e.g. "Tuesday"
-            "time": formatted_time,
-            "treatment": appointment_type.replace("book_", "").replace("_", " ").title(),
-            "duration": duration
-        }
-        response = requests.post("http://127.0.0.1:8000/api/add_appointment", json=payload)
-        if response.status_code == 200:
-            confirmation = f"You're all set for a {payload['treatment']} on {payload['date']} at {payload['time']}."
-        else:
-            confirmation = "I tried to record the appointment, but something went wrong."
-    except Exception as e:
-        confirmation = "Couldn't reach the appointment server."
+            # Format intent name into human-readable treatment
+            treatment = prediction.replace("book_", "").replace("_", " ").title()
 
-    return confirmation + " Anything else I can help with?"
+            # Duration rules
+            TREATMENT_DURATIONS = {
+                "Teeth Whitening": 90,
+                "Cleaning": 60,
+                "Checkup": 60,
+                "Filling": 60,
+                "Extraction": 60,
+                "Root Canal": 60,
+                "Braces Consult": 60
+            }
+            duration = TREATMENT_DURATIONS.get(treatment, 60)
 
+            # Prepare JSON payload
+            payload = {
+                "name": name,
+                "date": date,
+                "time": chosen_time,
+                "treatment": treatment,
+                "duration": duration
+            }
+
+            # Send to backend API
+            try:
+                response = requests.post("http://127.0.0.1:8000/api/add_appointment", json=payload)
+                if response.status_code == 200:
+                    confirmation = f"You're all set for {treatment} on {date} at {chosen_time}."
+                else:
+                    confirmation = "I tried to book your appointment, but something went wrong."
+            except Exception as e:
+                confirmation = "Couldn’t reach the booking server."
+
+            return confirmation + " Anything else I can help with?"
     else:
+        # Still missing the expected info
         return flow[step]["prompt"]
+
 
 
 
