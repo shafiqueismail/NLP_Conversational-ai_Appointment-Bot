@@ -907,7 +907,47 @@ def handle_response(user_input):
         if context["step"] < len(flow):
             return flow[context["step"]]["prompt"]
         else:
-            return f"You're all set for {context['params'].get('date', 'your appointment')} in the {context['params'].get('time_pref', 'day')}. Anything else I can help with?"
+    # Auto-booking logic
+    appointment_type = prediction
+    date = context['params'].get('date')
+    time_pref = context['params'].get('time_pref')
+    
+    # Choose default time slot based on time_pref
+    default_times = {
+        "morning": "09:00 AM",
+        "afternoon": "01:00 PM",
+        "evening": "04:00 PM"
+    }
+    chosen_time = default_times.get(time_pref, "09:00 AM")
+
+    # Format to 24-hr string for consistency
+    import datetime
+    dt = datetime.datetime.strptime(chosen_time, "%I:%M %p")
+    formatted_time = dt.strftime("%-I:%M %p")  # for API
+
+    # Duration in minutes
+    duration = TREATMENT_DURATIONS.get(appointment_type, 60)
+
+    # Record to backend
+    try:
+        import requests
+        payload = {
+            "name": "John Doe",  # later prompt for real name
+            "date": date.capitalize(),  # e.g. "Tuesday"
+            "time": formatted_time,
+            "treatment": appointment_type.replace("book_", "").replace("_", " ").title(),
+            "duration": duration
+        }
+        response = requests.post("http://127.0.0.1:8000/api/add_appointment", json=payload)
+        if response.status_code == 200:
+            confirmation = f"You're all set for a {payload['treatment']} on {payload['date']} at {payload['time']}."
+        else:
+            confirmation = "I tried to record the appointment, but something went wrong."
+    except Exception as e:
+        confirmation = "Couldn't reach the appointment server."
+
+    return confirmation + " Anything else I can help with?"
+
     else:
         return flow[step]["prompt"]
 
