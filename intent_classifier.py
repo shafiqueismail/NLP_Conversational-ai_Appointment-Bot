@@ -939,50 +939,53 @@ def handle_response(user_input):
 
     INTENT_SWITCH_CONFIDENCE_THRESHOLD = 0.75
 
-    # STRICT: Disallow switching if name was just given or already filled
-    already_has_name = "name" in context["params"]
-    gave_name_now = "name" in found_slots
-    disallow_switch = gave_name_now or already_has_name
+    # Determine expected slot based on current FSM step
+    current_intent = context.get("last_intent")
+    step = context.get("step", 0)
+    flow = dialogue_flows.get(current_intent, [])
+    expected_slot = flow[step]["expect"] if step < len(flow) else None
+    slot_was_expected = expected_slot in found_slots
 
-    # Only allow switching if confidence is high AND no name involved
-    if new_prediction != context.get("last_intent") and context["step"] > 0:
-        if confidence > INTENT_SWITCH_CONFIDENCE_THRESHOLD and not disallow_switch:
-            print(f"Intent switched from {context['last_intent']} ➜ {new_prediction} (confidence={confidence:.2f})")
+    # Determine if we should allow switching intent
+    if step > 0 and new_prediction != current_intent:
+        if confidence >= INTENT_SWITCH_CONFIDENCE_THRESHOLD and not slot_was_expected:
+            print(f"Intent switched from {current_intent} ➜ {new_prediction} (confidence={confidence:.2f})")
             context["last_intent"] = new_prediction
             context["step"] = 0
             context["params"] = found_slots
             return handle_response(user_input)
         else:
-            print(f"Intent NOT switched (confidence={confidence:.2f}, disallow_switch={disallow_switch})")
-            new_prediction = context["last_intent"]
+            print(f"Intent NOT switched (confidence={confidence:.2f}, slot_was_expected={slot_was_expected})")
+            new_prediction = current_intent
 
     # Step 0: Initial intent setup
-    if context["step"] == 0:
+    if step == 0:
         prediction = new_prediction
         context["last_intent"] = prediction
         context["params"] = found_slots
 
         flow = dialogue_flows.get(prediction, [])
-        required_slots = [step["expect"] for step in flow if step["expect"] != "end"]
-        missing_slots = [slot for slot in required_slots if slot not in context["params"]]
+        required_slots = [s["expect"] for s in flow if s["expect"] != "end"]
+        missing = [s for s in required_slots if s not in context["params"]]
 
         if not flow:
             return f"Okay, you want to {prediction.replace('_', ' ')}. Let me help with that."
 
-        if missing_slots:
-            for i, step in enumerate(flow):
-                if step["expect"] == missing_slots[0]:
+        if missing:
+            for i, step_info in enumerate(flow):
+                if step_info["expect"] == missing[0]:
                     context["step"] = i
                     break
         else:
             context["step"] = len(flow)
 
     else:
-        prediction = context["last_intent"]
+        prediction = current_intent
         context["params"].update(found_slots)
 
     print(f"Current intent: {context['last_intent']}, Step: {context['step']}, Slots: {context['params']}")
 
+    # Re-fetch flow and step after possible updates
     flow = dialogue_flows.get(prediction)
     step = context["step"]
 
@@ -993,6 +996,7 @@ def handle_response(user_input):
         context["step"] = len(flow)
 
     if context["step"] >= len(flow):
+        # All slots are filled — schedule the appointment
         name = context['params'].get('name', 'John Doe')
         date = context['params']['date'].capitalize()
         time_pref = context['params']['time_pref']
@@ -1029,14 +1033,14 @@ def handle_response(user_input):
             f"Treatment: {treatment}, Duration: {duration} mins"
         )
 
-        # Reset context
+        # Reset context for next session
         context["step"] = 0
         context["params"] = {}
         context["last_intent"] = None
 
         return confirmation + "\n" + parsed_info + "\nIs there anything else I can help you with?"
 
-    # Continue FSM prompt
+    # Continue FSM
     expected_slot = flow[step]["expect"]
     if expected_slot in context["params"]:
         context["step"] += 1
