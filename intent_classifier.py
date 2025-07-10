@@ -928,29 +928,36 @@ import requests
 
 import requests
 
+
 def handle_response(user_input):
     context = conversation_context
     context["history"].append(user_input)
 
+    # Predict intent and extract new slots
     new_prediction, confidence = predict_intent(user_input)
+    found_slots = extract_slot(user_input)
 
-    INTENT_SWITCH_CONFIDENCE_THRESHOLD = 0.5 # A category can be changed mid search only if the threshold is above 0.5
+    INTENT_SWITCH_CONFIDENCE_THRESHOLD = 0.75
+    slot_keywords = {"name", "date", "time_pref"}
+    only_slot_update = set(found_slots.keys()).intersection(slot_keywords)
 
+    # Prevent switching if mid-dialogue and user only gave a slot
     if new_prediction != context.get("last_intent") and context["step"] > 0:
-        if confidence > INTENT_SWITCH_CONFIDENCE_THRESHOLD:
+        if confidence > INTENT_SWITCH_CONFIDENCE_THRESHOLD and not only_slot_update:
             print(f"Intent changed from {context['last_intent']} to {new_prediction} (confidence={confidence:.2f}). Resetting flow.")
             context["last_intent"] = new_prediction
             context["step"] = 0
-            context["params"] = extract_slot(user_input)
+            context["params"] = found_slots
             return handle_response(user_input)
         else:
-            print(f"Low confidence ({confidence:.2f}) — keeping current intent: {context['last_intent']}")
+            print(f"Low confidence ({confidence:.2f}) or slot-only input — keeping current intent: {context['last_intent']}")
             new_prediction = context["last_intent"]
 
+    # Step 0: Initial intent setup
     if context["step"] == 0:
         prediction = new_prediction
         context["last_intent"] = prediction
-        context["params"] = extract_slot(user_input)
+        context["params"] = found_slots
 
         flow = dialogue_flows.get(prediction, [])
         required_slots = [step["expect"] for step in flow if step["expect"] != "end"]
@@ -969,7 +976,6 @@ def handle_response(user_input):
 
     else:
         prediction = context["last_intent"]
-        found_slots = extract_slot(user_input)
         context["params"].update(found_slots)
 
     print(f"Current intent: {context['last_intent']}, Step: {context['step']}, Slots: {context['params']}")
@@ -1020,20 +1026,20 @@ def handle_response(user_input):
             f"Treatment: {treatment}, Duration: {duration} mins"
         )
 
+        # Reset context
         context["step"] = 0
         context["params"] = {}
         context["last_intent"] = None
 
         return confirmation + "\n" + parsed_info + "\nIs there anything else I can help you with?"
 
+    # Continue FSM prompt
     expected_slot = flow[step]["expect"]
     if expected_slot in context["params"]:
         context["step"] += 1
         return handle_response(user_input)
     else:
         return flow[step]["prompt"]
-
-
 
 
 
