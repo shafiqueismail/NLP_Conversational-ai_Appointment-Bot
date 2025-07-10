@@ -871,29 +871,44 @@ def extract_slot(user_input):
         else:
             slots["time_pref"] = "evening"
 
-    # --- Time preference keyword detection ---
-    if "morning" in user_input.lower():
+    # --- Time preference keywords ---
+    lowered = user_input.lower()
+    if "morning" in lowered:
         slots["time_pref"] = "morning"
-    elif "afternoon" in user_input.lower():
+    elif "afternoon" in lowered:
         slots["time_pref"] = "afternoon"
-    elif "evening" in user_input.lower():
+    elif "evening" in lowered:
         slots["time_pref"] = "evening"
 
-    # --- Name Detection (Improved) ---
+    # --- Name Detection (Safe) ---
+    # Explicit phrases like "my name is Ali Khan"
     name_match = re.search(
-        r"\b(?:my name is|i am|i'm|this is|booking for|appointment for|for)\s+([A-Z][a-z]+(?: [A-Z][a-z]+)?)",
+        r"\b(?:my name is|i am|i'm|this is)\s+([A-Z][a-z]+(?: [A-Z][a-z]+)?)",
         user_input,
         re.IGNORECASE
     )
     if name_match:
-        slots["name"] = name_match.group(1).strip()
+        name_candidate = name_match.group(1).strip()
+        # Avoid accidentally capturing common treatment keywords
+        if name_candidate.lower() not in {
+            "cleaning", "whitening", "checkup", "extraction", "filling",
+            "root canal", "consultation"
+        }:
+            slots["name"] = name_candidate
+
     else:
-        # Fallback if message is just a name like "Bob Dylan"
+        # Fallback for direct input like "Ali Khan"
         words = user_input.strip().split()
         if len(words) == 2 and all(w[0].isupper() for w in words if w.isalpha()):
-            slots["name"] = user_input.strip()
+            name_candidate = user_input.strip()
+            if name_candidate.lower() not in {
+                "cleaning", "whitening", "checkup", "extraction", "filling",
+                "root canal", "consultation"
+            }:
+                slots["name"] = name_candidate
 
     return slots
+
 
 
 
