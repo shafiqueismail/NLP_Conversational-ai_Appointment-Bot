@@ -74,11 +74,23 @@ def get_appointments(dates: str = Query("", description="Comma-separated list of
     } for a in appointments]
 
 # --------------------
-# POST: Add new appointment
+# POST: Add new appointment (with double-booking check)
 # --------------------
 @app.post("/api/add_appointment")
 def add_appointment(appointment: NewAppointment):
     db = SessionLocal()
+
+    # Step 1: Check if date + time is already booked
+    conflict = db.query(Appointment).filter(
+        Appointment.date == appointment.date,
+        Appointment.time == appointment.time
+    ).first()
+
+    if conflict:
+        db.close()
+        return {"status": "error", "message": "This time slot is already booked."}
+
+    # Step 2: No conflict, proceed to insert
     new_entry = Appointment(
         name=appointment.name,
         date=appointment.date,
@@ -89,4 +101,5 @@ def add_appointment(appointment: NewAppointment):
     db.add(new_entry)
     db.commit()
     db.close()
+
     return {"status": "success"}
