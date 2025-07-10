@@ -819,6 +819,18 @@ conversation_context = {
 }
 
 
+TREATMENT_DURATIONS = {
+    "teeth_whitening": 90,  # 1.5 hours
+    "book_whitening": 90,
+    "book_cleaning": 60,
+    "book_checkup": 60,
+    "book_filling": 60,
+    "book_extraction": 60,
+    "book_root_canal": 60,
+    "book_braces_consult": 60,
+}
+
+
 # 6. Predict the intent    
 def predict_intent(user_input):
     with open("model.pkl", "rb") as f: model = pickle.load(f)
