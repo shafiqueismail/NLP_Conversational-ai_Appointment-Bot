@@ -857,8 +857,13 @@ def predict_intent(user_input):
 def extract_slot(user_input):
     slots = {}
 
+    # --- Clean input before parsing ---
+    # e.g., "Friday's good" -> "Friday good"
+    cleaned_input = re.sub(r"\b([A-Za-z]+)'s\b", r"\1", user_input)  # possessive fix
+    cleaned_input = re.sub(r"[^A-Za-z0-9\s:]", "", cleaned_input)    # remove punctuation
+
     # --- Date & Time Parsing ---
-    parsed_date = dateparser.parse(user_input, settings={"PREFER_DATES_FROM": "future"})
+    parsed_date = dateparser.parse(cleaned_input, settings={"PREFER_DATES_FROM": "future"})
     if parsed_date:
         day_name = parsed_date.strftime('%A').lower()
         slots["date"] = day_name
@@ -872,7 +877,7 @@ def extract_slot(user_input):
             slots["time_pref"] = "evening"
 
     # --- Time preference keywords ---
-    lowered = user_input.lower()
+    lowered = cleaned_input.lower()
     if "morning" in lowered:
         slots["time_pref"] = "morning"
     elif "afternoon" in lowered:
@@ -908,6 +913,7 @@ def extract_slot(user_input):
                 slots["name"] = name_candidate
 
     return slots
+
 
 
 
