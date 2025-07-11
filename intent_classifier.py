@@ -899,10 +899,14 @@ def extract_slot(user_input):
     """
 
     Using the python librabry "dateparser" which can directly parse the three things that we are looking for which is
-    the day of the week, the exact month/day/year and the time of the day.  
+    the day of the week, the exact month/day/year and the time of the day. 
+
+    the second parameter/argumnet of this function is meant that if a person for example says 
+    they want an appoinment on monday. It will look at the closest following Monday (not look at the 
+    MOnday which had already occurred since its trying to book for a future date).
 
     """
-    parsed_date = dateparser.parse(user_input, settings={"PREFER_DATES_FROM": "future"})
+    parsed_date = dateparser.parse(user_input, settings={"PREFER_DATES_FROM": "future"}) 
 
     # Get the weekday
     if parsed_date:
