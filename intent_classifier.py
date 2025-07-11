@@ -904,7 +904,7 @@ def extract_slot(user_input):
     doc = nlp(user_input) # Reads the input
     for ent in doc.ents: # Parses the full name (downside is that this pre-trained is only good at parsing common english names. I would need to train my own model for it to detect names of other langugues)
         if ent.label_ == "PERSON":
-            slots["Full name: "] = ent.user_input # Adds it to the dictionary upon parsing the full name. 
+            slots["Full name: "] = ent.text # Adds it to the dictionary upon parsing the full name. 
 
 
 
@@ -926,8 +926,7 @@ def extract_slot(user_input):
 
         if parsed_date.strftime('%H:%M'): # Stores time (ex. 18:00PM)
             slots["Time: "] = parsed_date.strftime('%H:%M')
-    else:
-        print("Could not parse any date or time from the input.")
+    
     
 
     #  --- Date & Time Parsing ---
