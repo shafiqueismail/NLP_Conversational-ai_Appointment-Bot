@@ -10,9 +10,22 @@ import datetime
 
 
 
-
-# 1. Structured training data
 training_data = {
+
+    """
+
+    The following dictioanry stores all the training data for each category. There are
+    multitudes of exampels for each category (1. focusing on switching the order of words when giving repsonses, 
+    2. Using diverse choices of vocabulary/possible synonyms when entering the training data to optimize different
+    possibilities of responses, 3. Having each category have atleast 30 diferent possible ways of repsonding to an answer
+    for now, although upon writing this comment, i hope for this number to increase drastically as I would like as much training data 
+    as possible to trian my model), 4. Focusing on training data for categories with key words, thus making it easier to distinguish 
+    between categories and for the model to correctly identify the users need, 5. Also adding some categories
+    that consists of responses that are off topic, thus distinguisng between real and fake requests.  
+
+    """
+
+
     "book_cleaning": [
     "I need to book a teeth cleaning",
     "Please schedule my dental cleaning",
@@ -830,19 +843,39 @@ conversation_context = {
 
 
 TREATMENT_DURATIONS = {
-    "teeth_whitening": 90,  # 1.5 hours
-    "book_whitening": 90,
+    """
+    
+    Specific durations for each service given by the dentist. These numbers are counted in minutes.
+    Deepending on which service is picked there will be a different time duration as to how long
+    the service will take. For example, extractions taking 90 minutes while things like braces consulting
+    will be much less (30 minutes). 
+
+    """
+
+    "book_whitening": 60,
     "book_cleaning": 60,
     "book_checkup": 60,
     "book_filling": 60,
-    "book_extraction": 60,
-    "book_root_canal": 60,
-    "book_braces_consult": 60,
+    "book_extraction": 90,
+    "book_root_canal": 90,
+    "book_braces_consult": 30,
 }
 
 
 # 6. Predict the intent    
 def predict_intent(user_input):
+
+    """
+
+    Using the training data above (with all the different categories), it will use Naive Bayes
+    method with a combination of vectorizing to train the model (for it to than estimate a 
+    person's response and which category it most resembles by giving a confidence score.) For now,
+    the category with the highest confidence score will be the one being guessed (and than handled in the 
+    later functions such as extract_slot and handle_response).
+        
+    """
+
+
     with open("model.pkl", "rb") as f: model = pickle.load(f)
     with open("vectorizer.pkl", "rb") as f: vectorizer = pickle.load(f)
     X_test = vectorizer.transform([user_input])
@@ -851,11 +884,17 @@ def predict_intent(user_input):
     return prediction, confidence
 
 
-# Slot Filling (very basic extraction)
 
+def extract_slot(user_input): 
+    """
 
-def extract_slot(user_input):
-    slots = {}
+    The extract_slot function's main purpose is to parse out the important information that the user gives
+    in regards to their full name, date, time etc. This information is vital for it to be later stored
+    into the SQLite data base with the FASTapi (for it to be seen only in the dentists database and for 
+    appointmnets to be much more easily handled). 
+
+    """
+    slots = {} # initializing this dictionary where i can store the individaul pieces of information for the person booking the appointmnet (there full name, date, time, etc.). 
 
     # --- Clean input before parsing ---
     # Fix possessives like "Friday's" -> "Friday"
