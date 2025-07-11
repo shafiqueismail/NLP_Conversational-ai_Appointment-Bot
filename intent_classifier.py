@@ -906,40 +906,46 @@ def extract_slot(user_input):
     MOnday which had already occurred since its trying to book for a future date).
 
     """
-    parsed_date = dateparser.parse(user_input, settings={"PREFER_DATES_FROM": "future"}) 
+    parsed_date = dateparser.parse(user_input, settings={"PREFER_DATES_FROM": "future"})
 
-    # Get the weekday
     if parsed_date:
-        weekday = parsed_date.strftime('%A')  # Full weekday name like "Tuesday"
-        print("Weekday:", weekday)
+        if parsed_date.strftime('%A'): # Stores day of the week (ex. Monday, Tuesday, etc.)
+            slots["Day of the Week: "] = parsed_date.strftime('%A') 
+
+        if parsed_date.strftime('%Y-%m-%d'): # Stores date (ex. January 3rd, 2025)
+            slots["Date: "] = parsed_date.strftime('%Y-%m-%d')
+
+        if parsed_date.strftime('%H:%M'): # Stores time (ex. 18:00PM)
+            slots["Time: "] = parsed_date.strftime('%H:%M')
     else:
-        print("Could not parse date.")
+        print("Could not parse any date or time from the input.")
     
 
-    # --- Date & Time Parsing ---
-    parsed_date = dateparser.parse(cleaned_input, settings={"PREFER_DATES_FROM": "future"})
-    if parsed_date:
-        day_name = parsed_date.strftime('%A').lower()
-        slots["date"] = day_name
+    #  --- Date & Time Parsing ---
+    # parsed_date = dateparser.parse(cleaned_input, settings={"PREFER_DATES_FROM": "future"})
+    # if parsed_date:
+    #     day_name = parsed_date.strftime('%A').lower()
+    #     slots["date"] = day_name
 
-        hour = parsed_date.hour
-        if 5 <= hour < 12:
-            slots["time_pref"] = "morning"
-        elif 12 <= hour < 17:
-            slots["time_pref"] = "afternoon"
-        else:
-            slots["time_pref"] = "evening"
+    #     hour = parsed_date.hour
+    #     if 5 <= hour < 12:
+    #         slots["time_pref"] = "morning"
+    #     elif 12 <= hour < 17:
+    #         slots["time_pref"] = "afternoon"
+    #     else:
+    #         slots["time_pref"] = "evening"
 
-    # --- Time preference keywords ---
-    lowered = cleaned_input.lower()
-    if "morning" in lowered:
-        slots["time_pref"] = "morning"
-    elif "afternoon" in lowered:
-        slots["time_pref"] = "afternoon"
-    elif "evening" in lowered:
-        slots["time_pref"] = "evening"
+    # # --- Time preference keywords ---
+    # lowered = cleaned_input.lower()
+    # if "morning" in lowered:
+    #     slots["time_pref"] = "morning"
+    # elif "afternoon" in lowered:
+    #     slots["time_pref"] = "afternoon"
+    # elif "evening" in lowered:
+    #     slots["time_pref"] = "evening"
 
     # --- Name Detection (Safe) ---
+    
     # Explicit phrases like "my name is Ali Khan"
     name_match = re.search(
         r"\b(?:my name is|i am|i'm|this is)\s+([A-Z][a-z]+(?: [A-Z][a-z]+)?)",
