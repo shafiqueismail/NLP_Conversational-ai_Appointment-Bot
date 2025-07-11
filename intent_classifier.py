@@ -896,12 +896,21 @@ def extract_slot(user_input):
     """
     slots = {} # initializing this dictionary where i can store the individaul pieces of information for the person booking the appointmnet (there full name, date, time, etc.). 
 
-    # --- Clean input before parsing ---
-    # Fix possessives like "Friday's" -> "Friday"
-    # Fix plurals like "Fridays" -> "Friday"
-    cleaned_input = re.sub(r"\b([A-Za-z]+)'s\b", r"\1", user_input)       # possessive fix
-    cleaned_input = re.sub(r"\b([A-Za-z]+)s\b", r"\1", cleaned_input)     # plural weekday fix
-    cleaned_input = re.sub(r"[^A-Za-z0-9\s:]", "", cleaned_input)         # remove punctuation
+    """
+
+    Using the python librabry "dateparser" which can directly parse the three things that we are looking for which is
+    the day of the week, the exact month/day/year and the time of the day.  
+
+    """
+    parsed_date = dateparser.parse(user_input, settings={"PREFER_DATES_FROM": "future"})
+
+    # Get the weekday
+    if parsed_date:
+        weekday = parsed_date.strftime('%A')  # Full weekday name like "Tuesday"
+        print("Weekday:", weekday)
+    else:
+        print("Could not parse date.")
+    
 
     # --- Date & Time Parsing ---
     parsed_date = dateparser.parse(cleaned_input, settings={"PREFER_DATES_FROM": "future"})
