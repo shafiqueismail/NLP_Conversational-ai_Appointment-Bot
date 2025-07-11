@@ -917,22 +917,19 @@ def extract_slot(user_input):
 
 
 
-def get_dynamic_response(intent):
-    response_templates = [
-        "Sure! Let's take care of that. {filler}",
-        "Absolutely. {filler}",
-        "Happy to help! {filler},"
-    ]
-    template = choice(response_templates)
-    filler = choice(fillers.get(intent, [""]))
-    return template.format(filler=filler)
+# def get_dynamic_response(intent):
+#     response_templates = [
+#         "Sure! Let's take care of that. {filler}",
+#         "Absolutely. {filler}",
+#         "Happy to help! {filler},"
+#     ]
+#     template = choice(response_templates)
+#     filler = choice(fillers.get(intent, [""]))
+#     return template.format(filler=filler)
+
+
 
 # 6. FSM-driven response engine
-import requests
-
-import requests
-
-
 def handle_response(user_input):
     context = conversation_context
     context["history"].append(user_input)
