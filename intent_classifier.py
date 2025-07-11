@@ -7,23 +7,28 @@ import re
 import dateparser
 import requests
 import datetime
+import spacy
+
 
 
 
 training_data = {
 
-    """
-
-    The following dictioanry stores all the training data for each category. There are
-    multitudes of exampels for each category (1. focusing on switching the order of words when giving repsonses, 
-    2. Using diverse choices of vocabulary/possible synonyms when entering the training data to optimize different
-    possibilities of responses, 3. Having each category have atleast 30 diferent possible ways of repsonding to an answer
-    for now, although upon writing this comment, i hope for this number to increase drastically as I would like as much training data 
-    as possible to trian my model), 4. Focusing on training data for categories with key words, thus making it easier to distinguish 
-    between categories and for the model to correctly identify the users need, 5. Also adding some categories
-    that consists of responses that are off topic, thus distinguisng between real and fake requests.  
-
-    """
+    
+    # The following dictionary stores all the training data for each category.
+    # There are multitudes of examples for each category:
+    #   1. Focusing on switching the order of words when giving responses.
+    #   2. Using diverse choices of vocabulary and possible synonyms when entering 
+    #      the training data to optimize different possibilities of responses.
+    #   3. Ensuring that each category has at least 30 different possible ways 
+    #      of responding to a query. (At the time of writing this comment, I hope 
+    #      this number will increase drastically as I aim to gather as much 
+    #      training data as possible to train my model.)
+    #   4. Focusing on training data that uses category-specific keywords, 
+    #      which makes it easier for the model to distinguish between categories 
+    #      and correctly identify what the user needs.
+    #   5. Adding categories that consist of "off-topic" responses, so the model 
+    #      can learn to distinguish between real and fake requests.
 
 
     "book_cleaning": [
@@ -843,14 +848,14 @@ conversation_context = {
 
 
 TREATMENT_DURATIONS = {
-    """
     
-    Specific durations for each service given by the dentist. These numbers are counted in minutes.
-    Deepending on which service is picked there will be a different time duration as to how long
-    the service will take. For example, extractions taking 90 minutes while things like braces consulting
-    will be much less (30 minutes). 
-
-    """
+    # Specific durations for each dental service are measured in minutes.
+    # Depending on the service selected by the user, the duration will vary.
+    # For example:
+    #   - Extractions may take around 90 minutes.
+    #   - Braces consultations typically take less time, around 30 minutes.
+    # This information is useful for scheduling appointments accurately
+    # and avoiding overlaps in the calendar.
 
     "book_whitening": 60,
     "book_cleaning": 60,
@@ -862,18 +867,17 @@ TREATMENT_DURATIONS = {
 }
 
 
-# 6. Predict the intent    
 def predict_intent(user_input):
 
-    """
 
-    Using the training data above (with all the different categories), it will use Naive Bayes
-    method with a combination of vectorizing to train the model (for it to than estimate a 
-    person's response and which category it most resembles by giving a confidence score.) For now,
-    the category with the highest confidence score will be the one being guessed (and than handled in the 
-    later functions such as extract_slot and handle_response).
-        
-    """
+    # Using the training data above (with all the different categories), the model
+    # will be trained using the Naive Bayes method in combination with vectorization.
+    # This allows the model to estimate which category a user's message most closely matches,
+    # assigning a confidence score to each possible category.
+    #
+    # For now, the model selects the category with the highest confidence score.
+    # That selected category is then passed to later functions such as `extract_slot`
+    # and `handle_response` to continue the conversation flow.
 
 
     with open("model.pkl", "rb") as f: model = pickle.load(f)
@@ -886,26 +890,31 @@ def predict_intent(user_input):
 
 
 def extract_slot(user_input): 
-    """
+    
+    # The extract_slot function's main purpose is to parse out the important information that the user gives
+    # in regards to their full name, date, time etc. This information is vital for it to be later stored
+    # into the SQLite data base with the FASTapi (for it to be seen only in the dentists database and for 
+    # appointmnets to be much more easily handled).
 
-    The extract_slot function's main purpose is to parse out the important information that the user gives
-    in regards to their full name, date, time etc. This information is vital for it to be later stored
-    into the SQLite data base with the FASTapi (for it to be seen only in the dentists database and for 
-    appointmnets to be much more easily handled). 
-
-    """
     slots = {} # initializing this dictionary where i can store the individaul pieces of information for the person booking the appointmnet (there full name, date, time, etc.). 
 
-    """
+    # This specfic section is meant only to parse the name using a pre-trained model that has been imported
+    
+    nlp = spacy.load("en_core_web_sm") # Loads the model
+    doc = nlp(user_input) # Reads the input
+    for ent in doc.ents: # Parses the full name (downside is that this pre-trained is only good at parsing common english names. I would need to train my own model for it to detect names of other langugues)
+        if ent.label_ == "PERSON":
+            slots["Full name: "] = ent.user_input # Adds it to the dictionary upon parsing the full name. 
 
-    Using the python librabry "dateparser" which can directly parse the three things that we are looking for which is
-    the day of the week, the exact month/day/year and the time of the day. 
 
-    the second parameter/argumnet of this function is meant that if a person for example says 
-    they want an appoinment on monday. It will look at the closest following Monday (not look at the 
-    MOnday which had already occurred since its trying to book for a future date).
 
-    """
+    # Using the python librabry "dateparser" which can directly parse the three things that we are looking for which is
+    # the day of the week, the exact month/day/year and the time of the day. 
+    #
+    # the second parameter/argumnet of this function is meant that if a person for example says 
+    # they want an appoinment on monday. It will look at the closest following Monday (not look at the 
+    # Monday which had already occurred since its trying to book for a future date).
+
     parsed_date = dateparser.parse(user_input, settings={"PREFER_DATES_FROM": "future"})
 
     if parsed_date:
@@ -944,31 +953,30 @@ def extract_slot(user_input):
     # elif "evening" in lowered:
     #     slots["time_pref"] = "evening"
 
-    # --- Name Detection (Safe) ---
-    
+
     # Explicit phrases like "my name is Ali Khan"
-    name_match = re.search(
-        r"\b(?:my name is|i am|i'm|this is)\s+([A-Z][a-z]+(?: [A-Z][a-z]+)?)",
-        user_input,
-        re.IGNORECASE
-    )
-    if name_match:
-        name_candidate = name_match.group(1).strip()
-        if name_candidate.lower() not in {
-            "cleaning", "whitening", "checkup", "extraction", "filling",
-            "root canal", "consultation"
-        }:
-            slots["name"] = name_candidate
-    else:
-        # Fallback for direct input like "Ali Khan"
-        words = user_input.strip().split()
-        if len(words) == 2 and all(w[0].isupper() for w in words if w.isalpha()):
-            name_candidate = user_input.strip()
-            if name_candidate.lower() not in {
-                "cleaning", "whitening", "checkup", "extraction", "filling",
-                "root canal", "consultation"
-            }:
-                slots["name"] = name_candidate
+    # name_match = re.search(
+    #     r"\b(?:my name is|i am|i'm|this is)\s+([A-Z][a-z]+(?: [A-Z][a-z]+)?)",
+    #     user_input,
+    #     re.IGNORECASE
+    # )
+    # if name_match:
+    #     name_candidate = name_match.group(1).strip()
+    #     if name_candidate.lower() not in {
+    #         "cleaning", "whitening", "checkup", "extraction", "filling",
+    #         "root canal", "consultation"
+    #     }:
+    #         slots["name"] = name_candidate
+    # else:
+    #     # Fallback for direct input like "Ali Khan"
+    #     words = user_input.strip().split()
+    #     if len(words) == 2 and all(w[0].isupper() for w in words if w.isalpha()):
+    #         name_candidate = user_input.strip()
+    #         if name_candidate.lower() not in {
+    #             "cleaning", "whitening", "checkup", "extraction", "filling",
+    #             "root canal", "consultation"
+    #         }:
+    #             slots["name"] = name_candidate
 
     return slots
 
