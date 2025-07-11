@@ -858,9 +858,11 @@ def extract_slot(user_input):
     slots = {}
 
     # --- Clean input before parsing ---
-    # e.g., "Friday's good" -> "Friday good"
-    cleaned_input = re.sub(r"\b([A-Za-z]+)'s\b", r"\1", user_input)  # possessive fix
-    cleaned_input = re.sub(r"[^A-Za-z0-9\s:]", "", cleaned_input)    # remove punctuation
+    # Fix possessives like "Friday's" -> "Friday"
+    # Fix plurals like "Fridays" -> "Friday"
+    cleaned_input = re.sub(r"\b([A-Za-z]+)'s\b", r"\1", user_input)       # possessive fix
+    cleaned_input = re.sub(r"\b([A-Za-z]+)s\b", r"\1", cleaned_input)     # plural weekday fix
+    cleaned_input = re.sub(r"[^A-Za-z0-9\s:]", "", cleaned_input)         # remove punctuation
 
     # --- Date & Time Parsing ---
     parsed_date = dateparser.parse(cleaned_input, settings={"PREFER_DATES_FROM": "future"})
@@ -894,13 +896,11 @@ def extract_slot(user_input):
     )
     if name_match:
         name_candidate = name_match.group(1).strip()
-        # Avoid accidentally capturing common treatment keywords
         if name_candidate.lower() not in {
             "cleaning", "whitening", "checkup", "extraction", "filling",
             "root canal", "consultation"
         }:
             slots["name"] = name_candidate
-
     else:
         # Fallback for direct input like "Ali Khan"
         words = user_input.strip().split()
@@ -913,8 +913,6 @@ def extract_slot(user_input):
                 slots["name"] = name_candidate
 
     return slots
-
-
 
 
 
