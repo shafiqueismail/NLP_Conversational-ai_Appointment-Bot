@@ -662,7 +662,7 @@ with open("vectorizer.pkl", "wb") as f: pickle.dump(vectorizer, f)
 dialogue_flows = {
     "book_cleaning": [
         {"prompt": "Perfect! First things first, what’s your full name?", "expect": "name"},
-        {"prompt": "Sure! When would you like to come in for a cleaning?", "expect": "date"},
+        {"prompt": "Sure! What day of the week would you like to come in?", "expect": "date"},
         {"prompt": "Got it. Do you prefer morning or afternoon?", "expect": "time_pref"},
         {"prompt": "Thanks! I've noted that down. Anything else you'd like to ask?", "expect": "end"}
     ],
@@ -1039,9 +1039,6 @@ def handle_response(user_input):
         return handle_response(user_input)
     else:
         return flow[step]["prompt"]
-
-
-
 
 
 
