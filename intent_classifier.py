@@ -16,7 +16,7 @@ import json
 with open("training_data_bookings_inquiry.json", "r") as f:
     training_data_bookings_inquiry = json.load(f)
 
-    # The following dictionary stores all the training data for each category.
+    # The following json file stores all the training data for each category.
     # There are multitudes of examples for each category:
     #   1. Focusing on switching the order of words when giving responses.
     #   2. Using diverse choices of vocabulary and possible synonyms when entering 
@@ -30,6 +30,11 @@ with open("training_data_bookings_inquiry.json", "r") as f:
     #      and correctly identify what the user needs.
     #   5. Adding categories that consist of "off-topic" responses, so the model 
     #      can learn to distinguish between real and fake requests.
+
+
+# Loading the dialogue/prompts flows from the JSON file
+with open("dialogue_flows.json", "r") as f:
+    dialogue_flows = json.load(f)
 
 
 # 2. Flatten the data into two lists
@@ -51,93 +56,6 @@ model.fit(X_train, training_labels)
 # Save model and vectorizer for session memory
 with open("model.pkl", "wb") as f: pickle.dump(model, f)
 with open("vectorizer.pkl", "wb") as f: pickle.dump(vectorizer, f)
-
-
-
-# 2. Dialogue flows per intent (FSM)
-dialogue_flows = {
-    "book_cleaning": [
-        {"prompt": "Perfect! First things first, what’s your full name?", "expect": "name"},
-        {"prompt": "Sounds good! What day of the week would you like to come in?", "expect": "date"},
-        {"prompt": "Got it, what time of the day works best for you?", "expect": "time_pref"},
-        {"prompt": "Alright! The best slot I could find for you is at ...", "expect": "confirmation"},
-        {"prompt": "We’ve got you all set! Thanks! Is there anything else that I can help you with?", "expect": "end"}
-    ],
-    "book_filling": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "We can take care of your cavity. What day works for you?", "expect": "date"},
-        {"prompt": "Morning or afternoon?", "expect": "time_pref"},
-        {"prompt": "Great! I've logged your appointment. Need anything else?", "expect": "end"}
-    ],
-    "book_extraction": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "Ouch! When would you like to come in for a tooth extraction?", "expect": "date"},
-        {"prompt": "Do you prefer a morning or afternoon extraction?", "expect": "time_pref"},
-        {"prompt": "Noted! We'll get that taken care of. Anything else you’d like to do?", "expect": "end"}
-    ],
-    "book_checkup": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "Let’s keep those teeth healthy! When would you like your checkup?", "expect": "date"},
-        {"prompt": "Morning or afternoon for your checkup?", "expect": "time_pref"},
-        {"prompt": "Checkup scheduled! Anything else I can help with?", "expect": "end"}
-    ],
-    "book_whitening": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "Brighten your smile! What day works for whitening?", "expect": "date"},
-        {"prompt": "Would you like it in the morning or afternoon?", "expect": "time_pref"},
-        {"prompt": "Got it! Whitening is scheduled. Need anything else?", "expect": "end"}
-    ],
-    "book_root_canal": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "Root canal needed — let’s book you in. What day is good?", "expect": "date"},
-        {"prompt": "Morning or afternoon for your root canal?", "expect": "time_pref"},
-        {"prompt": "All set! Let us know if you need anything else.", "expect": "end"}
-    ],
-    "book_braces_consult": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "Let’s get you a braces consultation. When are you available?", "expect": "date"},
-        {"prompt": "Morning or afternoon for the consult?", "expect": "time_pref"},
-        {"prompt": "Great! We’ll discuss your options then. Anything else?", "expect": "end"}
-    ],
-    "cancel_appointment": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "No problem. What appointment would you like to cancel (cleaning, checkup, etc.)?", "expect": "type"},
-        {"prompt": "Got it. Anything else you’d like to do?", "expect": "end"}
-    ],
-    "reschedule_appointment": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "Sure. What type of appointment are you rescheduling?", "expect": "type"},
-        {"prompt": "What’s your new preferred date?", "expect": "date"},
-        {"prompt": "Morning or afternoon for the new time?", "expect": "time_pref"},
-        {"prompt": "Rescheduled! Let me know if you need anything else.", "expect": "end"}
-    ],
-    "tooth_pain": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "I’m sorry to hear that. Would you like to book an emergency visit?", "expect": "yes_no"},
-        {"prompt": "When would you like to come in?", "expect": "date"},
-        {"prompt": "Morning or afternoon?", "expect": "time_pref"},
-        {"prompt": "We’ll see you soon. Take care until then!", "expect": "end"}
-    ],
-    "ask_price": [
-        {"prompt": "Sure. What treatment are you asking about (cleaning, whitening, extraction, or is it something else)?", "expect": "type"},
-        {"prompt": "Let me look that up for you.", "expect": "end"}
-    ],
-    "ask_availability": [
-        {"prompt": "Let me check our calendar. What type of service are you interested in?", "expect": "type"},
-        {"prompt": "Do you prefer a morning or afternoon appointment?", "expect": "time_pref"},
-        {"prompt": "Thanks! We’ll get back to you with availability.", "expect": "end"}
-    ],
-    "general_inquiry": [
-        {"prompt": "Sure, I can help with info about our services. What would you like to know?", "expect": "topic"},
-        {"prompt": "Thanks for reaching out!", "expect": "end"}
-    ],
-    "out_of_scope": [
-        {"prompt": "Sorry, I can only help with dental-related questions. Try asking about appointments or treatments.", "expect": "end"}
-    ]
-}
-
-
-
 
 
 fillers = {
