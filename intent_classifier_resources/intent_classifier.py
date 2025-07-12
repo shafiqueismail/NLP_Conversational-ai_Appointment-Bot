@@ -13,7 +13,7 @@ import json
 
 
 # Loading the training data from the JSON file
-with open("training_data_bookings_inquiry.json", "r") as f:
+with open("intent_classifier_resources/training_data_bookings_inquiry.json", "r") as f:
     training_data_bookings_inquiry = json.load(f)
 
     # The following json file stores all the training data for each category.
@@ -33,7 +33,7 @@ with open("training_data_bookings_inquiry.json", "r") as f:
 
 
 # Loading the dialogue/prompts flows from the JSON file
-with open("dialogue_flows.json", "r") as f:
+with open("intent_classifier_resources/dialogue_flows.json", "r") as f:
     dialogue_flows = json.load(f)
 
 
@@ -54,8 +54,8 @@ model = MultinomialNB()
 model.fit(X_train, training_labels)
 
 # Save model and vectorizer for session memory
-with open("model.pkl", "wb") as f: pickle.dump(model, f)
-with open("vectorizer.pkl", "wb") as f: pickle.dump(vectorizer, f)
+with open("intent_classifier_resources/model.pkl", "wb") as f: pickle.dump(model, f)
+with open("intent_classifier_resources/vectorizer.pkl", "wb") as f: pickle.dump(vectorizer, f)
 
 
 conversation_context = {
@@ -99,8 +99,8 @@ def predict_intent(user_input):
     # and `handle_response` to continue the conversation flow.
 
 
-    with open("model.pkl", "rb") as f: model = pickle.load(f)
-    with open("vectorizer.pkl", "rb") as f: vectorizer = pickle.load(f)
+    with open("intent_classifier_resources/model.pkl", "rb") as f: model = pickle.load(f)
+    with open("intent_classifier_resources/vectorizer.pkl", "rb") as f: vectorizer = pickle.load(f)
     X_test = vectorizer.transform([user_input])
     prediction = model.predict(X_test)[0]
     confidence = model.predict_proba(X_test).max()
