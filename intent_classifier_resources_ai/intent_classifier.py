@@ -127,12 +127,18 @@ def extract_slot(user_input):
 
     # Using the python librabry "dateparser" which can directly parse the three things that we are looking for which is
     # the day of the week, the exact month/day/year and the time of the day. 
-    #
+    
+
+    cleaned_input = re.sub(r"\b([A-Za-z]+)'s\b", r"\1", user_input) # removes possessive endings: ex. Friday's, Tuesday's etc.
+    cleaned_input = re.sub(r"\b([A-Za-z]+)s\b", r"\1", cleaned_input) # removes plural
+    cleaned_input = re.sub(r"[^A-Za-z0-9\s:]", "", cleaned_input) # removinf punctuation like commas etc.
+
+
     # the second parameter/argumnet of this function is meant that if a person for example says 
     # they want an appoinment on monday. It will look at the closest following Monday (not look at the 
     # Monday which had already occurred since its trying to book for a future date).
 
-    parsed_date = dateparser.parse(user_input, settings={"PREFER_DATES_FROM": "future"})
+    parsed_date = dateparser.parse(cleaned_input, settings={"PREFER_DATES_FROM": "future"})
 
     if parsed_date:
         if parsed_date.strftime('%A'): # Stores day of the week (ex. Monday, Tuesday, etc.)
