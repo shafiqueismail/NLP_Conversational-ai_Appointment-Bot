@@ -123,7 +123,7 @@ def extract_slot(user_input):
     doc = nlp(user_input) # Reads the input
     for ent in doc.ents: # Parses the full name (downside is that this pre-trained is only good at parsing common english names. I would need to train my own model for it to detect names of other langugues)
         if ent.label_ == "PERSON":
-            slots["Full name: "] = ent.text # Adds it to the dictionary upon parsing the full name. 
+            slots["Full name: "] = ent.text # Adds it to the dictionary upon parsing the full name. Note that there is the occasional misidentification of name, and this ussually occurs for less common names, or names that do not have English origin.
 
     # Using the python librabry "dateparser" which can directly parse the three things that we are looking for which is
     # the day of the week, the exact month/day/year and the time of the day. 
@@ -150,18 +150,18 @@ def extract_slot(user_input):
         if parsed_date.strftime('%H:%M'): # Stores time (ex. 18:00PM)
             slots["Time: "] = parsed_date.strftime('%H:%M')
     
+    # If the dateparser librabry fails
     if not parsed_date:
-    weekdays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
-    for i, day in enumerate(weekdays):
-        if day in cleaned_input.lower():
-            today = datetime.date.today()
-            today_index = today.weekday()
-            delta_days = (i - today_index + 7) % 7 or 7
-            next_day = today + datetime.timedelta(days=delta_days)
-            parsed_date = datetime.datetime.combine(next_day, datetime.time())
-            slots["Day of the Week: "] = parsed_date.strftime('%A')
-            break
-    
+        weekdays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+        for i, day in enumerate(weekdays):
+            if day in cleaned_input.lower():
+                today = datetime.date.today()
+                today_index = today.weekday()
+                delta_days = (i - today_index + 7) % 7 or 7
+                next_day = today + datetime.timedelta(days=delta_days)
+                parsed_date = datetime.datetime.combine(next_day, datetime.time())
+                slots["Day of the Week: "] = parsed_date.strftime('%A') # Stores the weekday back given that teh orginal dateparser librabry fails and returns nothing.
+                break
 
     return slots
 
