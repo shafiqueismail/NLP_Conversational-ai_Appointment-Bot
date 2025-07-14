@@ -166,6 +166,18 @@ def extract_slot(user_input):
                 slots["Day of the Week: "] = parsed_date.strftime('%A') # Stores the weekday back given that teh orginal dateparser librabry fails and returns nothing.
                 break
 
+    # If a user gives a time by saying teh following key words, we just readjust it to follow this:
+    time_keywords = {
+        "early morning": "09:00",
+        "morning": "10:00",
+        "late morning": "11:00",
+        "early afternoon": "13:00",
+        "afternoon": "14:00",
+        "late afternoon": "16:00",
+        "evening": None,
+        "night": None,
+    }
+
     # Extracting time using regex if dateparser fails to extract it. Similar to the above reason,
     # sometimes the dateparser does not detect timings very well, so gthis back-up function checks for the correct timing. 
 
@@ -185,12 +197,12 @@ def extract_slot(user_input):
             if 1 <= hour <= 11:
                 hour += 12  # default to PM
 
-    # Only accept times between 09:00 and 17:00 (opening hours for the dentist)
-    if 9 <= hour < 17:
-        parsed_time = f"{hour:02d}:{minute:02d}"
-        slots["Time: "] = parsed_time
-    else:
-        print("Sorry, our clinic is only open between 9:00 AM and 5:00 PM.")
+        # Only accept times between 09:00 and 17:00 (opening hours for the dentist)
+        if 9 <= hour < 17:
+            parsed_time = f"{hour:02d}:{minute:02d}"
+            slots["Time: "] = parsed_time
+        else:
+            print("Sorry, our clinic is only open between 9:00 AM and 5:00 PM.")
 
 
     return slots
