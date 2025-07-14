@@ -185,9 +185,13 @@ def extract_slot(user_input):
             if 1 <= hour <= 11:
                 hour += 12  # default to PM
 
-        parsed_time = f"{hour:02d}:{minute:02d}" # reformatting it into a readble time.
-        slots["Time: "] = parsed_time # storing it back to the dictionary so that it can later be put into the database.
-   
+    # Only accept times between 09:00 and 17:00 (opening hours for the dentist)
+    if 9 <= hour < 17:
+        parsed_time = f"{hour:02d}:{minute:02d}"
+        slots["Time: "] = parsed_time
+    else:
+        print("Sorry, our clinic is only open between 9:00 AM and 5:00 PM.")
+
 
     return slots
 
