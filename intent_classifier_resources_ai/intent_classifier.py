@@ -178,6 +178,8 @@ def extract_slot(user_input):
         "night": None,
     }
 
+    lowered = user_input.lower()
+
     # Extracting time using regex if dateparser fails to extract it. Similar to the above reason,
     # sometimes the dateparser does not detect timings very well, so gthis back-up function checks for the correct timing. 
 
@@ -203,6 +205,7 @@ def extract_slot(user_input):
             slots["Time: "] = parsed_time
         else:
             print("Sorry, our clinic is only open between 9:00 AM and 5:00 PM.")
+        
 
 
     return slots
