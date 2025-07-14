@@ -150,18 +150,44 @@ def extract_slot(user_input):
         if parsed_date.strftime('%H:%M'): # Stores time (ex. 18:00PM)
             slots["Time: "] = parsed_date.strftime('%H:%M')
     
-    # If the dateparser librabry fails
+    # If the dateparser librabry fails, we'll use this function to re-parse the weekday. 
+    # I've noticed that the dataparser librabry in Python is not as accurate as I thought (it misses a lot of input that I give it, 
+    # escpecially when the weekday is given along side many words around it in a vague context.)
+    
     if not parsed_date:
         weekdays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
         for i, day in enumerate(weekdays):
             if day in cleaned_input.lower():
                 today = datetime.date.today()
                 today_index = today.weekday()
-                delta_days = (i - today_index + 7) % 7 or 7
+                delta_days = (i - today_index + 7) % 7 or 7 # Essentially checks for the following day in terms of next week ex. Next Monday, Next Friday etc.
                 next_day = today + datetime.timedelta(days=delta_days)
                 parsed_date = datetime.datetime.combine(next_day, datetime.time())
                 slots["Day of the Week: "] = parsed_date.strftime('%A') # Stores the weekday back given that teh orginal dateparser librabry fails and returns nothing.
                 break
+
+    # Extracting time using regex if dateparser fails to extract it. Similar to the above reason,
+    # sometimes the dateparser does not detect timings very well, so gthis back-up function checks for the correct timing. 
+
+    time_match = re.search(r'(\d{1,2})(?:[:.](\d{2}))?\s*(am|pm)?', cleaned_input, re.IGNORECASE)
+    if time_match:
+        hour = int(time_match.group(1))
+        minute = int(time_match.group(2)) if time_match.group(2) else 0
+        meridian = time_match.group(3)
+
+        if meridian: # Converting the time to the 24hour clock since it would be easier to communicate this.
+            if meridian.lower() == 'pm' and hour < 12:
+                hour += 12
+            elif meridian.lower() == 'am' and hour == 12:
+                hour = 0
+        else: # this is for cases if a person says for exmaple: "I can come in after 3".
+            # No AM/PM mentioned — assume PM if the hour is reasonable (1–11)
+            if 1 <= hour <= 11:
+                hour += 12  # default to PM
+
+        parsed_time = f"{hour:02d}:{minute:02d}" # reformatting it into a readble time.
+        slots["Time: "] = parsed_time # storing it back to the dictionary so that it can later be put into the database.
+   
 
     return slots
 
