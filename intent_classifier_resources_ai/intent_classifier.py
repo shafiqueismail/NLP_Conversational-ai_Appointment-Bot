@@ -150,6 +150,18 @@ def extract_slot(user_input):
         if parsed_date.strftime('%H:%M'): # Stores time (ex. 18:00PM)
             slots["Time: "] = parsed_date.strftime('%H:%M')
     
+    if not parsed_date:
+    weekdays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+    for i, day in enumerate(weekdays):
+        if day in cleaned_input.lower():
+            today = datetime.date.today()
+            today_index = today.weekday()
+            delta_days = (i - today_index + 7) % 7 or 7
+            next_day = today + datetime.timedelta(days=delta_days)
+            parsed_date = datetime.datetime.combine(next_day, datetime.time())
+            slots["Day of the Week: "] = parsed_date.strftime('%A')
+            break
+    
 
     return slots
 
