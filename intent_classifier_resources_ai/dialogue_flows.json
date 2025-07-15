@@ -36,7 +36,7 @@
         {"prompt": "Alright! The best slot I could find for you is at ... Can I confirm that this is alright with you?", "expect": "confirmation"},
         {"prompt": "We’ve got you all set! Thanks! Is there anything else that I can help you with?", "expect": "end"}
     ],
-    "book_braces_consult": [
+    "book_braces": [
         {"prompt": "Perfect! First things first, what’s your full name?", "expect": "Full name: "},
         {"prompt": "Sounds good! What day of the week would you like to come in?", "expect": "Day of the Week: "},
         {"prompt": "So, what time of the day works best for you?", "expect": "Time: "},

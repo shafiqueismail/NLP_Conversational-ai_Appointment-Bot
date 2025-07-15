@@ -81,7 +81,7 @@ TREATMENT_DURATIONS = {
     "book_filling": 60,
     "book_extraction": 90,
     "book_root_canal": 90,
-    "book_braces_consult": 30,
+    "book_braces": 30,
 }
 
 
