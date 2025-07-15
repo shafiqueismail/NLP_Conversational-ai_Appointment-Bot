@@ -442,7 +442,8 @@
   "My cavity hurts a lot, I need it checked up",
   "The cavity needs to be filled with a black or white coating",
   "I need to book an apoointment to fill my tooth that has a cavity",
-  "I want to fill a cavity" 
+  "I want to fill a cavity",
+  "I want to book a cavity filling"
 ],
 
 "book_extraction": [
