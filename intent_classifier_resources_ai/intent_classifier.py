@@ -166,19 +166,6 @@ def extract_slot(user_input):
                 slots["Day of the Week: "] = parsed_date.strftime('%A') # Stores the weekday back given that teh orginal dateparser librabry fails and returns nothing.
                 break
 
-    # If a user gives a time by saying teh following key words, we just readjust it to follow this:
-    time_keywords = {
-        "early morning": "09:00",
-        "morning": "10:00",
-        "late morning": "11:00",
-        "early afternoon": "13:00",
-        "afternoon": "14:00",
-        "late afternoon": "16:00",
-        "evening": None,
-        "night": None,
-    }
-
-    lowered = user_input.lower()
 
     # Extracting time using regex if dateparser fails to extract it. Similar to the above reason,
     # sometimes the dateparser does not detect timings very well, so gthis back-up function checks for the correct timing. 
