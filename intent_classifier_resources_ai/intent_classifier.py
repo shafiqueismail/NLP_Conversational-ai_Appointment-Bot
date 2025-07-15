@@ -78,7 +78,6 @@ TREATMENT_DURATIONS = {
 
     "book_whitening": 60,
     "book_cleaning": 60,
-    "book_checkup": 60,
     "book_filling": 60,
     "book_extraction": 90,
     "book_root_canal": 90,

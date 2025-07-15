@@ -9,40 +9,39 @@
         {"prompt": "We’ve got you all set! Thanks! Is there anything else that I can help you with?", "expect": "end"}
     ],
     "book_filling": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "We can take care of your cavity. What day works for you?", "expect": "date"},
-        {"prompt": "Morning or afternoon?", "expect": "time_pref"},
-        {"prompt": "Great! I've logged your appointment. Need anything else?", "expect": "end"}
+        {"prompt": "Perfect! First things first, what’s your full name?", "expect": "Full name: "},
+        {"prompt": "Sounds good! What day of the week would you like to come in?", "expect": "Day of the Week: "},
+        {"prompt": "So, what time of the day works best for you?", "expect": "Time: "},
+        {"prompt": "Alright! The best slot I could find for you is at ... Can I confirm that this is alright with you?", "expect": "confirmation"},
+        {"prompt": "We’ve got you all set! Thanks! Is there anything else that I can help you with?", "expect": "end"}
     ],
     "book_extraction": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "Ouch! When would you like to come in for a tooth extraction?", "expect": "date"},
-        {"prompt": "Do you prefer a morning or afternoon extraction?", "expect": "time_pref"},
-        {"prompt": "Noted! We'll get that taken care of. Anything else you’d like to do?", "expect": "end"}
-    ],
-    "book_checkup": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "Let’s keep those teeth healthy! When would you like your checkup?", "expect": "date"},
-        {"prompt": "Morning or afternoon for your checkup?", "expect": "time_pref"},
-        {"prompt": "Checkup scheduled! Anything else I can help with?", "expect": "end"}
+        {"prompt": "Perfect! First things first, what’s your full name?", "expect": "Full name: "},
+        {"prompt": "Sounds good! What day of the week would you like to come in?", "expect": "Day of the Week: "},
+        {"prompt": "So, what time of the day works best for you?", "expect": "Time: "},
+        {"prompt": "Alright! The best slot I could find for you is at ... Can I confirm that this is alright with you?", "expect": "confirmation"},
+        {"prompt": "We’ve got you all set! Thanks! Is there anything else that I can help you with?", "expect": "end"}
     ],
     "book_whitening": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "Brighten your smile! What day works for whitening?", "expect": "date"},
-        {"prompt": "Would you like it in the morning or afternoon?", "expect": "time_pref"},
-        {"prompt": "Got it! Whitening is scheduled. Need anything else?", "expect": "end"}
+        {"prompt": "Perfect! First things first, what’s your full name?", "expect": "Full name: "},
+        {"prompt": "Sounds good! What day of the week would you like to come in?", "expect": "Day of the Week: "},
+        {"prompt": "So, what time of the day works best for you?", "expect": "Time: "},
+        {"prompt": "Alright! The best slot I could find for you is at ... Can I confirm that this is alright with you?", "expect": "confirmation"},
+        {"prompt": "We’ve got you all set! Thanks! Is there anything else that I can help you with?", "expect": "end"}
     ],
     "book_root_canal": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "Root canal needed — let’s book you in. What day is good?", "expect": "date"},
-        {"prompt": "Morning or afternoon for your root canal?", "expect": "time_pref"},
-        {"prompt": "All set! Let us know if you need anything else.", "expect": "end"}
+        {"prompt": "Perfect! First things first, what’s your full name?", "expect": "Full name: "},
+        {"prompt": "Sounds good! What day of the week would you like to come in?", "expect": "Day of the Week: "},
+        {"prompt": "So, what time of the day works best for you?", "expect": "Time: "},
+        {"prompt": "Alright! The best slot I could find for you is at ... Can I confirm that this is alright with you?", "expect": "confirmation"},
+        {"prompt": "We’ve got you all set! Thanks! Is there anything else that I can help you with?", "expect": "end"}
     ],
     "book_braces_consult": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "Let’s get you a braces consultation. When are you available?", "expect": "date"},
-        {"prompt": "Morning or afternoon for the consult?", "expect": "time_pref"},
-        {"prompt": "Great! We’ll discuss your options then. Anything else?", "expect": "end"}
+        {"prompt": "Perfect! First things first, what’s your full name?", "expect": "Full name: "},
+        {"prompt": "Sounds good! What day of the week would you like to come in?", "expect": "Day of the Week: "},
+        {"prompt": "So, what time of the day works best for you?", "expect": "Time: "},
+        {"prompt": "Alright! The best slot I could find for you is at ... Can I confirm that this is alright with you?", "expect": "confirmation"},
+        {"prompt": "We’ve got you all set! Thanks! Is there anything else that I can help you with?", "expect": "end"}
     ],
     "cancel_appointment": [
         {"prompt": "What’s your full name?", "expect": "name"},
@@ -57,11 +56,11 @@
         {"prompt": "Rescheduled! Let me know if you need anything else.", "expect": "end"}
     ],
     "tooth_pain": [
-        {"prompt": "What’s your full name?", "expect": "name"},
-        {"prompt": "I’m sorry to hear that. Would you like to book an emergency visit?", "expect": "yes_no"},
-        {"prompt": "When would you like to come in?", "expect": "date"},
-        {"prompt": "Morning or afternoon?", "expect": "time_pref"},
-        {"prompt": "We’ll see you soon. Take care until then!", "expect": "end"}
+        {"prompt": "Ooof! We can check that out for you. First things first, what’s your full name?", "expect": "Full name: "},
+        {"prompt": "Sounds good! What day of the week would you like to come in?", "expect": "Day of the Week: "},
+        {"prompt": "So, what time of the day works best for you?", "expect": "Time: "},
+        {"prompt": "Alright! The best slot I could find for you is at ... Can I confirm that this is alright with you?", "expect": "confirmation"},
+        {"prompt": "We’ve got you all set! Thanks! Is there anything else that I can help you with?", "expect": "end"}
     ],
     "ask_price": [
         {"prompt": "Sure. What treatment are you asking about (cleaning, whitening, extraction, or is it something else)?", "expect": "type"},
