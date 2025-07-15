@@ -203,7 +203,7 @@ def handle_response(user_input):
     context = conversation_context
     context["history"].append(user_input)
 
-    # Step 1: Predict intent and extract slot info
+    # Step 1: Predict intent and extract new slots
     predicted_intent, confidence = predict_intent(user_input)
     found_slots = extract_slot(user_input)
 
@@ -211,31 +211,26 @@ def handle_response(user_input):
     current_intent = context.get("last_intent")
     step = context.get("step", 0)
 
-    # On first user input (no intent yet)
+    # First-time intent detection
     if step == 0 and not current_intent:
         context["last_intent"] = predicted_intent
         context["params"] = found_slots
         flow = dialogue_flows.get(predicted_intent, [])
         context["step"] = 0
     else:
-        # Continue same intent
+        # Continue with previous intent
         predicted_intent = current_intent
         flow = dialogue_flows.get(predicted_intent, [])
         context["params"].update(found_slots)
 
     print(f"Intent: {predicted_intent}, Step: {context['step']}, Slots: {context['params']}")
 
-    # Step 3: Booking attempt if FSM steps are finished
-    if context["step"] >= len(flow):
-        # Check for missing required slots
-        required_slots = [step["expect"] for step in flow if step["expect"] != "end"]
-        missing = [slot for slot in required_slots if slot not in context["params"]]
+    # Step 3: Check for missing slots before booking
+    required_slots = [step["expect"] for step in flow if step["expect"] != "end"]
+    missing = [slot for slot in required_slots if slot not in context["params"] or not context["params"][slot]]
 
-        if missing:
-            context["step"] = 0  # reset step to ask missing ones
-            return f"I'm missing some information: {', '.join(missing)}. Could you please provide it?"
-
-        # All info collected → prepare payload
+    # Step 4: Booking logic (only if all slots are filled and FSM finished)
+    if not missing and context["step"] >= len(flow):
         full_name = context["params"].get("Full name: ")
         day_of_week = context["params"].get("Day of the Week: ")
         date = context["params"].get("Date: ")
@@ -263,22 +258,24 @@ def handle_response(user_input):
             f"Time: {time_str}, Treatment: {treatment}, Duration: {duration} mins"
         )
 
-        # Reset FSM context
+        # Reset FSM
         context["step"] = 0
         context["params"] = {}
         context["last_intent"] = None
 
         return confirmation + "\n" + parsed + "\nIs there anything else I can help you with?"
 
-    # Step 4: FSM – Prompt for next missing slot
+    # Step 5: Still missing info → ask
+    if missing:
+        return f"I'm missing some information: {', '.join(missing)}. Could you please provide it?"
+
+    # Step 6: FSM prompt to collect info
     expected_slot = flow[context["step"]]["expect"]
     if expected_slot in context["params"]:
         context["step"] += 1
-        return handle_response(user_input)  # recursively move to next
+        return handle_response(user_input)  # move to next step
     else:
         return flow[context["step"]]["prompt"]
-
-
 
 
 
