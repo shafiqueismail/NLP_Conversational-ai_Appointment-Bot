@@ -200,6 +200,7 @@ def extract_slot(user_input):
 
 
 
+
 def handle_response(user_input):
     context = conversation_context
     context["history"].append(user_input)
