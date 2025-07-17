@@ -62,7 +62,9 @@ conversation_context = {
     "last_intent": None,
     "step": 0,
     "params": {},
-    "history": []
+    "history": [] # Stores all the conversation from begining to end for the user. 
+                  # May use this later for training data, so that the more users practice on this, 
+                  # the ai will get more trained. 
 }
 
 
