@@ -57,7 +57,10 @@
     "Can I book a cleaning apointment",
     "I want to book an apointment to clean my teeth",
     "I want to remove plaque form my teeth",
-    "I want to schedule an appointment to clean my teeth"
+    "I want to schedule an appointment to clean my teeth",
+    "My teeth are dirty, I want to book a cleaning",
+    "My teeth need to be cleaned, do you offer this service",
+    "I need to book a teeth cleaning for my teeth"
 ],
 "book_braces": [
     "I want to book an appointment for braces",
