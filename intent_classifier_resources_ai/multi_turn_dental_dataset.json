@@ -1,0 +1,153 @@
+
+{"prompt": "User: I want to get a cleaning done.\nAssistant: Sure! What day and time works for you?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Kelsey Cochran\", \"date\": \"2025-08-14\", \"time\": \"09:00\", \"treatment\": \"cleaning\"}"}
+{"prompt": "User: Can I schedule a whitening?\nAssistant: Sure! What day and time works for you?\nUser: Tuesday at 10am works.\nAssistant:", "completion": " {\"name\": \"Christina Lindsey\", \"date\": \"2025-08-14\", \"time\": \"11:00\", \"treatment\": \"whitening\"}"}
+{"prompt": "User: I'd like to book a root canal.\nAssistant: Sure! What day and time works for you?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Mr. Kevin Hogan Jr.\", \"date\": \"2025-08-07\", \"time\": \"13:00\", \"treatment\": \"root canal\"}"}
+{"prompt": "User: I want to get a extraction done.\nAssistant: Great! Which day suits you best?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Harold Shields\", \"date\": \"2025-08-19\", \"time\": \"10:00\", \"treatment\": \"extraction\"}"}
+{"prompt": "User: I need a filling appointment.\nAssistant: Sure! What day and time works for you?\nUser: Tuesday at 10am works.\nAssistant:", "completion": " {\"name\": \"Kathleen Sanchez\", \"date\": \"2025-08-18\", \"time\": \"10:00\", \"treatment\": \"filling\"}"}
+{"prompt": "User: I want to get a whitening done.\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: Are you open on weekends?\nAssistant:", "completion": " Our clinic is closed on weekends."}
+{"prompt": "User: I'd like to book a whitening.\nAssistant:", "completion": " Absolutely! When would you like to come in?"}
+{"prompt": "User: Can I schedule a extraction?\nAssistant:", "completion": " Absolutely! When would you like to come in?"}
+{"prompt": "User: Do you have slots for a filling?\nAssistant: No problem. Do you have a specific date and time?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Chelsea Rios\", \"date\": \"2025-08-06\", \"time\": \"11:00\", \"treatment\": \"filling\"}"}
+{"prompt": "User: Can I schedule a filling?\nAssistant: No problem. Do you have a specific date and time?\nUser: Can I come in on the 8th at 11am?\nAssistant:", "completion": " {\"name\": \"Jacqueline Rojas\", \"date\": \"2025-08-04\", \"time\": \"09:00\", \"treatment\": \"filling\"}"}
+{"prompt": "User: Can I schedule a whitening?\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: I need a root canal appointment.\nAssistant: Great! Which day suits you best?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Shelby Thomas\", \"date\": \"2025-08-14\", \"time\": \"09:00\", \"treatment\": \"root canal\"}"}
+{"prompt": "User: Can I schedule a whitening?\nAssistant: Great! Which day suits you best?\nUser: Can I come in on the 8th at 11am?\nAssistant:", "completion": " {\"name\": \"Troy Jones\", \"date\": \"2025-08-22\", \"time\": \"13:00\", \"treatment\": \"whitening\"}"}
+{"prompt": "User: I want to get a extraction done.\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: I want to get a filling done.\nAssistant: Sure! What day and time works for you?\nUser: Tuesday at 10am works.\nAssistant:", "completion": " {\"name\": \"Paul Brown\", \"date\": \"2025-08-15\", \"time\": \"10:00\", \"treatment\": \"filling\"}"}
+{"prompt": "User: Can I schedule a cleaning?\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: Can I schedule a braces?\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: I want to get a root canal done.\nAssistant: Sure! What day and time works for you?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Michelle Schmidt\", \"date\": \"2025-08-08\", \"time\": \"10:00\", \"treatment\": \"root canal\"}"}
+{"prompt": "User: Can I schedule a extraction?\nAssistant: Absolutely! When would you like to come in?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Jodi Hall\", \"date\": \"2025-08-12\", \"time\": \"09:00\", \"treatment\": \"extraction\"}"}
+{"prompt": "User: I need a braces appointment.\nAssistant: No problem. Do you have a specific date and time?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Jonathan Villegas\", \"date\": \"2025-08-07\", \"time\": \"09:00\", \"treatment\": \"braces\"}"}
+{"prompt": "User: Do you have slots for a braces?\nAssistant: Sure! What day and time works for you?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Krystal Hamilton\", \"date\": \"2025-08-04\", \"time\": \"14:00\", \"treatment\": \"braces\"}"}
+{"prompt": "User: I want to get a whitening done.\nAssistant:", "completion": " Absolutely! When would you like to come in?"}
+{"prompt": "User: I want to get a braces done.\nAssistant:", "completion": " Of course. What time are you thinking?"}
+{"prompt": "User: Do you have slots for a cleaning?\nAssistant:", "completion": " Of course. What time are you thinking?"}
+{"prompt": "User: Can I schedule a cleaning?\nAssistant: Sure! What day and time works for you?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Victoria Davis\", \"date\": \"2025-08-23\", \"time\": \"10:00\", \"treatment\": \"cleaning\"}"}
+{"prompt": "User: Do you have slots for a extraction?\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: Do you have slots for a braces?\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: Can I schedule a braces?\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: I need a extraction appointment.\nAssistant:", "completion": " Absolutely! When would you like to come in?"}
+{"prompt": "User: I'd like to book a braces.\nAssistant: Of course. What time are you thinking?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"James Short\", \"date\": \"2025-08-03\", \"time\": \"14:00\", \"treatment\": \"braces\"}"}
+{"prompt": "User: Can I schedule a braces?\nAssistant: Sure! What day and time works for you?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Tracy Munoz\", \"date\": \"2025-08-25\", \"time\": \"14:00\", \"treatment\": \"braces\"}"}
+{"prompt": "User: Do you have slots for a root canal?\nAssistant: Great! Which day suits you best?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Jeffrey Santiago\", \"date\": \"2025-08-08\", \"time\": \"11:00\", \"treatment\": \"root canal\"}"}
+{"prompt": "User: I need a root canal appointment.\nAssistant: Absolutely! When would you like to come in?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Melissa Spence\", \"date\": \"2025-08-05\", \"time\": \"15:00\", \"treatment\": \"root canal\"}"}
+{"prompt": "User: Can I schedule a cleaning?\nAssistant: No problem. Do you have a specific date and time?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Jonathan Hayden\", \"date\": \"2025-08-02\", \"time\": \"14:00\", \"treatment\": \"cleaning\"}"}
+{"prompt": "User: Do you have slots for a filling?\nAssistant: Sure! What day and time works for you?\nUser: Tuesday at 10am works.\nAssistant:", "completion": " {\"name\": \"Jennifer Norton\", \"date\": \"2025-08-28\", \"time\": \"15:00\", \"treatment\": \"filling\"}"}
+{"prompt": "User: Do you have slots for a whitening?\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: Can I schedule a filling?\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: I need a extraction appointment.\nAssistant: Absolutely! When would you like to come in?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Amanda Howell\", \"date\": \"2025-08-26\", \"time\": \"15:00\", \"treatment\": \"extraction\"}"}
+{"prompt": "User: I need a braces appointment.\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: I need a filling appointment.\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: Can I schedule a whitening?\nAssistant: Of course. What time are you thinking?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Jennifer Phillips\", \"date\": \"2025-08-09\", \"time\": \"15:00\", \"treatment\": \"whitening\"}"}
+{"prompt": "User: I'd like to book a braces.\nAssistant:", "completion": " Of course. What time are you thinking?"}
+{"prompt": "User: What's the price for whitening?\nAssistant:", "completion": " Teeth whitening typically costs $250."}
+{"prompt": "User: Do you have slots for a cleaning?\nAssistant: Of course. What time are you thinking?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Laura Mendez\", \"date\": \"2025-08-13\", \"time\": \"14:00\", \"treatment\": \"cleaning\"}"}
+{"prompt": "User: I want to get a whitening done.\nAssistant: Sure! What day and time works for you?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Rebecca Bowers\", \"date\": \"2025-08-05\", \"time\": \"13:00\", \"treatment\": \"whitening\"}"}
+{"prompt": "User: I'd like to book a filling.\nAssistant: Sure! What day and time works for you?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Aaron Cunningham\", \"date\": \"2025-08-26\", \"time\": \"11:00\", \"treatment\": \"filling\"}"}
+{"prompt": "User: Do you have slots for a extraction?\nAssistant: No problem. Do you have a specific date and time?\nUser: Can I come in on the 8th at 11am?\nAssistant:", "completion": " {\"name\": \"Sarah Kane\", \"date\": \"2025-08-09\", \"time\": \"13:00\", \"treatment\": \"extraction\"}"}
+{"prompt": "User: I'd like to book a root canal.\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: I'd like to book a filling.\nAssistant: Absolutely! When would you like to come in?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Patricia Dillon\", \"date\": \"2025-08-27\", \"time\": \"15:00\", \"treatment\": \"filling\"}"}
+{"prompt": "User: I want to get a filling done.\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: I'd like to book a filling.\nAssistant:", "completion": " Absolutely! When would you like to come in?"}
+{"prompt": "User: Do you have slots for a root canal?\nAssistant: Great! Which day suits you best?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Michelle West\", \"date\": \"2025-08-15\", \"time\": \"10:00\", \"treatment\": \"root canal\"}"}
+{"prompt": "User: I'd like to book a braces.\nAssistant: No problem. Do you have a specific date and time?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Gary Howard DDS\", \"date\": \"2025-08-18\", \"time\": \"11:00\", \"treatment\": \"braces\"}"}
+{"prompt": "User: I'd like to book a extraction.\nAssistant: Of course. What time are you thinking?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Patricia Mitchell\", \"date\": \"2025-08-18\", \"time\": \"10:00\", \"treatment\": \"extraction\"}"}
+{"prompt": "User: I'd like to book a braces.\nAssistant: Great! Which day suits you best?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Raymond Johnson\", \"date\": \"2025-08-20\", \"time\": \"09:00\", \"treatment\": \"braces\"}"}
+{"prompt": "User: I want to get a filling done.\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: I need a cleaning appointment.\nAssistant:", "completion": " Of course. What time are you thinking?"}
+{"prompt": "User: I need a root canal appointment.\nAssistant: Of course. What time are you thinking?\nUser: Can I come in on the 8th at 11am?\nAssistant:", "completion": " {\"name\": \"Shawn Adams\", \"date\": \"2025-08-15\", \"time\": \"13:00\", \"treatment\": \"root canal\"}"}
+{"prompt": "User: Do you have slots for a extraction?\nAssistant: Absolutely! When would you like to come in?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Robert Hill\", \"date\": \"2025-08-23\", \"time\": \"13:00\", \"treatment\": \"extraction\"}"}
+{"prompt": "User: I want to get a root canal done.\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: I'd like to book a braces.\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: How expensive is a root canal?\nAssistant:", "completion": " A root canal ranges from $500 to $1,200."}
+{"prompt": "User: Can I schedule a filling?\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: Can I schedule a extraction?\nAssistant:", "completion": " Of course. What time are you thinking?"}
+{"prompt": "User: I want to get a extraction done.\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: I want to get a braces done.\nAssistant: Absolutely! When would you like to come in?\nUser: Tuesday at 10am works.\nAssistant:", "completion": " {\"name\": \"Michelle Smith\", \"date\": \"2025-08-14\", \"time\": \"10:00\", \"treatment\": \"braces\"}"}
+{"prompt": "User: Do you have slots for a root canal?\nAssistant: Sure! What day and time works for you?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Danielle Barker\", \"date\": \"2025-08-22\", \"time\": \"14:00\", \"treatment\": \"root canal\"}"}
+{"prompt": "User: Can I schedule a braces?\nAssistant: No problem. Do you have a specific date and time?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Rebecca Zamora MD\", \"date\": \"2025-08-03\", \"time\": \"14:00\", \"treatment\": \"braces\"}"}
+{"prompt": "User: What are your working hours?\nAssistant:", "completion": " We\u2019re open Monday to Friday, 9am to 5pm."}
+{"prompt": "User: I'd like to book a extraction.\nAssistant: Sure! What day and time works for you?\nUser: Can I come in on the 8th at 11am?\nAssistant:", "completion": " {\"name\": \"Brandi Simmons\", \"date\": \"2025-08-28\", \"time\": \"09:00\", \"treatment\": \"extraction\"}"}
+{"prompt": "User: Can I schedule a cleaning?\nAssistant: Sure! What day and time works for you?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Aaron Charles\", \"date\": \"2025-08-04\", \"time\": \"14:00\", \"treatment\": \"cleaning\"}"}
+{"prompt": "User: I'd like to book a braces.\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: Can I schedule a cleaning?\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: I want to get a root canal done.\nAssistant: Great! Which day suits you best?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Valerie Taylor\", \"date\": \"2025-08-04\", \"time\": \"13:00\", \"treatment\": \"root canal\"}"}
+{"prompt": "User: I'd like to book a whitening.\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: I need a root canal appointment.\nAssistant:", "completion": " Absolutely! When would you like to come in?"}
+{"prompt": "User: I'd like to book a braces.\nAssistant:", "completion": " Absolutely! When would you like to come in?"}
+{"prompt": "User: I'd like to book a root canal.\nAssistant: Sure! What day and time works for you?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Blake Davis\", \"date\": \"2025-08-14\", \"time\": \"15:00\", \"treatment\": \"root canal\"}"}
+{"prompt": "User: I want to get a extraction done.\nAssistant: Great! Which day suits you best?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Troy Garrett\", \"date\": \"2025-08-16\", \"time\": \"09:00\", \"treatment\": \"extraction\"}"}
+{"prompt": "User: I need a cleaning appointment.\nAssistant: Of course. What time are you thinking?\nUser: Tuesday at 10am works.\nAssistant:", "completion": " {\"name\": \"Brandon Robinson\", \"date\": \"2025-08-06\", \"time\": \"10:00\", \"treatment\": \"cleaning\"}"}
+{"prompt": "User: I'd like to book a whitening.\nAssistant: No problem. Do you have a specific date and time?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Tammy Villa\", \"date\": \"2025-08-19\", \"time\": \"15:00\", \"treatment\": \"whitening\"}"}
+{"prompt": "User: I want to get a braces done.\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: Do you have slots for a whitening?\nAssistant: No problem. Do you have a specific date and time?\nUser: Tuesday at 10am works.\nAssistant:", "completion": " {\"name\": \"Jason Young\", \"date\": \"2025-08-25\", \"time\": \"14:00\", \"treatment\": \"whitening\"}"}
+{"prompt": "User: I'd like to book a braces.\nAssistant: Absolutely! When would you like to come in?\nUser: Can I come in on the 8th at 11am?\nAssistant:", "completion": " {\"name\": \"Edward Chung\", \"date\": \"2025-08-05\", \"time\": \"14:00\", \"treatment\": \"braces\"}"}
+{"prompt": "User: I need a whitening appointment.\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: I'd like to book a braces.\nAssistant: Great! Which day suits you best?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Michael Johnson\", \"date\": \"2025-08-20\", \"time\": \"14:00\", \"treatment\": \"braces\"}"}
+{"prompt": "User: Can I schedule a root canal?\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: I'd like to book a root canal.\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: Do you have slots for a filling?\nAssistant: Great! Which day suits you best?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Thomas Jenkins\", \"date\": \"2025-08-10\", \"time\": \"14:00\", \"treatment\": \"filling\"}"}
+{"prompt": "User: I need a cleaning appointment.\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: Do you have slots for a root canal?\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: Do you have slots for a extraction?\nAssistant:", "completion": " Absolutely! When would you like to come in?"}
+{"prompt": "User: I need a whitening appointment.\nAssistant: No problem. Do you have a specific date and time?\nUser: Can I come in on the 8th at 11am?\nAssistant:", "completion": " {\"name\": \"Walter Green\", \"date\": \"2025-08-13\", \"time\": \"10:00\", \"treatment\": \"whitening\"}"}
+{"prompt": "User: I need a cleaning appointment.\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: I'd like to book a braces.\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: I need a cleaning appointment.\nAssistant: No problem. Do you have a specific date and time?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"James Gonzalez\", \"date\": \"2025-08-14\", \"time\": \"09:00\", \"treatment\": \"cleaning\"}"}
+{"prompt": "User: I'd like to book a extraction.\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: Can I schedule a cleaning?\nAssistant: No problem. Do you have a specific date and time?\nUser: Can I come in on the 8th at 11am?\nAssistant:", "completion": " {\"name\": \"Matthew Smith\", \"date\": \"2025-08-09\", \"time\": \"13:00\", \"treatment\": \"cleaning\"}"}
+{"prompt": "User: I want to get a cleaning done.\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: I'd like to book a cleaning.\nAssistant: Sure! What day and time works for you?\nUser: Tuesday at 10am works.\nAssistant:", "completion": " {\"name\": \"Debra Moon\", \"date\": \"2025-08-09\", \"time\": \"10:00\", \"treatment\": \"cleaning\"}"}
+{"prompt": "User: I want to get a filling done.\nAssistant: Absolutely! When would you like to come in?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Jeffrey Hall\", \"date\": \"2025-08-09\", \"time\": \"14:00\", \"treatment\": \"filling\"}"}
+{"prompt": "User: I need a root canal appointment.\nAssistant: Of course. What time are you thinking?\nUser: Can I come in on the 8th at 11am?\nAssistant:", "completion": " {\"name\": \"Stephanie Valdez\", \"date\": \"2025-08-24\", \"time\": \"15:00\", \"treatment\": \"root canal\"}"}
+{"prompt": "User: I'd like to book a extraction.\nAssistant:", "completion": " Of course. What time are you thinking?"}
+{"prompt": "User: I want to get a filling done.\nAssistant:", "completion": " Absolutely! When would you like to come in?"}
+{"prompt": "User: I'd like to book a filling.\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: Where are you located?\nAssistant:", "completion": " We're at 123 Dental St., Smile City."}
+{"prompt": "User: Do you have slots for a cleaning?\nAssistant:", "completion": " Of course. What time are you thinking?"}
+{"prompt": "User: Do you offer payment plans?\nAssistant:", "completion": " Yes, we do offer flexible payment plans."}
+{"prompt": "User: Do you have slots for a root canal?\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: I want to get a cleaning done.\nAssistant:", "completion": " Of course. What time are you thinking?"}
+{"prompt": "User: I need a root canal appointment.\nAssistant:", "completion": " Of course. What time are you thinking?"}
+{"prompt": "User: Can I schedule a whitening?\nAssistant:", "completion": " Of course. What time are you thinking?"}
+{"prompt": "User: I'd like to book a cleaning.\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: I need a cleaning appointment.\nAssistant: Sure! What day and time works for you?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Donna Jacobson\", \"date\": \"2025-08-04\", \"time\": \"10:00\", \"treatment\": \"cleaning\"}"}
+{"prompt": "User: Do you have slots for a whitening?\nAssistant: Absolutely! When would you like to come in?\nUser: Tuesday at 10am works.\nAssistant:", "completion": " {\"name\": \"Javier Acevedo\", \"date\": \"2025-08-28\", \"time\": \"09:00\", \"treatment\": \"whitening\"}"}
+{"prompt": "User: I want to get a root canal done.\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: Do you have slots for a filling?\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: Can I schedule a extraction?\nAssistant: Of course. What time are you thinking?\nUser: Can I come in on the 8th at 11am?\nAssistant:", "completion": " {\"name\": \"Carlos Barnes\", \"date\": \"2025-08-23\", \"time\": \"15:00\", \"treatment\": \"extraction\"}"}
+{"prompt": "User: Do you have slots for a cleaning?\nAssistant: Of course. What time are you thinking?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Gary Lee\", \"date\": \"2025-08-26\", \"time\": \"10:00\", \"treatment\": \"cleaning\"}"}
+{"prompt": "User: Can I schedule a cleaning?\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: Do you have slots for a root canal?\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: I need a root canal appointment.\nAssistant:", "completion": " Of course. What time are you thinking?"}
+{"prompt": "User: Can I schedule a root canal?\nAssistant: Great! Which day suits you best?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Megan Navarro\", \"date\": \"2025-08-14\", \"time\": \"11:00\", \"treatment\": \"root canal\"}"}
+{"prompt": "User: Can I schedule a whitening?\nAssistant:", "completion": " Absolutely! When would you like to come in?"}
+{"prompt": "User: How much does a cleaning cost?\nAssistant:", "completion": " A cleaning usually costs around $100."}
+{"prompt": "User: Do you have slots for a filling?\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: I want to get a braces done.\nAssistant:", "completion": " Absolutely! When would you like to come in?"}
+{"prompt": "User: I need a filling appointment.\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: Do you have slots for a extraction?\nAssistant: No problem. Do you have a specific date and time?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Rachel Parks\", \"date\": \"2025-08-20\", \"time\": \"10:00\", \"treatment\": \"extraction\"}"}
+{"prompt": "User: I need a filling appointment.\nAssistant: No problem. Do you have a specific date and time?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Kevin Strickland\", \"date\": \"2025-08-14\", \"time\": \"13:00\", \"treatment\": \"filling\"}"}
+{"prompt": "User: Do I need a referral for a root canal?\nAssistant:", "completion": " No referral needed! We can book it directly."}
+{"prompt": "User: I want to get a filling done.\nAssistant: Great! Which day suits you best?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Melissa Richardson\", \"date\": \"2025-08-05\", \"time\": \"11:00\", \"treatment\": \"filling\"}"}
+{"prompt": "User: I'd like to book a whitening.\nAssistant: Absolutely! When would you like to come in?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Angela Clark\", \"date\": \"2025-08-24\", \"time\": \"11:00\", \"treatment\": \"whitening\"}"}
+{"prompt": "User: I want to get a whitening done.\nAssistant: Great! Which day suits you best?\nUser: Tuesday at 10am works.\nAssistant:", "completion": " {\"name\": \"Amanda Case\", \"date\": \"2025-08-07\", \"time\": \"11:00\", \"treatment\": \"whitening\"}"}
+{"prompt": "User: I want to get a whitening done.\nAssistant: Absolutely! When would you like to come in?\nUser: Tuesday at 10am works.\nAssistant:", "completion": " {\"name\": \"Olivia Watkins\", \"date\": \"2025-08-24\", \"time\": \"15:00\", \"treatment\": \"whitening\"}"}
+{"prompt": "User: Can I schedule a filling?\nAssistant: No problem. Do you have a specific date and time?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Raymond Davis\", \"date\": \"2025-08-02\", \"time\": \"14:00\", \"treatment\": \"filling\"}"}
+{"prompt": "User: Do you have slots for a whitening?\nAssistant:", "completion": " Absolutely! When would you like to come in?"}
+{"prompt": "User: I want to get a whitening done.\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: Do you have slots for a extraction?\nAssistant:", "completion": " Absolutely! When would you like to come in?"}
+{"prompt": "User: Can I schedule a cleaning?\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: I want to get a braces done.\nAssistant: Of course. What time are you thinking?\nUser: This Friday afternoon, maybe 2?\nAssistant:", "completion": " {\"name\": \"Christopher Johnston\", \"date\": \"2025-08-23\", \"time\": \"15:00\", \"treatment\": \"braces\"}"}
+{"prompt": "User: Do you have slots for a extraction?\nAssistant: Absolutely! When would you like to come in?\nUser: Tuesday at 10am works.\nAssistant:", "completion": " {\"name\": \"Angela Thompson\", \"date\": \"2025-08-18\", \"time\": \"14:00\", \"treatment\": \"extraction\"}"}
+{"prompt": "User: I want to get a braces done.\nAssistant: Great! Which day suits you best?\nUser: Tuesday at 10am works.\nAssistant:", "completion": " {\"name\": \"Cindy Reid\", \"date\": \"2025-08-26\", \"time\": \"09:00\", \"treatment\": \"braces\"}"}
+{"prompt": "User: I need a root canal appointment.\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: Can I schedule a whitening?\nAssistant:", "completion": " Great! Which day suits you best?"}
+{"prompt": "User: I'd like to book a extraction.\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: Do you have slots for a extraction?\nAssistant:", "completion": " No problem. Do you have a specific date and time?"}
+{"prompt": "User: Do you have slots for a filling?\nAssistant:", "completion": " Sure! What day and time works for you?"}
+{"prompt": "User: I want to get a cleaning done.\nAssistant: Of course. What time are you thinking?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Megan Vega\", \"date\": \"2025-08-10\", \"time\": \"09:00\", \"treatment\": \"cleaning\"}"}
+{"prompt": "User: I'd like to book a extraction.\nAssistant: Sure! What day and time works for you?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Mark Wright\", \"date\": \"2025-08-09\", \"time\": \"09:00\", \"treatment\": \"extraction\"}"}
+{"prompt": "User: Can I schedule a whitening?\nAssistant: Absolutely! When would you like to come in?\nUser: Can I come in on the 8th at 11am?\nAssistant:", "completion": " {\"name\": \"Marco Smith\", \"date\": \"2025-08-14\", \"time\": \"11:00\", \"treatment\": \"whitening\"}"}
