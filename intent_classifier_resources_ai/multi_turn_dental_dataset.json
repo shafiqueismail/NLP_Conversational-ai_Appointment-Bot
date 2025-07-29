@@ -302,8 +302,6 @@
 {"prompt": "User: I want to get a cleaning done.\nAssistant: Of course. What time are you thinking?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Megan Vega\", \"date\": \"2025-08-10\", \"time\": \"09:00\", \"treatment\": \"cleaning\"}"}
 {"prompt": "User: I'd like to book a extraction.\nAssistant: Sure! What day and time works for you?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Mark Wright\", \"date\": \"2025-08-09\", \"time\": \"09:00\", \"treatment\": \"extraction\"}"}
 {"prompt": "User: Can I schedule a whitening?\nAssistant: Absolutely! When would you like to come in?\nUser: Can I come in on the 8th at 11am?\nAssistant:", "completion": " {\"name\": \"Marco Smith\", \"date\": \"2025-08-14\", \"time\": \"11:00\", \"treatment\": \"whitening\"}"}
-{"prompt": "User: I was wondering if I could whiten my teeth this weekend?\nAssistant:", "completion": " Of course! What time on the weekend works for you?"}
-{"prompt": "User: I was wondering if I could whiten my teeth this weekend?\nAssistant: Of course! What time on the weekend works for you?\nUser: How about Monday at 14:00?\nAssistant:", "completion": " {\"name\": \"Albert Stanton\", \"date\": \"2025-08-11\", \"time\": \"14:00\", \"treatment\": \"whitening\"}"}
 {"prompt": "User: Can I come in Tuesday morning for a cleaning?\nAssistant:", "completion": " {\"name\": \"Kendra Burke\", \"date\": \"2025-08-15\", \"time\": \"11:00\", \"treatment\": \"cleaning\"}"}
 {"prompt": "User: Hey! My molar hurts \u2014 I think I need a filling.\nAssistant:", "completion": " No problem, we can help with that. What day suits you?"}
 {"prompt": "User: Hey! My molar hurts \u2014 I think I need a filling.\nAssistant: No problem, we can help with that. What day suits you?\nUser: How about Thursday at 14:00?\nAssistant:", "completion": " {\"name\": \"Johnathan Mcdaniel\", \"date\": \"2025-08-14\", \"time\": \"14:00\", \"treatment\": \"filling\"}"}
@@ -482,8 +480,6 @@
 {"prompt": "User: I want to get a cleaning done.\nAssistant: Of course. What time are you thinking?\nUser: What about August 10th around noon?\nAssistant:", "completion": " {\"name\": \"Megan Vega\", \"date\": \"2025-08-10\", \"time\": \"09:00\", \"treatment\": \"cleaning\"}"}
 {"prompt": "User: I'd like to book a extraction.\nAssistant: Sure! What day and time works for you?\nUser: How about next Monday at 3pm?\nAssistant:", "completion": " {\"name\": \"Mark Wright\", \"date\": \"2025-08-09\", \"time\": \"09:00\", \"treatment\": \"extraction\"}"}
 {"prompt": "User: Can I schedule a whitening?\nAssistant: Absolutely! When would you like to come in?\nUser: Can I come in on the 8th at 11am?\nAssistant:", "completion": " {\"name\": \"Marco Smith\", \"date\": \"2025-08-14\", \"time\": \"11:00\", \"treatment\": \"whitening\"}"}
-{"prompt": "User: I was wondering if I could whiten my teeth this weekend?\nAssistant:", "completion": " Of course! What time on the weekend works for you?"}
-{"prompt": "User: I was wondering if I could whiten my teeth this weekend?\nAssistant: Of course! What time on the weekend works for you?\nUser: How about Monday at 14:00?\nAssistant:", "completion": " {\"name\": \"Albert Stanton\", \"date\": \"2025-08-11\", \"time\": \"14:00\", \"treatment\": \"whitening\"}"}
 {"prompt": "User: Can I come in Tuesday morning for a cleaning?\nAssistant:", "completion": " {\"name\": \"Kendra Burke\", \"date\": \"2025-08-15\", \"time\": \"11:00\", \"treatment\": \"cleaning\"}"}
 {"prompt": "User: Hey! My molar hurts \u2014 I think I need a filling.\nAssistant:", "completion": " No problem, we can help with that. What day suits you?"}
 {"prompt": "User: Hey! My molar hurts \u2014 I think I need a filling.\nAssistant: No problem, we can help with that. What day suits you?\nUser: How about Thursday at 14:00?\nAssistant:", "completion": " {\"name\": \"Johnathan Mcdaniel\", \"date\": \"2025-08-14\", \"time\": \"14:00\", \"treatment\": \"filling\"}"}
@@ -672,15 +668,15 @@
 {"prompt": "User: Could you schedule me for a whitening?\nAssistant: When works best for you?\nUser: How about Tuesday, 10am sharp?\nAssistant:", "completion": " {\"name\": \"Sergio Newton\", \"date\": \"2025-08-22\", \"time\": \"13:00\", \"treatment\": \"whitening\"}"}
 {"prompt": "User: Do you clean with ultrasonic or manual tools?\nAssistant:", "completion": " We use both, depending on the case."}
 {"prompt": "User: How long does whitening last?\nAssistant:", "completion": " Results typically last 6\u201312 months."}
-{"prompt": "User: What payment methods do you accept?\nAssistant:", "completion": " We accept credit, debit, and e-transfers."}
+{"prompt": "User: What payment methods do you accept?\nAssistant:", "completion": " We accept debit, and e-transfers."}
 {"prompt": "User: Are teeth extractions painful?\nAssistant:", "completion": " We use local anesthesia to minimize discomfort."}
-{"prompt": "User: What payment methods do you accept?\nAssistant:", "completion": " We accept credit, debit, and e-transfers."}
+{"prompt": "User: What payment methods do you accept?\nAssistant:", "completion": " We accept debit, and e-transfers."}
 {"prompt": "User: Do you accept walk-ins?\nAssistant:", "completion": " We recommend booking ahead to guarantee a spot."}
 {"prompt": "User: Do you clean with ultrasonic or manual tools?\nAssistant:", "completion": " We use both, depending on the case."}
 {"prompt": "User: Can I cancel my appointment?\nAssistant:", "completion": " Yes, cancellations must be made 24 hours in advance."}
 {"prompt": "User: Can I bring my child to the appointment?\nAssistant:", "completion": " Yes, children are welcome in our clinic."}
 {"prompt": "User: Is fluoride treatment included with cleaning?\nAssistant:", "completion": " Yes, fluoride is included in the visit."}
-{"prompt": "User: What payment methods do you accept?\nAssistant:", "completion": " We accept credit, debit, and e-transfers."}
+{"prompt": "User: What payment methods do you accept?\nAssistant:", "completion": " We accept debit, and e-transfers."}
 {"prompt": "User: Is fluoride treatment included with cleaning?\nAssistant:", "completion": " Yes, fluoride is included in the visit."}
 {"prompt": "User: Do you accept walk-ins?\nAssistant:", "completion": " We recommend booking ahead to guarantee a spot."}
 {"prompt": "User: Is fluoride treatment included with cleaning?\nAssistant:", "completion": " Yes, fluoride is included in the visit."}
@@ -702,7 +698,7 @@
 {"prompt": "User: Can I cancel my appointment?\nAssistant:", "completion": " Yes, cancellations must be made 24 hours in advance."}
 {"prompt": "User: Do you offer student discounts?\nAssistant:", "completion": " Yes, we offer 10% off for students."}
 {"prompt": "User: How early should I arrive before my appointment?\nAssistant:", "completion": " Please arrive 10 minutes early."}
-{"prompt": "User: What payment methods do you accept?\nAssistant:", "completion": " We accept credit, debit, and e-transfers."}
+{"prompt": "User: What payment methods do you accept?\nAssistant:", "completion": " We accept debit, and e-transfers."}
 {"prompt": "User: Can I bring my child to the appointment?\nAssistant:", "completion": " Yes, children are welcome in our clinic."}
 {"prompt": "User: Do you accept walk-ins?\nAssistant:", "completion": " We recommend booking ahead to guarantee a spot."}
 {"prompt": "User: Is fluoride treatment included with cleaning?\nAssistant:", "completion": " Yes, fluoride is included in the visit."}
