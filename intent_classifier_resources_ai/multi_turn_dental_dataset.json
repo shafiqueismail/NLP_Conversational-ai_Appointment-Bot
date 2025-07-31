@@ -1,0 +1,4 @@
+{
+  "prompt": "User: Hi, I want to book a dental appointment.\nAssistant: Sure! What kind of treatment are you looking for?\nUser: A cleaning, please.\nAssistant: Got it. When would you like to come in?\nUser: Next Monday around 2pm.\nAssistant: Great. Could I have your full name?\nUser: Sarah Ali.\nAssistant:",
+  "completion": " {\n  \"name\": \"Sarah Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"14:00\",\n  \"duration\": 60\n}"
+}
