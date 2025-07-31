@@ -199,6 +199,30 @@ def extract_slot(user_input):
     return slots
 
 
+def convert_relative_dates_and_times(output_dict):
+    # --- Convert relative date ---
+    if "date" in output_dict:
+        parsed = dateparser.parse(output_dict["date"], settings={"PREFER_DATES_FROM": "future"})
+        if parsed:
+            output_dict["date"] = parsed.strftime("%Y-%m-%d")
+
+    # --- Convert time to 24-hour format ---
+    if "time" in output_dict:
+        match = re.search(r'(\d{1,2})(?::(\d{2}))?\s*(am|pm)?', output_dict["time"], re.IGNORECASE)
+        if match:
+            hour = int(match.group(1))
+            minute = int(match.group(2)) if match.group(2) else 0
+            meridian = match.group(3)
+            if meridian:
+                if meridian.lower() == "pm" and hour < 12:
+                    hour += 12
+                elif meridian.lower() == "am" and hour == 12:
+                    hour = 0
+            output_dict["time"] = f"{hour:02d}:{minute:02d}"
+
+    return output_dict
+
+
 # def handle_response(user_input):
 #     context = conversation_context
 #     context["history"].append(user_input)
