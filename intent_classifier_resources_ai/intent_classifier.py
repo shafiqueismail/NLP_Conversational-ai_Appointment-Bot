@@ -199,84 +199,82 @@ def extract_slot(user_input):
     return slots
 
 
+# def handle_response(user_input):
+#     context = conversation_context
+#     context["history"].append(user_input)
 
+#     # Step 1: Predict intent and extract new slots
+#     predicted_intent, confidence = predict_intent(user_input)
+#     found_slots = extract_slot(user_input)
 
-def handle_response(user_input):
-    context = conversation_context
-    context["history"].append(user_input)
+#     # Step 2: FSM setup
+#     current_intent = context.get("last_intent")
+#     step = context.get("step", 0)
 
-    # Step 1: Predict intent and extract new slots
-    predicted_intent, confidence = predict_intent(user_input)
-    found_slots = extract_slot(user_input)
+#     if step == 0 and not current_intent:
+#         # First-time intent detection
+#         context["last_intent"] = predicted_intent
+#         context["params"] = found_slots
+#         flow = dialogue_flows.get(predicted_intent, [])
+#         context["step"] = 0
+#     else:
+#         # Continue with previous intent
+#         predicted_intent = current_intent
+#         flow = dialogue_flows.get(predicted_intent, [])
+#         context["params"].update(found_slots)
 
-    # Step 2: FSM setup
-    current_intent = context.get("last_intent")
-    step = context.get("step", 0)
+#     print(f"Intent: {predicted_intent}, Step: {context['step']}, Slots: {context['params']}")
 
-    if step == 0 and not current_intent:
-        # First-time intent detection
-        context["last_intent"] = predicted_intent
-        context["params"] = found_slots
-        flow = dialogue_flows.get(predicted_intent, [])
-        context["step"] = 0
-    else:
-        # Continue with previous intent
-        predicted_intent = current_intent
-        flow = dialogue_flows.get(predicted_intent, [])
-        context["params"].update(found_slots)
+#     # Step 3: Check for missing required slots
+#     required_slots = [step["expect"] for step in flow if step["expect"] != "end"]
+#     missing = [
+#         slot for slot in required_slots
+#         if slot not in context["params"] or not context["params"][slot]
+#     ]
 
-    print(f"Intent: {predicted_intent}, Step: {context['step']}, Slots: {context['params']}")
+#     # Step 4: Booking logic (only if all required slots are filled and FSM is done)
+#     if not missing and context["step"] >= len(flow):
+#         full_name = context["params"].get("Full name: ")
+#         day_of_week = context["params"].get("Day of the Week: ")
+#         date = context["params"].get("Date: ")
+#         time_str = context["params"].get("Time: ")
 
-    # Step 3: Check for missing required slots
-    required_slots = [step["expect"] for step in flow if step["expect"] != "end"]
-    missing = [
-        slot for slot in required_slots
-        if slot not in context["params"] or not context["params"][slot]
-    ]
+#         treatment = predicted_intent.replace("book_", "").replace("_", " ").title()
+#         duration = TREATMENT_DURATIONS.get(predicted_intent, 60)
 
-    # Step 4: Booking logic (only if all required slots are filled and FSM is done)
-    if not missing and context["step"] >= len(flow):
-        full_name = context["params"].get("Full name: ")
-        day_of_week = context["params"].get("Day of the Week: ")
-        date = context["params"].get("Date: ")
-        time_str = context["params"].get("Time: ")
+#         payload = {
+#             "name": full_name,
+#             "date": date,
+#             "time": time_str,
+#             "treatment": treatment,
+#             "duration": duration
+#         }
 
-        treatment = predicted_intent.replace("book_", "").replace("_", " ").title()
-        duration = TREATMENT_DURATIONS.get(predicted_intent, 60)
+#         try:
+#             response = requests.post("http://127.0.0.1:8000/api/add_appointment", json=payload)
+#             confirmation = "You're booked!" if response.status_code == 200 else "Booking failed."
+#         except Exception as e:
+#             confirmation = f"Could not connect to the server: {e}"
 
-        payload = {
-            "name": full_name,
-            "date": date,
-            "time": time_str,
-            "treatment": treatment,
-            "duration": duration
-        }
+#         parsed = (
+#             f"[Parsed Info] Name: {full_name}, Day: {day_of_week}, Date: {date}, "
+#             f"Time: {time_str}, Treatment: {treatment}, Duration: {duration} mins"
+#         )
 
-        try:
-            response = requests.post("http://127.0.0.1:8000/api/add_appointment", json=payload)
-            confirmation = "You're booked!" if response.status_code == 200 else "Booking failed."
-        except Exception as e:
-            confirmation = f"Could not connect to the server: {e}"
+#         # Reset FSM context
+#         context["step"] = 0
+#         context["params"] = {}
+#         context["last_intent"] = None
 
-        parsed = (
-            f"[Parsed Info] Name: {full_name}, Day: {day_of_week}, Date: {date}, "
-            f"Time: {time_str}, Treatment: {treatment}, Duration: {duration} mins"
-        )
+#         return confirmation + "\n" + parsed + "\nIs there anything else I can help you with?"
 
-        # Reset FSM context
-        context["step"] = 0
-        context["params"] = {}
-        context["last_intent"] = None
-
-        return confirmation + "\n" + parsed + "\nIs there anything else I can help you with?"
-
-    # Step 5: FSM prompt to collect info (only advance if value is filled)
-    expected_slot = flow[context["step"]]["expect"]
-    if expected_slot in context["params"] and context["params"][expected_slot]:
-        context["step"] += 1
-        return handle_response(user_input)  # recursively advance
-    else:
-        return flow[context["step"]]["prompt"]
+#     # Step 5: FSM prompt to collect info (only advance if value is filled)
+#     expected_slot = flow[context["step"]]["expect"]
+#     if expected_slot in context["params"] and context["params"][expected_slot]:
+#         context["step"] += 1
+#         return handle_response(user_input)  # recursively advance
+#     else:
+#         return flow[context["step"]]["prompt"]
 
 
 
