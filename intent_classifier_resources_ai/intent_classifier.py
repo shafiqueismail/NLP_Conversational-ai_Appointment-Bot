@@ -7,7 +7,7 @@ import re
 import dateparser
 import requests
 import datetime
-import spacy
+import spacy 
 import json
 
 
@@ -220,6 +220,18 @@ def convert_relative_dates_and_times(output_dict):
                     hour = 0
             output_dict["time"] = f"{hour:02d}:{minute:02d}"
 
+    return output_dict
+
+
+nlp = spacy.load("en_core_web_sm")
+
+def fix_name_with_spacy(output_dict, original_input):
+    if "name" not in output_dict or not output_dict["name"].strip():
+        doc = nlp(original_input)
+        for ent in doc.ents:
+            if ent.label_ == "PERSON":
+                output_dict["name"] = ent.text
+                break
     return output_dict
 
 
