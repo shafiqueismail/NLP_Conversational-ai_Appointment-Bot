@@ -1,18 +1,18 @@
 [
 {
-  "prompt": "User: Hi, I want to book a dental appointment.\nAssistant: Sure! What kind of treatment are you looking for?\nUser: A cleaning, please.\nAssistant: Got it. When would you like to come in?\nUser: Next Monday around 2pm.\nAssistant: Great. Could I have your full name?\nUser: Sarah Ali.\nAssistant:",
+  "prompt": "User: I want to book a dental appointment.\nAssistant: Sure! What kind of treatment are you looking for?\nUser: A cleaning, please.\nAssistant: Got it. When would you like to come in?\nUser: Next Monday around 2pm.\nAssistant: Great. Could I have your full name?\nUser: Sarah Ali.\nAssistant:",
   "completion": " {\n  \"name\": \"Sarah Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"14:00\",\n  \"duration\": 60\n}"
 },
 {
-  "prompt": "User: Hi, I want to book a cleaning appointment.\nAssistant: For sure! When would you like to come in?\nUser: Tuesday at around 3.\nAssistant: Awesome. Could I have your full name?\nUser: Mohammed Ali.\nAssistant:",
+  "prompt": "User: I want to book a cleaning appointment.\nAssistant: For sure! When would you like to come in?\nUser: Tuesday at around 3.\nAssistant: Awesome. Could I have your full name?\nUser: Mohammed Ali.\nAssistant:",
   "completion": " {\n  \"name\": \"Mohammed Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-06\",\n  \"time\": \"15:00\",\n  \"duration\": 60\n}"
 },
 {
-  "prompt": "User: Hi, I want to book a dental appointment.\nAssistant: Sure! What kind of treatment are you looking for?\nUser: A cleaning, please.\nAssistant: Got it. When would you like to come in?\nUser: Next Monday around 2pm.\nAssistant: Great. Could I have your full name?\nUser: Sarah Ali.\nAssistant:",
+  "prompt": "User: I want to book a dental appointment.\nAssistant: Sure! What kind of treatment are you looking for?\nUser: A cleaning, please.\nAssistant: Got it. When would you like to come in?\nUser: Next Monday around 2pm.\nAssistant: Great. Could I have your full name?\nUser: Sarah Ali.\nAssistant:",
   "completion": " {\n  \"name\": \"Sarah Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"14:00\",\n  \"duration\": 60\n}"
 },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 2pm.\nAssistant: Got it. May I have your full name?\nUser: Sarah Ali.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 2pm.\nAssistant: Got it. May I have your full name?\nUser: Sarah Ali.\nAssistant:",
     "completion":" {\n  \"name\": \"Sarah Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"14:00\",\n  \"duration\": 60\n}"
   },
   {
@@ -24,11 +24,11 @@
     "completion":" {\n  \"name\": \"Jamal Smith\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-04\",\n  \"time\": \"14:00\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 11:30am.\nAssistant: Got it. May I have your full name?\nUser: Mohammed Ali.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 11:30am.\nAssistant: Got it. May I have your full name?\nUser: Mohammed Ali.\nAssistant:",
     "completion":" {\n  \"name\": \"Mohammed Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"11:30\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 2pm.\nAssistant: Got it. May I have your full name?\nUser: Omar Siddiq.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 2pm.\nAssistant: Got it. May I have your full name?\nUser: Omar Siddiq.\nAssistant:",
     "completion":" {\n  \"name\": \"Omar Siddiq\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"14:00\",\n  \"duration\": 60\n}"
   },
   {
@@ -56,15 +56,15 @@
     "completion":" {\n  \"name\": \"Sarah Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-04\",\n  \"time\": \"11:30\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Monday.\nAssistant: Great. What time would you prefer?\nUser: Around 4:45pm.\nAssistant: Got it. May I have your full name?\nUser: Jamal Smith.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Monday.\nAssistant: Great. What time would you prefer?\nUser: Around 4:45pm.\nAssistant: Got it. May I have your full name?\nUser: Jamal Smith.\nAssistant:",
     "completion":" {\n  \"name\": \"Jamal Smith\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-04\",\n  \"time\": \"16:45\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Friday.\nAssistant: Great. What time would you prefer?\nUser: Around 11:30am.\nAssistant: Got it. May I have your full name?\nUser: Jamal Smith.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Friday.\nAssistant: Great. What time would you prefer?\nUser: Around 11:30am.\nAssistant: Got it. May I have your full name?\nUser: Jamal Smith.\nAssistant:",
     "completion":" {\n  \"name\": \"Jamal Smith\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-01\",\n  \"time\": \"11:30\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 11:30am.\nAssistant: Got it. May I have your full name?\nUser: Zainab Rahman.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 11:30am.\nAssistant: Got it. May I have your full name?\nUser: Zainab Rahman.\nAssistant:",
     "completion":" {\n  \"name\": \"Zainab Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"11:30\",\n  \"duration\": 60\n}"
   },
   {
@@ -84,7 +84,7 @@
     "completion":" {\n  \"name\": \"Omar Siddiq\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-01\",\n  \"time\": \"11:30\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 3:30pm.\nAssistant: Got it. May I have your full name?\nUser: Zainab Rahman.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 3:30pm.\nAssistant: Got it. May I have your full name?\nUser: Zainab Rahman.\nAssistant:",
     "completion":" {\n  \"name\": \"Zainab Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"15:30\",\n  \"duration\": 60\n}"
   },
   {
@@ -108,7 +108,7 @@
     "completion":" {\n  \"name\": \"Omar Siddiq\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-01\",\n  \"time\": \"09:00\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Wednesday.\nAssistant: Great. What time would you prefer?\nUser: Around 3:30pm.\nAssistant: Got it. May I have your full name?\nUser: Omar Siddiq.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Wednesday.\nAssistant: Great. What time would you prefer?\nUser: Around 3:30pm.\nAssistant: Got it. May I have your full name?\nUser: Omar Siddiq.\nAssistant:",
     "completion":" {\n  \"name\": \"Omar Siddiq\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-06\",\n  \"time\": \"15:30\",\n  \"duration\": 60\n}"
   },
   {
@@ -140,19 +140,19 @@
     "completion":" {\n  \"name\": \"Omar Siddiq\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-04\",\n  \"time\": \"14:00\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 3:30pm.\nAssistant: Got it. May I have your full name?\nUser: Mohammed Ali.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 3:30pm.\nAssistant: Got it. May I have your full name?\nUser: Mohammed Ali.\nAssistant:",
     "completion":" {\n  \"name\": \"Mohammed Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"15:30\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Monday.\nAssistant: Great. What time would you prefer?\nUser: Around 9am.\nAssistant: Got it. May I have your full name?\nUser: Jamal Smith.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Monday.\nAssistant: Great. What time would you prefer?\nUser: Around 9am.\nAssistant: Got it. May I have your full name?\nUser: Jamal Smith.\nAssistant:",
     "completion":" {\n  \"name\": \"Jamal Smith\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-04\",\n  \"time\": \"09:00\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Friday.\nAssistant: Great. What time would you prefer?\nUser: Around 10am.\nAssistant: Got it. May I have your full name?\nUser: Sarah Ali.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Friday.\nAssistant: Great. What time would you prefer?\nUser: Around 10am.\nAssistant: Got it. May I have your full name?\nUser: Sarah Ali.\nAssistant:",
     "completion":" {\n  \"name\": \"Sarah Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-01\",\n  \"time\": \"10:00\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Thursday.\nAssistant: Great. What time would you prefer?\nUser: Around 3:30pm.\nAssistant: Got it. May I have your full name?\nUser: Zainab Rahman.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Thursday.\nAssistant: Great. What time would you prefer?\nUser: Around 3:30pm.\nAssistant: Got it. May I have your full name?\nUser: Zainab Rahman.\nAssistant:",
     "completion":" {\n  \"name\": \"Zainab Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-07\",\n  \"time\": \"15:30\",\n  \"duration\": 60\n}"
   },
   {
@@ -160,7 +160,7 @@
     "completion":" {\n  \"name\": \"Ayesha Khan\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-07\",\n  \"time\": \"16:45\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Friday.\nAssistant: Great. What time would you prefer?\nUser: Around 3:30pm.\nAssistant: Got it. May I have your full name?\nUser: Mohammed Ali.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Friday.\nAssistant: Great. What time would you prefer?\nUser: Around 3:30pm.\nAssistant: Got it. May I have your full name?\nUser: Mohammed Ali.\nAssistant:",
     "completion":" {\n  \"name\": \"Mohammed Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-01\",\n  \"time\": \"15:30\",\n  \"duration\": 60\n}"
   },
   {
@@ -184,7 +184,7 @@
     "completion":" {\n  \"name\": \"Sarah Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"09:00\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Monday.\nAssistant: Great. What time would you prefer?\nUser: Around 2pm.\nAssistant: Got it. May I have your full name?\nUser: Ayesha Khan.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Monday.\nAssistant: Great. What time would you prefer?\nUser: Around 2pm.\nAssistant: Got it. May I have your full name?\nUser: Ayesha Khan.\nAssistant:",
     "completion":" {\n  \"name\": \"Ayesha Khan\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-04\",\n  \"time\": \"14:00\",\n  \"duration\": 60\n}"
   },
   {
@@ -196,7 +196,7 @@
     "completion":" {\n  \"name\": \"Zainab Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"10:00\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 10am.\nAssistant: Got it. May I have your full name?\nUser: Sarah Ali.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 10am.\nAssistant: Got it. May I have your full name?\nUser: Sarah Ali.\nAssistant:",
     "completion":" {\n  \"name\": \"Sarah Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"10:00\",\n  \"duration\": 60\n}"
   },
   {
@@ -204,7 +204,7 @@
     "completion":" {\n  \"name\": \"Ayesha Khan\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-06\",\n  \"time\": \"10:00\",\n  \"duration\": 60\n}"
   },
   {
-    "prompt":"User: Hi there, I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 2pm.\nAssistant: Got it. May I have your full name?\nUser: Sarah Ali.\nAssistant:",
+    "prompt":"User: I want to book a dental cleaning.\nAssistant: Sure! Which day works best for you?\nUser: I\u2019m free on Tuesday.\nAssistant: Great. What time would you prefer?\nUser: Around 2pm.\nAssistant: Got it. May I have your full name?\nUser: Sarah Ali.\nAssistant:",
     "completion":" {\n  \"name\": \"Sarah Ali\",\n  \"treatment\": \"cleaning\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"14:00\",\n  \"duration\": 60\n}"
   },
   {
