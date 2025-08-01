@@ -1,0 +1,223 @@
+[
+    {
+      "prompt": "User: When are you guys open?\nAssistant: We are open from 9am to 5pm, Monday through Friday.\nUser: So you're open on Saturdays?\nAssistant: We’re actually closed on weekends.",
+      "completion": "{\n  \"hours\": \"Monday to Friday, 9am to 5pm\",\n  \"closed_on\": \"Saturday and Sunday\"\n}"
+    },
+    {
+      "prompt": "User: How much does a cleaning cost?\nAssistant: A dental cleaning costs $100 and usually takes about an hour.\nUser: Okay, and do you accept credit cards?\nAssistant: We currently only accept cash and debit payments.",
+      "completion": "{\n  \"treatment\": \"cleaning\",\n  \"price\": \"$100\",\n  \"duration\": \"1 hour\",\n  \"payment_methods\": [\"cash\", \"debit\"]\n}"
+    },
+    {
+      "prompt": "User: Can I get a tooth removed there? How much would that be?\nAssistant: Yes, we offer tooth extractions. The price is typically around $200 and takes about 90 minutes.\nUser: Alright!",
+      "completion": "{\n  \"treatment\": \"extraction\",\n  \"price\": \"$200\",\n  \"duration\": \"1.5 hours\"\n}"
+    },
+    {
+      "prompt": "User: What kind of payments do you accept?\nAssistant: We accept cash and debit only.\nUser: No credit card?\nAssistant: Nope, not at the moment.",
+      "completion": "{\n  \"payment_methods\": [\"cash\", \"debit\"]\n}"
+    },
+    {
+      "prompt": "User: I might need a cavity filled. What's the price like?\nAssistant: A cavity filling costs $150 and takes about an hour.\nUser: Ok, perfect!",
+      "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+    },
+    {
+        "prompt": "User: Do you accept credit cards?\nAssistant: only cash and debit are accepted.",
+        "completion": "{\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: Can I get a tooth removed?\nAssistant: Yes, we do extractions. It usually costs $200 and takes 90 minutes.",
+        "completion": "{\n  \"treatment\": \"extraction\",\n  \"price\": \"$200\",\n  \"duration\": \"1.5 hours\"\n}"
+      },
+      {
+        "prompt": "User: What\u2019s the cost of a cavity filling?\nAssistant: It's $150 and takes approximately one hour.",
+        "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+      },
+      {
+        "prompt": "User: When are you guys open?\nAssistant: We\u2019re open from 9am to 5pm, Monday through Friday.\nUser: So you're open on Saturdays?\nAssistant: We\u2019re actually closed on weekends.",
+        "completion": "{\n  \"hours\": \"Monday to Friday, 9am to 5pm\",\n  \"closed_on\": \"Saturday and Sunday\"\n}"
+      },
+      {
+        "prompt": "User: Can I get a tooth removed?\nAssistant: Yes, we do extractions. It usually costs $200 and takes 90 minutes.",
+        "completion": "{\n  \"treatment\": \"extraction\",\n  \"price\": \"$200\",\n  \"duration\": \"1.5 hours\"\n}"
+      },
+      {
+        "prompt": "User: Do you do cavity fillings?\nAssistant: Yes. They cost $150 and take about 1 hour.",
+        "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+      },
+      {
+        "prompt": "User: How long is a cleaning appointment?\nAssistant: Around 1 hour, and the cost is $100.",
+        "completion": "{\n  \"treatment\": \"cleaning\",\n  \"price\": \"$100\",\n  \"duration\": \"1 hour\",\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: What's the price for a dental cleaning?\nAssistant: It\u2019s $100 and takes about 1 hour.",
+        "completion": "{\n  \"treatment\": \"cleaning\",\n  \"price\": \"$100\",\n  \"duration\": \"1 hour\",\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: Can I get a tooth removed?\nAssistant: Yes, we do extractions. It usually costs $200 and takes 90 minutes.",
+        "completion": "{\n  \"treatment\": \"extraction\",\n  \"price\": \"$200\",\n  \"duration\": \"1.5 hours\"\n}"
+      },
+      {
+        "prompt": "User: Do you take Visa or Mastercard?\nAssistant: No, we only accept cash and debit.",
+        "completion": "{\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: How long is a cleaning appointment?\nAssistant: Around 1 hour, and the cost is $100.",
+        "completion": "{\n  \"treatment\": \"cleaning\",\n  \"price\": \"$100\",\n  \"duration\": \"1 hour\",\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: Do you accept credit cards?\nAssistant: only cash and debit are accepted.",
+        "completion": "{\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: Do you accept credit cards?\nAssistant: only cash and debit are accepted.",
+        "completion": "{\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: What\u2019s the cost of a cavity filling?\nAssistant: It's $150 and takes approximately one hour.",
+        "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+      },
+      {
+        "prompt": "User: When are you guys open?\nAssistant: We\u2019re open from 9am to 5pm, Monday through Friday.\nUser: So you're open on Saturdays?\nAssistant: We\u2019re actually closed on weekends.",
+        "completion": "{\n  \"hours\": \"Monday to Friday, 9am to 5pm\",\n  \"closed_on\": \"Saturday and Sunday\"\n}"
+      },
+      {
+        "prompt": "User: Do you accept credit cards?\nAssistant: only cash and debit are accepted.",
+        "completion": "{\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: What kind of payments do you accept?\nAssistant: We accept cash and debit only.",
+        "completion": "{\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: Can I get a tooth removed?\nAssistant: Yes, we do extractions. It usually costs $200 and takes 90 minutes.",
+        "completion": "{\n  \"treatment\": \"extraction\",\n  \"price\": \"$200\",\n  \"duration\": \"1.5 hours\"\n}"
+      },
+      {
+        "prompt": "User: Can I get a tooth removed?\nAssistant: Yes, we do extractions. It usually costs $200 and takes 90 minutes.",
+        "completion": "{\n  \"treatment\": \"extraction\",\n  \"price\": \"$200\",\n  \"duration\": \"1.5 hours\"\n}"
+      },
+      {
+        "prompt": "User: What\u2019s the cost of a cavity filling?\nAssistant: It's $150 and takes approximately one hour.",
+        "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+      },
+      {
+        "prompt": "User: What's the price for a dental cleaning?\nAssistant: It\u2019s $100 and takes about 1 hour.",
+        "completion": "{\n  \"treatment\": \"cleaning\",\n  \"price\": \"$100\",\n  \"duration\": \"1 hour\",\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: How much is a tooth extraction?\nAssistant: Tooth extraction is around $200 and takes 1.5 hours.",
+        "completion": "{\n  \"treatment\": \"extraction\",\n  \"price\": \"$200\",\n  \"duration\": \"1.5 hours\"\n}"
+      },
+      {
+        "prompt": "User: Do you do cavity fillings?\nAssistant: Yes. They cost $150 and take about 1 hour.",
+        "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+      },
+      {
+        "prompt": "User: How much is a tooth extraction?\nAssistant: Tooth extraction is around $200 and takes 1.5 hours.",
+        "completion": "{\n  \"treatment\": \"extraction\",\n  \"price\": \"$200\",\n  \"duration\": \"1.5 hours\"\n}"
+      },
+      {
+        "prompt": "User: Do you do cavity fillings?\nAssistant: Yes. They cost $150 and take about 1 hour.",
+        "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+      },
+      {
+        "prompt": "User: Can I get a tooth removed?\nAssistant: Yes, we do extractions. It usually costs $200 and takes 90 minutes.",
+        "completion": "{\n  \"treatment\": \"extraction\",\n  \"price\": \"$200\",\n  \"duration\": \"1.5 hours\"\n}"
+      },
+      {
+        "prompt": "User: What kind of payments do you accept?\nAssistant: We accept cash and debit only.",
+        "completion": "{\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: Do you accept credit cards?\nAssistant: only cash and debit are accepted.",
+        "completion": "{\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: How much does a cleaning cost?\nAssistant: A dental cleaning costs $100 and usually takes about an hour.\nUser: And what payment methods do you take?\nAssistant: We accept cash and debit only.",
+        "completion": "{\n  \"treatment\": \"cleaning\",\n  \"price\": \"$100\",\n  \"duration\": \"1 hour\",\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: What are your working hours?\nAssistant: We're available from 9am to 5pm on weekdays.",
+        "completion": "{\n  \"hours\": \"Monday to Friday, 9am to 5pm\",\n  \"closed_on\": \"Saturday and Sunday\"\n}"
+      },
+      {
+        "prompt": "User: What kind of payments do you accept?\nAssistant: We accept cash and debit only.",
+        "completion": "{\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: Can I get a tooth removed?\nAssistant: Yes, we do extractions. It usually costs $200 and takes 90 minutes.",
+        "completion": "{\n  \"treatment\": \"extraction\",\n  \"price\": \"$200\",\n  \"duration\": \"1.5 hours\"\n}"
+      },
+      {
+        "prompt": "User: What's the price for a dental cleaning?\nAssistant: It\u2019s $100 and takes about 1 hour.",
+        "completion": "{\n  \"treatment\": \"cleaning\",\n  \"price\": \"$100\",\n  \"duration\": \"1 hour\",\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: What kind of payments do you accept?\nAssistant: We accept cash and debit only.",
+        "completion": "{\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: Do you accept credit cards?\nAssistant: only cash and debit are accepted.",
+        "completion": "{\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: Do you do cavity fillings?\nAssistant: Yes. They cost $150 and take about 1 hour.",
+        "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+      },
+      {
+        "prompt": "User: What\u2019s the cost of a cavity filling?\nAssistant: It's $150 and takes approximately one hour.",
+        "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+      },
+      {
+        "prompt": "User: What\u2019s the cost of a cavity filling?\nAssistant: It's $150 and takes approximately one hour.",
+        "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+      },
+      {
+        "prompt": "User: Are you open on the weekends?\nAssistant: We are closed on weekends. Our hours are Monday to Friday, 9am to 5pm.",
+        "completion": "{\n  \"hours\": \"Monday to Friday, 9am to 5pm\",\n  \"closed_on\": \"Saturday and Sunday\"\n}"
+      },
+      {
+        "prompt": "User: Do you do cavity fillings?\nAssistant: Yes. They cost $150 and take about 1 hour.",
+        "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+      },
+      {
+        "prompt": "User: Do you take Visa or Mastercard?\nAssistant: No, we only accept cash and debit.",
+        "completion": "{\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: How much is a tooth extraction?\nAssistant: Tooth extraction is around $200 and takes 1.5 hours.",
+        "completion": "{\n  \"treatment\": \"extraction\",\n  \"price\": \"$200\",\n  \"duration\": \"1.5 hours\"\n}"
+      },
+      {
+        "prompt": "User: Do you accept credit cards?\nAssistant: only cash and debit are accepted.",
+        "completion": "{\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: How long is a cleaning appointment?\nAssistant: Around 1 hour, and the cost is $100.",
+        "completion": "{\n  \"treatment\": \"cleaning\",\n  \"price\": \"$100\",\n  \"duration\": \"1 hour\",\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      },
+      {
+        "prompt": "User: Do you do cavity fillings?\nAssistant: Yes. They cost $150 and take about 1 hour.",
+        "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+      },
+      {
+        "prompt": "User: When are you guys open?\nAssistant: We\u2019re open from 9am to 5pm, Monday through Friday.\nUser: So you're open on Saturdays?\nAssistant: We\u2019re actually closed on weekends.",
+        "completion": "{\n  \"hours\": \"Monday to Friday, 9am to 5pm\",\n  \"closed_on\": \"Saturday and Sunday\"\n}"
+      },
+      {
+        "prompt": "User: Do you do cavity fillings?\nAssistant: Yes. They cost $150 and take about 1 hour.",
+        "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+      },
+      {
+        "prompt": "User: What are your working hours?\nAssistant: We're available from 9am to 5pm on weekdays.",
+        "completion": "{\n  \"hours\": \"Monday to Friday, 9am to 5pm\",\n  \"closed_on\": \"Saturday and Sunday\"\n}"
+      },
+      {
+        "prompt": "User: What\u2019s the cost of a cavity filling?\nAssistant: It's $150 and takes approximately one hour.",
+        "completion": "{\n  \"treatment\": \"filling\",\n  \"price\": \"$150\",\n  \"duration\": \"1 hour\"\n}"
+      },
+      {
+        "prompt": "User: What's the price for a dental cleaning?\nAssistant: It\u2019s $100 and takes about 1 hour.",
+        "completion": "{\n  \"treatment\": \"cleaning\",\n  \"price\": \"$100\",\n  \"duration\": \"1 hour\",\n  \"payment_methods\": [\n    \"cash\",\n    \"debit\"\n  ]\n}"
+      }
+  ]
+  
