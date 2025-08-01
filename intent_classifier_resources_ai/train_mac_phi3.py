@@ -3,7 +3,14 @@ os.environ["TRANSFORMERS_NO_TF"] = "1"
 
 import torch
 from datasets import load_dataset
-from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments, Trainer, DataCollatorForLanguageModeling
+from transformers import (
+    AutoTokenizer,
+    AutoModelForCausalLM,
+    TrainingArguments,
+    Trainer,
+    DataCollatorForLanguageModeling,
+    TrainerCallback
+)
 from peft import get_peft_model, LoraConfig, TaskType
 
 # Use MPS if available (Apple Silicon), otherwise CPU
@@ -33,24 +40,35 @@ def format_example(example):
     return {"text": example["prompt"] + example["completion"]}
 
 tokenized = dataset["train"].map(format_example)
-tokenized = tokenized.map(lambda e: tokenizer(e["text"], truncation=True, padding="max_length", max_length=512), batched=True)
+tokenized = tokenized.map(
+    lambda e: tokenizer(e["text"], truncation=True, padding="max_length", max_length=512),
+    batched=True
+)
 
-# Training arguments
+# Define training arguments
 training_args = TrainingArguments(
     output_dir="./finetuned_phi3_dental",
     evaluation_strategy="no",
     logging_strategy="steps",
-    logging_steps=10,
+    logging_steps=10,  # log every 10 steps
     save_strategy="epoch",
     per_device_train_batch_size=1,
     num_train_epochs=3,
-    report_to="none",
+    report_to="none",  # disable wandb
+    logging_dir="./logs",
+    disable_tqdm=False,  # enable progress bar
     fp16=False,
-    bf16=True if torch.backends.mps.is_available() else False
+    bf16=torch.backends.mps.is_available()  # bf16 if using Apple MPS
 )
 
 # Data collator
 data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
+
+# Custom callback to print loss
+class PrintLossCallback(TrainerCallback):
+    def on_log(self, args, state, control, logs=None, **kwargs):
+        if logs is not None and "loss" in logs:
+            print(f"📉 Step {state.global_step} | Loss: {logs['loss']:.4f}")
 
 # Trainer setup
 trainer = Trainer(
@@ -59,6 +77,7 @@ trainer = Trainer(
     train_dataset=tokenized,
     tokenizer=tokenizer,
     data_collator=data_collator,
+    callbacks=[PrintLossCallback()]
 )
 
 # Start training
