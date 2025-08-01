@@ -4,7 +4,7 @@
       "completion": " {\n  \"name\": \"Sarah Ali\",\n  \"treatment\": \"cavity\",\n  \"date\": \"2025-08-05\",\n  \"time\": \"14:00\",\n  \"duration\": 60\n}"
     },
     {
-      "prompt": "User: I want to book a cavity filling appointment.\nAssistant: For sure! When would you like to come in?\nUser: Tuesday at around 3.\nAssistant: Awesome. Could I have your full name?\nUser: Mohammed Ali.\nAssistant: Your all booked now! See you there!",
+      "prompt": "User: I want to book some cavity fillings appointment.\nAssistant: For sure! When would you like to come in?\nUser: Tuesday at around 3.\nAssistant: Awesome. Could I have your full name?\nUser: Mohammed Ali.\nAssistant: Your all booked now! See you there!",
       "completion": " {\n  \"name\": \"Mohammed Ali\",\n  \"treatment\": \"cavity\",\n  \"date\": \"2025-08-06\",\n  \"time\": \"15:00\",\n  \"duration\": 60\n}"
     },
     {
