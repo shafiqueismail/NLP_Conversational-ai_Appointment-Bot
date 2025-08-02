@@ -20,29 +20,37 @@ device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 # Load dataset
 dataset = load_dataset("json", data_files="intent_classifier_resources_ai/multi_turn_dental_dataset.json")
 
-# Load tokenizer and model (force 4-bit or bf16 if using MPS)
+# Load tokenizer and model
 model_name = "microsoft/phi-3-mini-4k-instruct"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-# Load model in lower precision to save memory
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
-    torch_dtype=torch.float16 if device.type == "mps" else torch.float32,  # Use float16 on MPS
+    torch_dtype=torch.float16 if device.type == "mps" else torch.float32,
     low_cpu_mem_usage=True
 )
 model.to(device)
 
-# Apply LoRA
+# Optional: Inspect layer names to debug target_modules
+print("Available Linear layer names in Phi-3 model:")
+for name, module in model.named_modules():
+    if isinstance(module, torch.nn.Linear):
+        print(name)
+
+# LoRA config — correct modules for Phi-3
 peft_config = LoraConfig(
     task_type=TaskType.CAUSAL_LM,
     inference_mode=False,
     r=8,
     lora_alpha=16,
-    lora_dropout=0.1
+    lora_dropout=0.1,
+    target_modules=["qkv_proj", "out_proj", "fc1", "fc2"]
 )
+
+# Apply LoRA
 model = get_peft_model(model, peft_config)
 
-# Merge prompt + completion
+# Format dataset: merge prompt + completion
 def format_example(example):
     return {"text": example["prompt"] + example["completion"]}
 
@@ -52,31 +60,23 @@ tokenized = tokenized.map(
     batched=True
 )
 
-# Training config
+# Training args
 training_args = TrainingArguments(
     output_dir="./finetuned_phi3_dental",
-    evaluation_strategy="no",
-    logging_strategy="steps",
-    logging_steps=10,
-    save_strategy="epoch",
-    per_device_train_batch_size=1,  # VERY important for MPS
+    per_device_train_batch_size=1,
     num_train_epochs=3,
-    report_to="none",
-    logging_dir="./logs",
-    disable_tqdm=False,
-    fp16=False,
-    bf16=torch.backends.mps.is_available()  # Only enable bf16 if MPS
+    logging_dir="./logs"
 )
 
-# Collator & callback
+# Collator and callback
 data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
 class PrintLossCallback(TrainerCallback):
     def on_log(self, args, state, control, logs=None, **kwargs):
         if logs and "loss" in logs:
-            print(f"📉 Step {state.global_step} | Loss: {logs['loss']:.4f}")
+            print(f"Step {state.global_step} | Loss: {logs['loss']:.4f}")
 
-# Trainer
+# Train
 trainer = Trainer(
     model=model,
     args=training_args,
@@ -86,7 +86,6 @@ trainer = Trainer(
     callbacks=[PrintLossCallback()]
 )
 
-# Train
 trainer.train()
 
 # Save
