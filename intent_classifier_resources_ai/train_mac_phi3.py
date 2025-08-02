@@ -15,7 +15,7 @@ from transformers import (
 from peft import get_peft_model, LoraConfig, TaskType
 
 # Use MPS if available, otherwise CPU
-device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load dataset
 dataset = load_dataset("json", data_files="intent_classifier_resources_ai/multi_turn_dental_dataset.json")
@@ -26,9 +26,10 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
-    torch_dtype=torch.float16 if device.type == "mps" else torch.float32,
-    low_cpu_mem_usage=True
+    torch_dtype=torch.float16 if device.type == "cuda" else torch.float32,
+    device_map="auto"  # this puts model layers on GPU automatically
 )
+
 model.to(device)
 
 # Optional: Inspect layer names to debug target_modules
