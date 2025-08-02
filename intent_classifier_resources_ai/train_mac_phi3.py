@@ -18,7 +18,8 @@ from peft import get_peft_model, LoraConfig, TaskType
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load dataset
-dataset = load_dataset("json", data_files="intent_classifier_resources_ai/multi_turn_dental_dataset.json")
+dataset = load_dataset("json", data_files="multi_turn_dental_dataset.json")
+
 
 # Load tokenizer and model
 model_name = "microsoft/phi-3-mini-4k-instruct"
