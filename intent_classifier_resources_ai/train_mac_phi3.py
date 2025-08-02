@@ -23,13 +23,15 @@ dataset = load_dataset("json", data_files="multi_turn_dental_dataset.json")
 
 # Load tokenizer and model
 model_name = "microsoft/phi-3-mini-4k-instruct"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
 
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
     torch_dtype=torch.float16 if device.type == "cuda" else torch.float32,
-    device_map="auto"  # this puts model layers on GPU automatically
+    device_map="auto",
+    trust_remote_code=True
 )
+
 
 model.to(device)
 
