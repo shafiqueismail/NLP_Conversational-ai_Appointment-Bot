@@ -1,0 +1,6 @@
+# model artifacts
+finetuned_small_dental/
+*.safetensors
+*.bin
+*.pt
+logs/
