@@ -20,19 +20,19 @@ class DentalExtractor:
         if use_spacy:
             try:
                 import spacy
-                self.nlp = spacy.load("en_core_web_sm")  # includes NER
+                self.nlp = spacy.load("en_core_web_sm")
             except Exception as e:
-                print("spaCy not available, falling back to regex for names:", e)
+                print("⚠️ spaCy not available, falling back to regex for names:", e)
                 self.nlp = None
 
         # load tokenizer FROM adapter so vocab matches training
         self.tok = AutoTokenizer.from_pretrained(adapter_dir, trust_remote_code=True, padding_side="right")
 
-        # base + LoRA (MPS-safe-ish)
+        # base + LoRA (MPS-safe)
         self.base = AutoModelForCausalLM.from_pretrained(
             base_model,
             torch_dtype=self.dtype,
-            attn_implementation="eager",  # avoids Apple GPU matmul issues
+            attn_implementation="eager",
         )
         self.base.resize_token_embeddings(len(self.tok))
         self.base.config.pad_token_id = self.tok.pad_token_id
@@ -53,6 +53,16 @@ class DentalExtractor:
         ampm = m.group(3).lower()
         if ampm == "pm" and hh != 12: hh += 12
         if ampm == "am" and hh == 12: hh = 0
+        return f"{hh:02d}:{mm:02d}"
+
+    @staticmethod
+    def _parse_time_24h(text: str):
+        # catches 14:30 etc. (avoid matching when am/pm is also present)
+        m = None
+        for m in re.finditer(r'\b([01]?\d|2[0-3]):([0-5]\d)(?!\s*[ap]m)\b', text, re.I):
+            pass
+        if not m: return None
+        hh = int(m.group(1)); mm = int(m.group(2))
         return f"{hh:02d}:{mm:02d}"
 
     @staticmethod
@@ -90,7 +100,7 @@ class DentalExtractor:
 
     @staticmethod
     def _smart_case(name: str) -> str:
-        # Title-case while preserving hyphens/apostrophes: o’connor → O’Connor, jean-luc → Jean-Luc
+        # Title-case while preserving hyphens/apostrophes
         def cap_seg(seg: str) -> str:
             return seg[:1].upper() + seg[1:].lower() if seg else seg
         words = []
@@ -100,9 +110,8 @@ class DentalExtractor:
             words.append(w)
         return " ".join(words)
 
-    # NEW: robust name extraction with spaCy, with regex hints
+    # robust name extraction with spaCy + regex hints
     def _extract_name(self, text: str):
-        # 1) Strong intent patterns first (capture up to 3 tokens incl. hyphens/apostrophes)
         pat = r"\b(?:my name is|name is|i am|i'm|this is)\s+([A-Za-z][A-Za-z'’-]*(?:\s+[A-Za-z][A-Za-z'’-]*){0,2})"
         m = None
         for m in re.finditer(pat, text, re.I):
@@ -110,18 +119,15 @@ class DentalExtractor:
         if m:
             return self._smart_case(m.group(1))
 
-        # 2) spaCy PERSONs (last PERSON mentioned often is the user)
         if self.nlp is not None:
             doc = self.nlp(text)
             persons = [ent.text for ent in doc.ents if ent.label_ == "PERSON"]
             if persons:
                 return self._smart_case(persons[-1])
 
-        # 3) Fallback mild patterns (e.g., “Mohammed Ali here”)
         m2 = re.search(r"\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})\s+(here|speaking)\b", text)
         if m2:
             return self._smart_case(m2.group(1))
-
         return None
 
     @staticmethod
@@ -169,7 +175,7 @@ class DentalExtractor:
             except: pass
 
         # --- enforce user intent from dialog ---
-        # Name (spaCy/regex)
+        # Name
         if not obj.get("name"):
             nm = self._extract_name(dialog)
             if nm: obj["name"] = nm
@@ -181,13 +187,15 @@ class DentalExtractor:
         else:
             obj["treatment"] = self._normalize_treatment(obj.get("treatment")) or "cleaning"
 
-        # Date + time from dialog (dynamic next weekday)
-        wd, said_next = self._parse_weekday(dialog)
-        tm = self._parse_time_12h(dialog)
-        if wd:
-            obj["date"] = self._resolve_date(wd, said_next, tm or obj.get("time"))
+        # Time (prefer explicit; support 12h or 24h)
+        tm = self._parse_time_12h(dialog) or self._parse_time_24h(dialog)
         if tm:
             obj["time"] = tm
+
+        # Date (dynamic next weekday)
+        wd, said_next = self._parse_weekday(dialog)
+        if wd:
+            obj["date"] = self._resolve_date(wd, said_next, obj.get("time"))
 
         # Duration by treatment
         obj["duration"] = self._duration_for(obj.get("treatment"))
